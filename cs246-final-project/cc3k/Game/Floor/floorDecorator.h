@@ -3,7 +3,7 @@
 
 #include <memory>
 #include "floor.h"
-#include "../GameObject/Player/player.h"
+#include "../Player/player.h"
 using namespace std;
 
 class FloorDecorator : public Floor {
