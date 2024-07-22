@@ -1,5 +1,6 @@
 #include "GameSubject.h"
 #include <vector>
+#include <>
 using namespace std;
 
 class GameModel: public GameSubject {
