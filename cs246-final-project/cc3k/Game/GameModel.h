@@ -2,9 +2,9 @@
 
 #include "GameSubject.h"
 #include "floor.h"
-#include "cell.h"
-#include "enemies/enemy.h"
-#include "player/player.h"
+#include "Floor/Cell/cell.h"
+#include "GameObject/Enemy/enemy.h"
+#include "GameObject/Player/player.h"
 
 using namespace std;
 

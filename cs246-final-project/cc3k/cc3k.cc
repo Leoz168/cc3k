@@ -1,7 +1,9 @@
 #include <iostream>
 
-#include "observer/observer.h"
-#include "subject/GameSubject.h"
+#include "Display/observer.h"
+#include "Game/GameSubject.h"
+
+using namespace std;
 
 
 int main() {

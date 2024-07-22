@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "observer.h"
-#include "../subject/GameModel.h"
-#include "../allConsts.h"
+#include "../Game/GameModel.h"
+#include "../consts.h"
 
 class InfoDisplay: public Observer {
         GameModel *gm;

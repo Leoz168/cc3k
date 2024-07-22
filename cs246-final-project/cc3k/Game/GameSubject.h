@@ -1,5 +1,5 @@
 #include <vector>
-#include "observer/observer.h"
+#include "../Display/observer.h"
 using namespace std;
 
 class GameSubject {
