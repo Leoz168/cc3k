@@ -1,4 +1,5 @@
 #include <vector>
+#include <memory>
 
 #include "GameSubject.h"
 #include "floor.h"
