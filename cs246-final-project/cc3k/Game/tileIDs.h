@@ -2,6 +2,8 @@
 #define TILEIDS
 
 enum tileID {
+    NOTHING = -1,
+
     // Cells
     BLANK = 0,
     FLOORTILE,
