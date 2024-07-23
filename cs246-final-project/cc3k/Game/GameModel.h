@@ -16,6 +16,7 @@ class GameModel: public GameSubject {
         vector<shared_ptr<Item>> items;
         vector<shared_ptr<Cell>> cells;
         vector<vector<shared_ptr<Tile>>> map;
+        unique_ptr<Player> player;
     public:
         void updateGame();
         int tileIDAt(int, int);
