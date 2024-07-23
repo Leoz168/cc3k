@@ -5,6 +5,7 @@
 #include "enemy.h"
 
 class Player: public GameObject {
+    protected:
         int hp_now;
         int hp_max;
         int atk;

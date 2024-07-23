@@ -1,6 +1,4 @@
 #include "Effect.h"
-#include "atkModifier.h"
-#include "defModifier.h"
 
 class EffectDecorator: public Effect {
     protected:
