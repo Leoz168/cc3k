@@ -5,6 +5,7 @@ class DefModifier: public EffectDecorator {
     public:
         DefModifier(Effect *effect, int def);
         int getDefModifier() override;
+        int getAtkModifier() override;
         void setDef(int def);
         ~DefModifier();
 };

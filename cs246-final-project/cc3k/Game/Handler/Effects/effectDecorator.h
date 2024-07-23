@@ -5,5 +5,5 @@ class EffectDecorator: public Effect {
         Effect *effect;
     public:
         EffectDecorator(Effect *effct);
-        virtual ~EffectDecorator() = 0;
+        virtual ~EffectDecorator();
 };

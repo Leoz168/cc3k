@@ -9,8 +9,8 @@ class EffectHandler: public Effect {
         EffectHandler(Effect *effect);
         int getAtkEffect();
         int getDefEffect();
-        void addAtkEffect(int delatk);
-        void addDefEffect(int deldef);
+        void addAtkEffect(int atk);
+        void addDefEffect(int def);
         void removeAllEffects();
         ~EffectHandler();
 };

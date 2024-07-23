@@ -7,14 +7,14 @@ int EffectHandler::getAtkEffect() {
 int EffectHandler::getDefEffect() {
     return effect->getDefModifier();
 }
-void EffectHandler::addAtkEffect(int delatk) {
-    effect = new AtkModifier{effect, delatk};
+void EffectHandler::addAtkEffect(int atk) {
+    effect = new AtkModifier{effect, atk};
 }
-void EffectHandler::addDefEffect(int deldef) {
-    effect = new DefModifier{effect, deldef};
+void EffectHandler::addDefEffect(int def) {
+    effect = new DefModifier{effect, def};
 }
 void EffectHandler::removeAllEffects() {
-    delete effect
+    delete effect;
     effect = new NoEffect{};
 }
 
