@@ -5,6 +5,7 @@
 using namespace std;
 
 class Tile {
+    protected:
         int x, y;
         int id;
     public:
