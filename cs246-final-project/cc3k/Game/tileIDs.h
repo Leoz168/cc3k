@@ -1,5 +1,5 @@
-#ifndef CONSTANTS
-#define CONSTANTS
+#ifndef TILEIDS
+#define TILEIDS
 
 enum tileID {
     // Cells
