@@ -1,19 +1,19 @@
-#ifndef BLANKFLOOR_H
-#define BLANKFLOOR_H
+#ifndef BLANKTILE_H
+#define BLANKTILE_H
 
-#include "floor.h"
+#include "../Tile.h"
 
-class BlankFloor: public Floor {
+class BlankTile: public Tile {
         int id;
     public:
-        BlankFloor();
+        BlankTile(int x, int y);
         int getTileID(int x, int y);
-        Floor* getTilePtr(int x, int y);
+        Tile* getTilePtr(int x, int y);
         bool move(int x, int y, int dx, int dy);
         std::pair<bool, bool> playerAttack(int x, int y);
         bool playerUsed(int x, int y);
         bool takeAction(int x, int y);
-        ~BlankFloor();
+        ~BlankTile();
 };
 
 #endif

@@ -1,16 +1,19 @@
-#ifndef FLOOR_H
-#define FLOOR_H
+#ifndef TILE_H
+#define TILE_H
 
 #include <utility>
 using namespace std;
 
-class Floor {
+class Tile {
+        int x, y;
     public:
+        Tile(int x, int y);
+
         // getTileID gets the unique tile id defined in the consts.h file for the given coordinates
         virtual int getTileID(int x, int y) = 0;
 
         // getTilePtr gets the ptr to the Floor object at (x, y)
-        virtual Floor* getTilePtr(int x, int y) = 0;
+        virtual Tile* getTilePtr(int x, int y) = 0;
 
         // move moves the file at (x, y) by (dx, dy), if the thing there is movable 
         virtual bool move(int x, int y, int dx, int dy) = 0;
@@ -29,7 +32,7 @@ class Floor {
         //     should be despawned after it takes action.
         virtual bool takeAction(int x, int y) = 0;
 
-        virtual ~Floor() = 0;
+        virtual ~Tile() = 0;
 };
 
 #endif

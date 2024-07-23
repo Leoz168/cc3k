@@ -2,7 +2,7 @@
 #include <memory>
 
 #include "GameSubject.h"
-#include "floor.h"
+#include "../Tile.h"
 #include "Floor/Cell/cell.h"
 #include "GameObject/Enemy/enemy.h"
 #include "GameObject/Item/item.h"
@@ -15,6 +15,7 @@ class GameModel: public GameSubject {
         vector<shared_ptr<Enemy>> enemies;
         vector<shared_ptr<Item>> items;
         vector<shared_ptr<Cell>> cells;
+        vector<vector<shared_ptr<Tile>>> map;
     public:
         void updateGame();
         int tileIDAt(int, int);
@@ -22,10 +23,10 @@ class GameModel: public GameSubject {
         bool movePlayer(string);
         bool usePotion(string);
         bool attackEnemy(string);
-        Floor *createPlayer(string);
-        bool spawnRandGameObj(Floor*);
-        bool spawn(Floor*);
-        bool resetFloor(Floor*);
+        Tile *createPlayer(string);
+        bool spawnRandGameObj(Tile*);
+        bool spawn(Tile*);
+        bool resetFloor(Tile*);
         bool freezeEnemy();
         bool restartGame();
         void quitGame();
