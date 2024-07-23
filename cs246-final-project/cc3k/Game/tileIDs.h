@@ -4,7 +4,7 @@
 enum tileID {
     // Cells
     BLANK = 0,
-    TILE,
+    FLOORTILE,
     HWALL,
     VWALL,
     PASSAGE,
