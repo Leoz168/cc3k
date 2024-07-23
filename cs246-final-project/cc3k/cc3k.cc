@@ -5,12 +5,13 @@
 
 using namespace std;
 
+enum class PlayerCommand {NO, SO, EA, WE, NE, NW, SE, SW, U, A, F, R, Q, NONE};
 
 int main() {
     char mode;
     cin >> mode;
-    switch (mode)
     while (true) { // choose the race
+        switch (mode)
         {
         case 's': // shade
             /* code */
@@ -33,6 +34,7 @@ int main() {
             break;
         }
     }
+    
     string command;
     while (true) {
         cin >> command;
