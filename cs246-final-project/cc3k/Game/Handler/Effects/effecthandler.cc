@@ -14,7 +14,7 @@ void EffectHandler::addDefEffect(int deldef) {
     effect = new DefModifier{effect, deldef};
 }
 void EffectHandler::removeAllEffects() {
-    delete effect;
+    delete effect
     effect = new NoEffect{};
 }
 
