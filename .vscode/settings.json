@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "__split_buffer": "cpp",
+        "new": "cpp",
+        "typeinfo": "cpp",
+        "vector": "cpp",
+        "compare": "cpp",
+        "type_traits": "cpp",
+        "iosfwd": "cpp"
+    }
+}
