@@ -5,8 +5,12 @@
 #include "tileIDs.h"
 
 class Drow : public Player {
-public:
-    Drow(int x, int y, EffectHandler* ehr);
+    public:
+        Drow(int x, int y, EffectHandler* ehr);
+        bool attackEnemy(Enemy * e);
+        bool attackedBy(Enemy * e);
+        bool triggerAbility(int id, int ab_ver);
+        ~Drow() = default;
 };
 
 #endif

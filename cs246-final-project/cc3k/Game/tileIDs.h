@@ -14,7 +14,7 @@ enum tileID {
     STAIR,
 
     // Treasure/Gold
-    SMALLGOLD
+    SMALLGOLD,
     NORMALGOLD,
     MERCHANTHOARD,
     DRAGONHOARD,

@@ -5,6 +5,7 @@
 #include "effecthandler.h"
 #include "enemy.h"
 #include "tileIDs.h"
+#include <cmath>
 
 class Player: public GameObject {
         int hp_now;
@@ -22,14 +23,14 @@ class Player: public GameObject {
         int getDef();
         int getMaxHP();
         int getGoldCount();
-        bool setHPMax(int hp_max);
-        bool setHP(int hp_now);
-        bool setAtk(int atk);
-        bool setDef(int def);
-        bool setGoldCount(int gold);
+        void setHPMax(int hp_max);
+        void setHP(int hp_now);
+        void setAtk(int atk);
+        void setDef(int def);
+        void setGoldCount(int gold);
         std::pair<int, int> getPosition();
-        bool setPosition(int x, int y);
-        bool move(int x, int y, int dx, int dy);
+        void setPosition(int x, int y);
+        void move(int x, int y, int dx, int dy);
         virtual bool Player::attackEnemy(Enemy * e);
         virtual bool Player::attackedBy(Enemy * e);
         virtual bool triggerAbility(int id, int ab_ver) = 0;

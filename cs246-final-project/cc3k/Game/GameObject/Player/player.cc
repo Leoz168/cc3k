@@ -12,22 +12,22 @@ int Player::getMaxHP() { return hp_max; }
 
 int Player::getGoldCount() { return gold; }
 
-bool Player::setHPMax(int hp_max) {
+void Player::setHPMax(int hp_max) {
     this->hp_max = hp_max;
 }
 
-bool Player::setHP(int hp_now) { this->hp_now = hp_now; }
+void Player::setHP(int hp_now) { this->hp_now = hp_now; }
 
-bool Player::setAtk(int atk) { this->atk = atk; }
+void Player::setAtk(int atk) { this->atk = atk; }
 
-bool Player::setDef(int def) { this->def = def; }
+void Player::setDef(int def) { this->def = def; }
 
-bool Player::setGoldCount(int gold) { this->gold = gold; }
+void Player::setGoldCount(int gold) { this->gold = gold; }
 
 std::pair<int, int> Player::getPosition() { return std::pair<int, int>{x, y}; }
 
-bool Player::setPosition(int x, int y) { this->x = x; this->y = y; }
+void Player::setPosition(int x, int y) { this->x = x; this->y = y; }
 
-bool Player::move(int x, int y, int dx, int dy) { this->x += dx; this->y += dy; }
+void Player::move(int x, int y, int dx, int dy) { this->x += dx; this->y += dy; }
 
 Player::~Player() {}
