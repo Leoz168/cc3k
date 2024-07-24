@@ -11,11 +11,11 @@
 
 using namespace std;
 
-class Map {
+class GameMap {
         map<pair<int, int>, vector<shared_ptr<Tile>>> gameMap;
     public:
-        explicit Map();
-        Map(string filename);
+        explicit GameMap();
+        GameMap(string filename);
 
         // tileAt returns the frontmost tile pointer at (x, y)
         //     and nullptr if there is no tile there
@@ -25,11 +25,11 @@ class Map {
         //     and the constant NOTHING if there is no tile there
         int tileIDAt(int x, int y);
 
-        // moveTile moves the frontmost tile at (x, y) by (dx, dy)
+        // moveTile moves the tile at (x, y) by (dx, dy)
         //     REGARDLESS of whether the tile "can" be moved or not
-        // Returns false if there is no tile there
+        // Returns false if there is no tile with the specificed pointer there
         // NOTE: does NOT check the internal x, y fields of a tile.
-        bool moveTile(int x, int y, int dx, int dy);
+        bool moveTile(int x, int y, int dx, int dy, Tile* tile);
 
         // removeTile removes the frontmost tile at (x, y)
         //     and returns a shared_ptr to the tile

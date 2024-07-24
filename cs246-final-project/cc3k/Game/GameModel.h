@@ -11,7 +11,7 @@
 #include "GameObject/Enemy/Enemy.h"
 #include "GameObject/Item/Item.h"
 #include "Player/Player.h"
-#include "Map.h"
+#include "GameMap.h"
 #include "Factory/ObjectCreator.h"
 #include "Factory/CellCreator.h"
 #include "Factory/EnemyCreator.h"
@@ -44,7 +44,7 @@ class GameModel: public GameSubject {
         std::shared_ptr<EffectHandler> effectHandler;
 
         // Map and objects on the Map
-        Map map;
+        GameMap map;
         std::vector<std::shared_ptr<Enemy>> enemies;
         std::vector<std::shared_ptr<Item>> items;
         std::vector<std::shared_ptr<Cell>> cells;

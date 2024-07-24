@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include "GameObject/Player/Player.h"
-#include "Map.h"
+#include "GameMap.h"
 using namespace std;
 
 class Tile {
@@ -25,15 +25,15 @@ class Tile {
         // move moves the Tile by (dx, dy), if the thing there is movable.
         //     Returns whether the thing was moved or not.
         // Default: does nothing, returns false
-        virtual bool move(int dx, int dy, Map& map);
+        virtual bool move(int dx, int dy, GameMap& map);
 
         // takeAction lets the Tile take a "turn". For example, an enemy would move
         //     or attack the player. The function returns whether or not the tile
         //     should be despawned after it takes action.
         // Default: does nothing
-        virtual bool takeAction(Player*, Map& map);
+        virtual bool takeAction(Player*, GameMap& map);
 
-        pair<int, int> getPosn();
+        virtual pair<int, int> getPosn();
 
         virtual ~Tile() = default;
 };

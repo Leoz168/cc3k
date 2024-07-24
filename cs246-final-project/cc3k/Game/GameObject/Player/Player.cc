@@ -12,6 +12,8 @@ int Player::getMaxHP() { return hp_max; }
 
 int Player::getGoldCount() { return gold; }
 
+bool Player::getMerchantHostility() { return merchant_hostility; }
+
 void Player::setHPMax(int hp_max) {
     this->hp_max = hp_max;
 }
@@ -23,6 +25,8 @@ void Player::setAtk(int atk) { this->atk = atk; }
 void Player::setDef(int def) { this->def = def; }
 
 void Player::setGoldCount(int gold) { this->gold = gold; }
+
+void Player::setMerchantHostility(bool hostility) { this->merchant_hostility = hostility; }
 
 std::pair<int, int> Player::getPosition() { return std::pair<int, int>{x, y}; }
 
