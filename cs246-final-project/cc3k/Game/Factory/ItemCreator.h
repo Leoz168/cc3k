@@ -60,8 +60,8 @@ class ItemCreator : public Creator
     }
 
 public:
-    std::shared_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
-        std::shared_ptr<Tile> newItem;
+    std::unique_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
+        std::unique_ptr<Tile> newItem;
         if (is_rand_generated) {
             if (id == GOLD) {
                 id = chooseGoldType();
@@ -73,31 +73,31 @@ public:
 
         switch (id) {
             case NORMALGOLD:
-                newItem = std::make_shared<NormalGold>(x, y);
+                newItem = std::make_unique<NormalGold>(x, y);
                 break;
             case SMALLGOLD:
-                newItem = std::make_shared<SmallGold>(x, y);
+                newItem = std::make_unique<SmallGold>(x, y);
                 break;
             case DRAGONHOARD:
-                newItem = std::make_shared<DragonHoard>(x, y);
+                newItem = std::make_unique<DragonHoard>(x, y);
                 break;
             case RESTOREHEALTH:
-                newItem = std::make_shared<RH>(x, y);
+                newItem = std::make_unique<RH>(x, y);
                 break;
             case BOOSTATK:
-                newItem = std::make_shared<BA>(x, y);
+                newItem = std::make_unique<BA>(x, y);
                 break;
             case BOOSTDEF:
-                newItem = std::make_shared<BD>(x, y);
+                newItem = std::make_unique<BD>(x, y);
                 break;
             case POISONHEALTH:
-                newItem = std::make_shared<PH>(x, y);
+                newItem = std::make_unique<PH>(x, y);
                 break;
             case WOUNDATK:
-                newItem = std::make_shared<WA>(x, y);
+                newItem = std::make_unique<WA>(x, y);
                 break;
             case WOUNDDEF:
-                newItem = std::make_shared<WD>(x, y);
+                newItem = std::make_unique<WD>(x, y);
                 break;
         }
         return newItem;
