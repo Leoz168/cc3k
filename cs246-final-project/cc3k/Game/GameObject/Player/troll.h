@@ -8,7 +8,7 @@ class Troll : public Player {
     public:
         Troll(int x, int y, EffectHandler* ehr);
         bool attackEnemy(Enemy * e);
-        bool attackedBy(Enemy * e);
+        void attackedBy(Enemy * e);
         bool triggerAbility(int id, int ab_ver);
         ~Troll() = default;
 };

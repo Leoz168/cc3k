@@ -7,8 +7,8 @@ bool Vampire::attackEnemy(Enemy *e) {
     e->atkedByPlayer(this);
 }
 
-bool Vampire::attackedBy(Enemy *e) {
-    ceil((100 / (100 + getDef())) * e->getAtk());
+void Vampire::attackedBy(Enemy *e) {
+    hp_now -= ceil((100 / (100 + getDef())) * e->getAtk());
 }
 
 bool triggerAbility(int id, int ab_ver);

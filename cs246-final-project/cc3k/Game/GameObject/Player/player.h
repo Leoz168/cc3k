@@ -8,6 +8,7 @@
 #include <cmath>
 
 class Player: public GameObject {
+    protected:
         int hp_now;
         int hp_max;
         int atk;
@@ -32,7 +33,7 @@ class Player: public GameObject {
         void setPosition(int x, int y);
         void move(int x, int y, int dx, int dy);
         virtual bool Player::attackEnemy(Enemy * e);
-        virtual bool Player::attackedBy(Enemy * e);
+        virtual void Player::attackedBy(Enemy * e);
         virtual bool triggerAbility(int id, int ab_ver) = 0;
         ~Player();
 };

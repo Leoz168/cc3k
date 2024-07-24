@@ -7,7 +7,7 @@ bool Shade::attackEnemy(Enemy *e) {
     e->atkedByPlayer(this);
 }
 
-bool Shade::attackedBy(Enemy *e) {
+void Shade::attackedBy(Enemy *e) {
     ceil((100 / (100 + getDef())) * e->getAtk());
 }
 
