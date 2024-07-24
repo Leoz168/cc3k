@@ -1,7 +1,7 @@
 #include "Effect.h"
-#include "atkModifier.h"
-#include "defModifier.h"
-#include "noEffect.h"
+#include "AtkModifier.h"
+#include "DefModifier.h"
+#include "NoEffect.h"
 
 class EffectHandler: public Effect {
         Effect *effect;

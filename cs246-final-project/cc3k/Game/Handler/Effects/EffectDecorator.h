@@ -1,5 +1,4 @@
 #include "Effect.h"
-
 class EffectDecorator: public Effect {
     protected:
         Effect *next;

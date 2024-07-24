@@ -1,4 +1,4 @@
-#include "effecthandler.h"
+#include "EffectHandler.h"
 
 EffectHandler::EffectHandler(Effect *effect) {}
 

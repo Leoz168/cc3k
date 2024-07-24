@@ -1,4 +1,4 @@
-#include "effectDecorator.h"
+#include "EffectDecorator.h"
 
 class DefModifier: public EffectDecorator {
         int def;
