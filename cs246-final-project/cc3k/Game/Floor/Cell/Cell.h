@@ -2,7 +2,7 @@
 #define CELL_H
 
 #include <utility>
-#include "../../Tile.h"
+#include "Tile.h"
 
 class Cell : public Tile {
     public:
