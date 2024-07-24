@@ -2,7 +2,7 @@
 #define ELF_H
 
 #include <utility>
-#include "../Player/player.h"
+#include "../Player/Player.h"
 #include "Enemy.h"
 #include "../../Tile.h"
 

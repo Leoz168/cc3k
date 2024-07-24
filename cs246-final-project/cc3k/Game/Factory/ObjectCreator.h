@@ -24,12 +24,12 @@ class ObjectCreator {
         // - P: potion (by default - RESTOREHEALTH)
         // - @: player
 
-        std::shared_ptr<Tile> createObject(int x, int y, char type, bool is_rand_generated = false, int id = NOTHING, EffectHandler *ehr = nullptr) {
+        std::unique_ptr<Tile> createObject(int x, int y, char type, int id = NOTHING, bool is_rand_generated = false, EffectHandler *ehr = nullptr) {
             CellCreator makeCell;
             PlayerCreator makePlayer;
             EnemyCreator makeEnemy;
             ItemCreator makeItem;
-            std::shared_ptr<Tile> newObject;
+            std::unique_ptr<Tile> newObject;
             switch (type) {
                 case 'C':
                     newObject = makeCell.spawnTile(x, y, id, false);
