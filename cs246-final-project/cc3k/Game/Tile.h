@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 #include <memory>
-#include "GameObject/Player/player.h"
+#include "Player.h"
 #include "Map.h"
 using namespace std;
 
