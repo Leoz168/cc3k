@@ -1,11 +1,12 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "gameObject.h"
+
+#include "GameObject.h"
 #include "effecthandler.h"
 #include "enemy.h"
+#include "tileIDs.h"
 
 class Player: public GameObject {
-    protected:
         int hp_now;
         int hp_max;
         int atk;
@@ -14,7 +15,7 @@ class Player: public GameObject {
         int gold;
         unique_ptr<EffectHandler> ehr;
     public:
-        Player(int x, int y, int hp_now, int hp_max, int atk, int def, int id, int gold, EffectHandler *ehr);
+        Player(int x, int y, int id, int hp_now, int hp_max, int atk, int def, int gold, EffectHandler *ehr);
         virtual int getTileID() = 0;
         int getHP();
         int getAtk();

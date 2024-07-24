@@ -2,8 +2,9 @@
 #define ENEMY_H
 
 #include "../GameObject.h"
-#include "../Player/player.h"
+#include "../Player/Player.h"
 #include "../../Tile.h"
+#include "tileIDs.h"
 
 class Enemy: public GameObject {
     protected:
