@@ -12,7 +12,7 @@ class Player: public GameObject {
         int def;
         int id;
         int gold;
-        EffectHandler *ehr;
+        unique_ptr<EffectHandler> ehr;
     public:
         Player(int x, int y, int hp_now, int hp_max, int atk, int def, int id, int gold, EffectHandler *ehr);
         virtual int getTileID() = 0;
@@ -29,8 +29,8 @@ class Player: public GameObject {
         std::pair<int, int> getPosition();
         bool setPosition(int x, int y);
         bool move(int x, int y, int dx, int dy);
-        bool Player::attackEnemy(Enemy * e);
-        bool Player::attackedBy(Enemy * e);
+        virtual bool Player::attackEnemy(Enemy * e);
+        virtual bool Player::attackedBy(Enemy * e);
         virtual bool triggerAbility(int id, int ab_ver) = 0;
         ~Player();
 };

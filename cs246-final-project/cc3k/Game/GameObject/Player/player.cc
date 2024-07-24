@@ -12,7 +12,9 @@ int Player::getMaxHP() { return hp_max; }
 
 int Player::getGoldCount() { return gold; }
 
-bool Player::setHPMax(int hp_max) { this->hp_max = hp_max; }
+bool Player::setHPMax(int hp_max) {
+    this->hp_max = hp_max;
+}
 
 bool Player::setHP(int hp_now) { this->hp_now = hp_now; }
 
@@ -28,8 +30,4 @@ bool Player::setPosition(int x, int y) { this->x = x; this->y = y; }
 
 bool Player::move(int x, int y, int dx, int dy) { this->x += dx; this->y += dy; }
 
-bool Player::attackEnemy(Enemy *e) { e->playerAttack(); }
-
-bool Player::attackedBy(Enemy *e) { hp_now -= e->getDef(); }
-
-Player::~Player() { delete ehr; }
+Player::~Player() {}

@@ -22,6 +22,8 @@ class Enemy: public GameObject {
         // Default: default attack.
         virtual bool attackPlayer(Player*);
 
+        virtual bool atkedByPlayer(Player*);
+
         // Default: moves by dx, dy if available.
         virtual bool move(int dx, int dy, vector<vector<shared_ptr<Tile>>>& map);
         
