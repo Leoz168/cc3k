@@ -10,6 +10,7 @@ using namespace std;
 class Dragon : public Enemy {
         shared_ptr<DragonHoard> hoard;
         void preAction(Player* player, GameMap& map) override;
+        void postAtkedByPlayerAction(Player* player) override;
     public:
         Dragon(int x, int y, shared_ptr<DragonHoard> hoard);
         Tile* getTilePtr() override;

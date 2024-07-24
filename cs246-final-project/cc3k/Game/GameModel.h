@@ -5,12 +5,12 @@
 #include "fstream"
 
 #include "GameSubject.h"
-#include "../Tile.h"
+#include "Tile.h"
 #include "tileIDs.h"
-#include "Floor/Cell/Cell.h"
-#include "GameObject/Enemy/Enemy.h"
-#include "GameObject/Item/Item.h"
-#include "Player/Player.h"
+#include "Cell.h"
+#include "Enemy.h"
+#include "Item.h"
+#include "Player.h"
 #include "GameMap.h"
 #include "Factory/ObjectCreator.h"
 #include "Factory/CellCreator.h"
@@ -19,7 +19,7 @@
 #include "Factory/PlayerCreator.h"
 #include "Handler/AttackHandler.h"
 #include "Handler/MoveHandler.h"
-#include "Handler/Effects/effecthandler.h"
+#include "EffectHandler.h"
 
 
 class GameModel: public GameSubject {

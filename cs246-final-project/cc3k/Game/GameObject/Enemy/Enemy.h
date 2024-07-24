@@ -21,12 +21,15 @@ class Enemy: public GameObject {
         virtual void preAction(Player* player, GameMap& map);
         virtual void postMoveAction(Player* player, GameMap& map);
         virtual void postAtkAction(Player* player, GameMap& map);
+        virtual void preAtkedByPlayerAction(Player* player);
+        virtual void postAtkedByPlayerAction(Player* player);
     public:
         Enemy(int hp, int atk, int def, Enemy* thisEnemy, int x, int y, int id, bool hostility = true);
 
         int getHP();
         int getAtk();
         int getDef();
+        bool isDead();
         void takeDamage(int dHP);
 
         // attackPlayer causes the eneny to attack the player. The return value

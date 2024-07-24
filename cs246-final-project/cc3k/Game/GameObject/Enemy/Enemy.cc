@@ -18,6 +18,7 @@ Enemy::Enemy(int hp, int atk, int def, Enemy* thisEnemy, int x, int y, int id, b
 int Enemy::getHP() { return hp; }
 int Enemy::getAtk() { return atk; }
 int Enemy::getDef() { return def; }
+bool Enemy::isDead() { return getHP() <= 0; }
 void Enemy::takeDamage(int damage) { hp -= damage; }
 
 Enemy::~Enemy() = default;
@@ -30,9 +31,18 @@ bool Enemy::attackPlayer(Player* player) {
     }
 }
 
+void Enemy::preAtkedByPlayerAction(Player* player) { return; }
+void Enemy::postAtkedByPlayerAction(Player* player) { return; }
+
 pair<bool, bool> Enemy::atkedByPlayer(Player* player) {
+    preAtkedByPlayerAction(player);
+
     takeDamage( ceil((100 / (100 + getDef())) * player->getAtk()) );
-    if ( getHP() <= 0 ) return make_pair(true, true);
+
+    postAtkedByPlayerAction(player);
+
+    if ( isDead() ) return make_pair(true, true);
+
     return make_pair(true, false);
 }
 
@@ -45,17 +55,11 @@ bool Enemy::move(int dx, int dy, GameMap& map) {
     return false;
 }
 
-void Enemy::preAction(Player* player, GameMap& map) {
-    return;
-}
+void Enemy::preAction(Player* player, GameMap& map) { return; }
 
-void Enemy::postMoveAction(Player* player, GameMap& map) {
-    return;
-}
+void Enemy::postMoveAction(Player* player, GameMap& map) { return; }
 
-void Enemy::postAtkAction(Player* player, GameMap& map) {
-    return;
-}
+void Enemy::postAtkAction(Player* player, GameMap& map) { return; }
 
 bool Enemy::takeAction(Player* player, GameMap& map) {
     preAction(player, map);

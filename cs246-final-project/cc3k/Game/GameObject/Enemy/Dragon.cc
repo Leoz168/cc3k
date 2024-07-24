@@ -37,4 +37,8 @@ bool Dragon::takeAction(Player* player, GameMap& map) {
     return false;
 }
 
+void Dragon::postAtkedByPlayerAction(Player* player) {
+    if (isDead()) hoard->setDragonStatus(false);
+}
+
 Dragon::~Dragon() {}
