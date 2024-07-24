@@ -1,4 +1,4 @@
-#include "effectDecorator.h"
+#include "EffectDecorator.h"
 class NoEffect: public Effect {
     public:
         NoEffect();

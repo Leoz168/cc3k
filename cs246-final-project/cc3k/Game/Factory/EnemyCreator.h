@@ -2,7 +2,7 @@
 #define ENEMYCREATOR_H
 
 #include "Creator.h"
-#include "TileIDs.h"
+#include "tileIDs.h"
 #include "Enemy.h"
 #include "Dragon.h"
 #include "Dwarf.h"
@@ -35,35 +35,36 @@ class EnemyCreator : public Creator {
             }
         }
         return HUMAN;
+    }
 
     public:
-        std::shared_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
-            std::shared_ptr<Tile> newEnemy;
+        std::unique_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
+            std::unique_ptr<Tile> newEnemy;
             if (is_rand_generated) { // choose a random Enemy race
                 id = chooseEnemyRace();
             }
 
             switch (id) {
                 case HUMAN:
-                    newEnemy = make_shared<Human>(x, y);
+                    newEnemy = make_unique<Human>(x, y);
                     break;
                 case DWARF:
-                    newEnemy = make_shared<Dwarf>(x, y);
+                    newEnemy = make_unique<Dwarf>(x, y);
                     break;
                 case ELF:
-                    newEnemy = make_shared<Elf>(x, y);
+                    newEnemy = make_unique<Elf>(x, y);
                     break;
                 case ORC:
-                    newEnemy = make_shared<Orc>(x, y);
+                    newEnemy = make_unique<Orc>(x, y);
                     break;
                 case MERCHANT:
-                    newEnemy = make_shared<Merchant>(x, y);
+                    newEnemy = make_unique<Merchant>(x, y);
                     break;
                 case HALFLING:
-                    newEnemy = make_shared<Halfling>(x, y);
+                    newEnemy = make_unique<Halfling>(x, y);
                     break;
                 case DRAGON:
-                    newEnemy = make_shared<Dragon>(x, y);
+                    newEnemy = make_unique<Dragon>(x, y);
                     break;
                 case default:
                     break;

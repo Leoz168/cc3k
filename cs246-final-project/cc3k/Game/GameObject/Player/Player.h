@@ -1,10 +1,10 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "../GameObject.h"
-#include "../Handler/Effects/effecthandler.h"
-#include "../Enemy/Enemy.h"
-#include "../tileIDs.h"
+#include "GameObject.h"
+#include "EffectHandler.h"
+#include "Enemy.h"
+#include "tileIDs.h"
 #include <cmath>
 
 class Player: public GameObject {

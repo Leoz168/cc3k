@@ -1,4 +1,4 @@
-#include "effectDecorator.h"
+#include "EffectDecorator.h"
 
 class AtkModifier: public EffectDecorator {
         int atk;
