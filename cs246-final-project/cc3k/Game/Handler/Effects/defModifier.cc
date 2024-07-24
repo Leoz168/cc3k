@@ -1,5 +1,6 @@
 #include "defModifier.h"
-DefModifier::DefModifier(Effect *Effect, int def): EffectDecorator{effect} , def{def} {}
-int DefModifier::getDefModifier() { return def; }
+DefModifier::DefModifier(Effect *next, int def): EffectDecorator{next} , def{def} {}
+int DefModifier::getDefModifier() { return def + next->getDefModifier(); }
+int DefModifier::getAtkModifier() { return next->getAtkModifier(); }
 void DefModifier::setDef(int atk) { this->def = def; }
 DefModifier::~DefModifier() {}

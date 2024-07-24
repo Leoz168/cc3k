@@ -1,3 +1,3 @@
 #include "effectDecorator.h"
-EffectDecorator::EffectDecorator(Effect *effect): effect{effect} {}
+EffectDecorator::EffectDecorator(Effect *next): next{next} {}
 EffectDecorator::~EffectDecorator() {}

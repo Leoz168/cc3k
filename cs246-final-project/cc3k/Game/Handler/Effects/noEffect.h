@@ -1,5 +1,5 @@
 #include "effectDecorator.h"
-class NoEffect: EffectDecorator {
+class NoEffect: public Effect {
     public:
         NoEffect();
         int getAtkModifier();

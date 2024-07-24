@@ -2,8 +2,9 @@
 #define ENEMY_H
 
 #include "../GameObject.h"
-#include "../Player/player.h"
+#include "../Player/Player.h"
 #include "../../Tile.h"
+#include "tileIDs.h"
 
 class Enemy: public GameObject {
     protected:
@@ -21,6 +22,8 @@ class Enemy: public GameObject {
         //     indicates whether the attack succeeded or not.
         // Default: default attack.
         virtual bool attackPlayer(Player*);
+
+        virtual bool atkedByPlayer(Player*);
 
         // Default: moves by dx, dy if available.
         virtual bool move(int dx, int dy, vector<vector<shared_ptr<Tile>>>& map) override;

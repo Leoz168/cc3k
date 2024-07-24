@@ -1,5 +1,6 @@
 #include "atkModifier.h"
-AtkModifier::AtkModifier(Effect *Effect, int atk): EffectDecorator{effect}, atk{atk} {}
-int AtkModifier::getAtkModifier() { return atk; }
+AtkModifier::AtkModifier(Effect *next, int atk): EffectDecorator{next}, atk{atk} {}
+int AtkModifier::getAtkModifier() { return atk + next->getAtkModifier(); }
+int AtkModifier::getDefModifier() { return next->getDefModifier(); }
 void AtkModifier::setAtk(int atk) { this->atk = atk; }
 AtkModifier::~AtkModifier() {}
