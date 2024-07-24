@@ -1,13 +1,17 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
-#include "Display/observer.h"
-#include "Game/GameSubject.h"
+#include "observer.h"
+#include "GameSubject.h"
 
 using namespace std;
 
 enum class PlayerCommand {NO, SO, EA, WE, NE, NW, SE, SW, U, A, F, R, Q, NONE};
 
 int main() {
+    srand(time(NULL));
+
     char mode;
     cin >> mode;
     while (true) { // choose the race

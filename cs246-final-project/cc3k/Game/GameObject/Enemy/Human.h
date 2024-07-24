@@ -2,12 +2,14 @@
 #define HUMAN_H
 
 #include "Enemy.h"
-#include "tileIDs.h"
+
+using namespace std;
 
 class Human : public Enemy {
     public:
         Human(int x, int y);
-
+        Tile* getTilePtr() override;
+        ~Human();
 };
 
 

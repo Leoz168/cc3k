@@ -1,36 +1,41 @@
-#include "Map.h"
+#include "GameMap.h"
 #include "tileIDs.h"
 
 using namespace std;
 
 // Default initialize an empty map
-explicit Map::Map() {}
+explicit GameMap::GameMap() {}
 
 // todo
-Map::Map(string filename) {}
+GameMap::GameMap(string filename) {}
 
-Tile* Map::tileAt(int x, int y) {
+Tile* GameMap::tileAt(int x, int y) {
     vector<shared_ptr<Tile>> tileVector = gameMap[make_pair(x, y)];
     if (tileVector.size() == 0) return nullptr;
     else return (tileVector.back())->getTilePtr();
 }
 
-int Map::tileIDAt(int x, int y) {
+int GameMap::tileIDAt(int x, int y) {
     vector<shared_ptr<Tile>> tileVector = gameMap[make_pair(x, y)];
     if (tileVector.size() == 0) return NOTHING;
     else return (tileVector.back())->getTileID();
 }
 
-bool Map::moveTile(int x, int y, int dx, int dy) {
+bool GameMap::moveTile(int x, int y, int dx, int dy, Tile* tile) {
     vector<shared_ptr<Tile>> tileVector = gameMap[make_pair(x, y)];
     if (tileVector.size() == 0) return false;
     else {
-        addTile(x+dx, y+dy, removeTile(x, y));
-        return true;
+        for (shared_ptr<Tile> t : tileVector) {
+            if (t.get() == tile) {
+                addTile(x+dx, y+dy, removeTile(x, y));
+                return true;
+            }
+        }
     }
+    return false;
 }
 
-shared_ptr<Tile> Map::removeTile(int x, int y) {
+shared_ptr<Tile> GameMap::removeTile(int x, int y) {
     vector<shared_ptr<Tile>>& tileVector = gameMap[make_pair(x, y)];
     if (tileVector.size() == 0) return shared_ptr<Tile>{nullptr};
     else {
@@ -40,7 +45,7 @@ shared_ptr<Tile> Map::removeTile(int x, int y) {
     }
 }
 
-bool Map::addTile(int x, int y, shared_ptr<Tile> newTile) {
+bool GameMap::addTile(int x, int y, shared_ptr<Tile> newTile) {
     vector<shared_ptr<Tile>>& tileVector = gameMap[make_pair(x, y)];
     bool returnVal = false;
     if (tileVector.size() == 0) returnVal = true;
