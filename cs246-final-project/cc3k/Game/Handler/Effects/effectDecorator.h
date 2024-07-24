@@ -2,8 +2,8 @@
 
 class EffectDecorator: public Effect {
     protected:
-        Effect *effect;
+        Effect *next;
     public:
-        EffectDecorator(Effect *effct);
+        EffectDecorator(Effect *next);
         virtual ~EffectDecorator();
 };

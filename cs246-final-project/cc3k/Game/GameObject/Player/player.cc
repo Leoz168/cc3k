@@ -1,6 +1,6 @@
 #include "player.h"
-Player(int x, int y, int id, int hp_now, int hp_max, int atk, int def, int gold, EffectHandler* ehr)
-        : x(x), y(y), id(id), hp_now(hp_now), hp_max(hp_max), atk(atk), def(def), gold(gold), ehr(ehr) {}
+Player::Player(int x, int y, int id, int hp_now, int hp_max, int atk, int def, int gold, EffectHandler* ehr)
+: GameObject{x, y, id}, id(id), hp_now(hp_now), hp_max(hp_max), atk(atk), def(def), gold(gold), ehr(ehr) {}
 
 int Player::getHP() { return hp_now; }
 

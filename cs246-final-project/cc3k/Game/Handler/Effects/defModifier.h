@@ -3,7 +3,7 @@
 class DefModifier: public EffectDecorator {
         int def;
     public:
-        DefModifier(Effect *effect, int def);
+        DefModifier(Effect *next, int def);
         int getDefModifier() override;
         int getAtkModifier() override;
         void setDef(int def);
