@@ -8,7 +8,7 @@ class Cell : public Tile {
     public:
         Cell(int x, int y, int id);
         virtual Tile* getTilePtr() = 0;
-        virtual ~Cell() = 0;
+        virtual ~Cell() = default;
 };
 
 #endif

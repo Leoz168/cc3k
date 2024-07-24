@@ -23,9 +23,9 @@ class Enemy: public GameObject {
         virtual bool attackPlayer(Player*);
 
         // Default: moves by dx, dy if available.
-        virtual bool move(int dx, int dy, vector<vector<shared_ptr<Tile>>>& map);
+        virtual bool move(int dx, int dy, vector<vector<shared_ptr<Tile>>>& map) override;
         
-        virtual bool takeAction(Player*, vector<vector<shared_ptr<Tile>>>& map);
+        virtual bool takeAction(Player*, vector<vector<shared_ptr<Tile>>>& map) override;
         virtual ~Enemy() = 0;
 };
 

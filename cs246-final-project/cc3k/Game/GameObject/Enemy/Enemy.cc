@@ -5,3 +5,4 @@ Enemy::Enemy(int x, int y, int hp, int id, int atk, int def): GameObject{x, y, i
 int Enemy::getHP() { return hp; }
 int Enemy::getAtk() { return atk; }
 int Enemy::getDef() { return def; }
+Enemy::~Enemy() = default;

@@ -35,7 +35,7 @@ class Tile {
 
         pair<int, int> getPosn();
 
-        virtual ~Tile() = 0;
+        virtual ~Tile() = default;
 };
 
 #endif
