@@ -2,13 +2,14 @@
 #define ENEMY_H
 
 #include "GameObject.h"
-#include "Player.h"
 #include "Tile.h"
 #include "tileIDs.h"
 #include "GameMap.h"
 #include <utility>
 
 using namespace std;
+
+class Player;
 
 class Enemy: public GameObject {
     protected:

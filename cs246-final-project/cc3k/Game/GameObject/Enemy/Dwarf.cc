@@ -1,5 +1,6 @@
 #include "Dwarf.h"
 #include "tileIDs.h"
+#include "Player.h"
 
 using namespace std;
 

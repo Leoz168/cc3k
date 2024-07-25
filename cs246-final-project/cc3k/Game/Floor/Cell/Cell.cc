@@ -2,4 +2,4 @@
 
 using namespace std;
 
-Cell::Cell(int x, int y, int id) : Tile{x, y, id} {}
+Cell::Cell(int x, int y, int id, int room_number) : Tile{x, y, id, room_number} {}

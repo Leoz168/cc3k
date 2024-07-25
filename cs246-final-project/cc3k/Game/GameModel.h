@@ -66,7 +66,7 @@ class GameModel: public GameSubject {
             {'4', WOUNDATK},
             {'5', WOUNDDEF},
             {'6', NORMALGOLD},
-            {'7', SMALLGOLD}
+            {'7', SMALLGOLD},
             {'8', MERCHANTHOARD},
             {'9', DRAGONHOARD}
         };
@@ -123,7 +123,7 @@ class GameModel: public GameSubject {
 
         // Game State Control:
         bool startGame();
-        void nextFloor(ifstream& mapFile, bool isMapProvided)
+        void nextFloor(ifstream& mapFile, bool isMapProvided);
         bool restartGame();
         void quitGame();
         bool setScore();

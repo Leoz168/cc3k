@@ -6,7 +6,7 @@
 class FloorTile : public Cell {
         int id;
     public:
-        FloorTile(int x, int y);
+        FloorTile(int x, int y, int room_number);
         Tile* getTilePtr();
         ~FloorTile();
 };

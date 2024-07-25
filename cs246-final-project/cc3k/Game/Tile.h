@@ -4,16 +4,19 @@
 #include <utility>
 #include <vector>
 #include <memory>
-#include "GameObject/Player/Player.h"
 #include "GameMap.h"
+#include "tileGenConsts.h"
 using namespace std;
+
+class Player;
 
 class Tile {
     protected:
         int x, y;
         int id;
+        int room_number;
     public:
-        Tile(int x, int y, int id);
+        Tile(int x, int y, int id, int room_number = NOASSOCIATEDROOM);
 
         // getTileID gets the unique tile id defined in the consts.h file
         // Default: returns this class' id field
@@ -21,6 +24,8 @@ class Tile {
 
         // getTilePtr gets the ptr to the Tile object
         virtual Tile* getTilePtr() = 0;
+
+        virtual int getRoomNumber();
 
         // move moves the Tile by (dx, dy), if the thing there is movable.
         //     Returns whether the thing was moved or not.

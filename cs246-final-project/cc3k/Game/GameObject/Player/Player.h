@@ -3,9 +3,10 @@
 
 #include "GameObject.h"
 #include "EffectHandler.h"
-#include "Enemy.h"
 #include "tileIDs.h"
 #include <cmath>
+
+class Enemy;
 
 class Player: public GameObject {
     protected:

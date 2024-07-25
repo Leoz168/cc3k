@@ -52,3 +52,7 @@ bool GameMap::addTile(int x, int y, shared_ptr<Tile> new_tile) {
     tile_vector.emplace_back(new_tile);
     return return_val;
 }
+
+map<int, vector<pair<int, int>>>& GameMap::getRoomMapping() {
+    return room_mapping;
+}

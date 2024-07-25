@@ -13,6 +13,7 @@ using namespace std;
 
 class GameMap {
         map<pair<int, int>, vector<shared_ptr<Tile>>> game_map;
+        map<int, vector<pair<int, int>>> room_mapping;
     public:
         explicit GameMap();
         GameMap(string filename);
@@ -39,6 +40,8 @@ class GameMap {
         // addTile adds a tile to the front at (x, y) and
         //     returns true if it is the first tile there.
         bool addTile(int x, int y, shared_ptr<Tile> new_tile);
+
+        map<int, vector<pair<int, int>>>& getRoomMapping();
 };
 
 #endif
