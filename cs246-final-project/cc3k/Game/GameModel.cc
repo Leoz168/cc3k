@@ -3,44 +3,173 @@ using namespace std;
 
 // Get the ID of the tile at the given coordinates
 int GameModel::tileIDAt(int x, int y) {
-    return map.tileIDAt(x, y);
-}
-
-// Create the player based on the chosen race
-void GameModel::createPlayer(char type) {
-    ObjectCreator playerCreator;
-    pair<int, int> pos = randomPosition();
-    playerRace = playerRaceMap[type];
-    player = playerCreator.createObject(pos.first, pos.second, '@', playerRace, false, effectHandler);
-}
-
-// Initialize the cells
-void GameModel::initializeCells() {
-
+    return gameMap.tileIDAt(x, y);
 }
 
 // Initialize the map
 void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
-    if (isMapProvided) {
-        readMap(mapFile);
+    ifstream empty_map_file{"MapFiles/emptyfloor.txt"};
+    if (!isMapProvided) {
+        readMap(empty_map_file);
     } else {
-
+        readMap(mapFile);
     }
 }
 
-// Read the map from the file
-void GameModel::readMap(istream &mapFile) {
+// Read the map from the file: either provided one or emptyfloor.txt
+void GameModel::readMap(std::istream &mapFile) {
+    string line;
+    int y = 0; // Line number
 
+    while (getline(mapFile, line)) {
+        for (int x = 0; x < line.size(); ++x) {
+            char type = line[x];
+            // Process each character - spawn new object and add it to the gameMap
+            spawnObject(int x, int y, char type);
+        } //for
+        y++; // Move to the next line
+    } //while
 }
 
-// Spawn a random game object
-shared_ptr<Tile> GameModel::spawnRandGameObj() {
+// Spawn a specific type of game object and add it to the gameMap
+void GameModel::spawnObject(int x, int y, char type) {
+    CellCreator makeCell;
+    EnemyCreator makeEnemy;
+    ItemCreator makeItem;
+    PlayerCreator makePlayer;
+    std::unique_ptr<Tile> newObject;
+    int id = NOTHING;
 
+    if (type == '@') { // Input char is player
+        newObject = makePlayer.spawnPlayer(x, y, playerRace, ehr);
+        player = std::move(newObject);
+    } else if (cellMap.count(type)) { // Input char is a cell
+        id = cellMap[type];
+        newObject = makeCell.spawnTile(x, y, id, false);
+        cells.emplace_back(std::move(newObject));
+    } else if (itemMap.count(type)) { // Input char is an Item
+        id = itemMap[type];
+        newObject = makeItem.spawnTile(x, y, id, false);
+        items.emplace_back(std::move(newObject));
+    } else if (enemyMap.count(type)) { // Input char is an Enemy
+        id = enemyMap[type];
+        newObject = makeEnemy.spawnTile(x, y, id, false);
+        enemies.emplace_back(std::move(newObject));
+    } else {
+        std::cerr << "Reached default. Invalid input " + type + "type in spawnObject class" << endl;
+        return;
+    }
+
+    // Add newObject to gameMap:
+    gameMap.addTile(x, y, std::move(newObject));
 }
 
-// Spawn a specific type of game object
-shared_ptr<Tile> GameModel::spawn(string type) {
+// Spawn a random game object(Item or Enemy) and add it to the gameMap
+void GameModel::spawnRandObject(int x, int y, char type) {
+    CellCreator makeCell;
+    EnemyCreator makeEnemy;
+    ItemCreator makeItem;
+    std::unique_ptr<Tile> newObject;
 
+    switch (type) {
+        case 'E':
+            newObject = makeEnemy.spawnTile(x, y, HUMAN, true); // default value for id
+            enemies.emplace_back(std::move(newObject));
+            break;
+
+        case 'G':
+            newObject = makeItem.spawnTile(x, y, GOLD, true); // default value for id
+            items.emplace_back(std::move(newObject));
+            break;
+
+        case 'P':
+            newObject = makeItem.spawnTile(x, y, RESTOREHEALTH, true); // default value for id
+            items.emplace_back(std::move(newObject));
+            break;
+
+        default:
+            std::cerr << "Reached default. Invalid input " + type + "type in spawnRandObject class" << endl;
+            return;
+    }
+
+    // Add newObject to gameMap:
+    gameMap.addTile(x, y, std::move(newObject));
+}
+
+// Create the player based on the chosen race
+bool GameModel::createPlayerAtRandPosn(char type) {
+    if (playerRaceMap.count(type)) { // input race is valid
+        playerRace = playerRaceMap[type];
+        pair<int, int> pos = randomPosition();
+
+        spawnObject(pos.x, pos.y, '@');
+
+        return true;
+    }
+    return false;
+}
+
+void GameModel::createStairAtRandPosition() {
+    pair<int, int> pos = randomPosition();
+    spawnObject(pos.x, pos.y, '\\');
+}
+
+void createEnemyAtRandPosn() {
+    const int MAX_ENEMIES = 20;
+    int enemyCount = enemies.size();
+    pair<int, int> pos = make_pair(0, 0);
+
+    while (enemyCount < MAX_ENEMIES) {
+        pair = randomPosition();
+        spawnRandObject(pos.x, pos.y, 'E');
+        ++enemyCount;
+    }
+}
+
+void createGoldAtRandPosn() {
+    const int MAX_GOLD_PILES = 10;
+    int goldPileCount= 0;
+    int itemId = NOTHING;
+
+    // Determine how many Gold items already exist:
+    for (auto item: items) {
+        itemId = item.getTileID();
+        if (itemID == SMALLGOLD || itemID == NORMALGOLD || itemID == MERCHANTHOARD || itemID == DRAGONHOARD) {
+            goldPileCount++;
+        }
+    }
+
+    pair<int, int> pos = make_pair(0, 0);
+    
+    // Spawn remaining Gold to make 10
+    while (goldPileCount < MAX_GOLD_PILES) {
+        pair = randomPosition();
+        spawnRandObject(pos.x, pos.y, 'G');
+        ++goldPileCount;
+    }
+}
+
+void createPotionAtRandPosn() {
+    const int MAX_POTIONS = 10;
+    int potionCount= 0;
+    int itemId = NOTHING;
+
+    // Determine how many Potion items already exist:
+    for (auto item: items) {
+        itemId = item.getTileID();
+        if (!(itemID == SMALLGOLD || itemID == NORMALGOLD || itemID == MERCHANTHOARD || itemID == DRAGONHOARD)) {
+            potionCount++;
+        }
+    }
+
+    pair<int, int> pos = make_pair(0, 0);
+    
+    // Spawn remaining Potion to make 10
+    while (potionCount < MAX_POTIONS) {
+        pair = randomPosition();
+        spawnRandObject(pos.x, pos.y, 'P');
+        ++potionCount;
+    }
 }
 
 // Move the player in the specified direction

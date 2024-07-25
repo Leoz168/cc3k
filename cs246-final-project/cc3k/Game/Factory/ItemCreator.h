@@ -2,7 +2,7 @@
 #define ITEMCREATOR_H
 
 #include "Creator.h"
-#include "TileIDs.h"
+#include "tileIDs.h"
 #include "Item.h"
 #include "Gold.h"
 #include "MerchantHoard.h"
@@ -63,9 +63,9 @@ public:
     std::unique_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
         std::unique_ptr<Tile> newItem;
         if (is_rand_generated) {
-            if (id == GOLD) {
+            if (id == GOLD) { // default values - provde in ObjectCreator
                 id = chooseGoldType();
-            } else if (id == RESTOREHEALTH) {
+            } else if (id == RESTOREHEALTH) { // default values - provde in ObjectCreator
                 id = choosePotionType();
             }
         }
