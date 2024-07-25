@@ -18,7 +18,7 @@ void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
 
     // Initialize the remaining objects which have not yet been created:
     createPlayerAtRandPosn();
-    createStairAtRandPosition();
+    createStairAtRandPosn();
     createPotionAtRandPosn();
     createGoldAtRandPosn();
     createEnemyAtRandPosn();
@@ -27,7 +27,7 @@ void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
 }
 
 // Read the map from the file: either provided one or emptyfloor.txt
-void GameModel::readMap(std::istream &mapFile) {
+void GameModel::readMap(std::ifstream &mapFile) {
     string line;
     int y = 0; // Line number
 
@@ -35,7 +35,7 @@ void GameModel::readMap(std::istream &mapFile) {
         for (int x = 0; x < line.size(); ++x) {
             char type = line[x];
             // Process each character - spawn new object and add it to the gameMap
-            spawnObject(int x, int y, char type);
+            spawnObject(x, y, type);
         } //for
         y++; // Move to the next line
     } //while
@@ -51,12 +51,12 @@ void GameModel::spawnObject(int x, int y, char type) {
     int id = NOTHING;
 
     if (type == '@') { // Input char is player
-        newObject = makePlayer.spawnPlayer(x, y, playerRace, ehr);
+        newObject = makePlayer.spawnPlayer(x, y, playerRace, effectHandler.get());
         player = std::move(newObject); // initialize the player
-        playerCreated = true;
+        isPlayerCreated = true;
 
     } else if (cellMap.count(type)) { // Input char is a cell
-        id = cellMap[type];
+        id = cellMap.at(type);
 
         if (id == STAIR) isStairCreated = true;
 
@@ -64,12 +64,12 @@ void GameModel::spawnObject(int x, int y, char type) {
         cells.emplace_back(std::move(newObject)); // add to cell vector
 
     } else if (itemMap.count(type)) { // Input char is an Item
-        id = itemMap[type];
+        id = itemMap.at(type);
         newObject = makeItem.spawnTile(x, y, id, false);
         items.emplace_back(std::move(newObject));
 
     } else if (enemyMap.count(type)) { // Input char is an Enemy
-        id = enemyMap[type];
+        id = enemyMap.at(type);
         newObject = makeEnemy.spawnTile(x, y, id, false);
         enemies.emplace_back(std::move(newObject)); // add to enemies vector
 
@@ -119,7 +119,7 @@ bool GameModel::createPlayerAtRandPosn() {
     if (isPlayerCreated) return false; // Player already exists
 
     pair<int, int> pos = randomPosition();
-    spawnObject(pos.x, pos.y, '@');
+    spawnObject(pos.first, pos.second, '@');
     return true;
 }
 
@@ -127,7 +127,7 @@ void GameModel::createStairAtRandPosn() {
     if (isStairCreated) return; // Stair already exists 
 
     pair<int, int> pos = randomPosition();
-    spawnObject(pos.x, pos.y, '\\');
+    spawnObject(pos.first, pos.second, '\\');
 }
 
 void GameModel::createEnemyAtRandPosn() {
@@ -137,7 +137,7 @@ void GameModel::createEnemyAtRandPosn() {
 
     while (enemyCount < MAX_ENEMIES) {
         pair = randomPosition();
-        spawnRandObject(pos.x, pos.y, 'E');
+        spawnRandObject(pos.first, pos.second, 'E');
         ++enemyCount;
     }
 }
@@ -149,8 +149,8 @@ void GameModel::createGoldAtRandPosn() {
 
     // Determine how many Gold items already exist:
     for (auto item: items) {
-        itemId = item.getTileID();
-        if (itemID == SMALLGOLD || itemID == NORMALGOLD || itemID == MERCHANTHOARD || itemID == DRAGONHOARD) {
+        itemId = item->getTileID();
+        if (itemId == SMALLGOLD || itemId == NORMALGOLD || itemId == MERCHANTHOARD || itemId == DRAGONHOARD) {
             goldPileCount++;
         }
     }
@@ -160,7 +160,7 @@ void GameModel::createGoldAtRandPosn() {
     // Spawn remaining Gold to make 10
     while (goldPileCount < MAX_GOLD_PILES) {
         pair = randomPosition();
-        spawnRandObject(pos.x, pos.y, 'G');
+        spawnRandObject(pos.first, pos.second, 'G');
         ++goldPileCount;
     }
 }
@@ -172,8 +172,8 @@ void GameModel::createPotionAtRandPosn() {
 
     // Determine how many Potion items already exist:
     for (auto item: items) {
-        itemId = item.getTileID();
-        if (!(itemID == SMALLGOLD || itemID == NORMALGOLD || itemID == MERCHANTHOARD || itemID == DRAGONHOARD)) {
+        itemId = item->getTileID();
+        if (!(itemId == SMALLGOLD || itemId == NORMALGOLD || itemId == MERCHANTHOARD || itemId == DRAGONHOARD)) {
             potionCount++;
         }
     }
@@ -183,7 +183,7 @@ void GameModel::createPotionAtRandPosn() {
     // Spawn remaining Potion to make 10
     while (potionCount < MAX_POTIONS) {
         pair = randomPosition();
-        spawnRandObject(pos.x, pos.y, 'P');
+        spawnRandObject(pos.first, pos.second, 'P');
         ++potionCount;
     }
 }

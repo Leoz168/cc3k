@@ -97,7 +97,7 @@ class GameModel: public GameSubject {
 
         // Creators:
         void initializeMap(ifstream &mapFile, bool isMapProvided);
-        void readMap(istream& mapFile);
+        void readMap(ifstream& mapFile);
 
         // Spawn a specific type of game object and add it to the gameMap
         void spawnObject(int x, int y, char type);
@@ -108,7 +108,7 @@ class GameModel: public GameSubject {
         // - G: gold
         void spawnRandObject(int x, int y, char type);
 
-        void createPlayerAtRandPosn();
+        bool createPlayerAtRandPosn();
         void createStairAtRandPosn();
         void createEnemyAtRandPosn();
         void createGoldAtRandPosn();

@@ -11,7 +11,7 @@
 
 class EffectHandler;
 
-class PlayerFactory : public Creator {
+class PlayerCreator : public Creator {
 
     public:
         std::unique_ptr<Tile> spawnPlayer(int x, int y, int id, EffectHandler *ehr) override {
