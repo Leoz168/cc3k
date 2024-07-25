@@ -71,7 +71,7 @@ bool Enemy::takeAction(Player* player, GameMap& map) {
     if (abs(playerPosn.first - thisPosn.first) <= 1 && abs(playerPosn.second - thisPosn.second) <= 1 && hostile) {
         attackPlayer(player);
         postAtkAction(player, map);
-    } else {
+    } else if (!is_frozen) {
         Directions direction = Directions(rand() % NUM_DIRECTIONS);
         for (int i = 0; i < NUM_DIRECTIONS; i++) {
             int dx, dy;
@@ -122,4 +122,9 @@ bool Enemy::takeAction(Player* player, GameMap& map) {
         }
     }
     return false;
+}
+
+bool Enemy::setFrozen(bool frozen) {
+    is_frozen = frozen;
+    return frozen;
 }

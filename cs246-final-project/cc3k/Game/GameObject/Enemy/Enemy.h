@@ -18,6 +18,7 @@ class Enemy: public GameObject {
         int def;
         Enemy* thisEnemy;
         bool hostile;
+        bool is_frozen = false;
 
         virtual void preAction(Player* player, GameMap& map);
         virtual void postMoveAction(Player* player, GameMap& map);
@@ -55,6 +56,8 @@ class Enemy: public GameObject {
         //          If neither action can be done, does nothing.
         // Returns whether the tile should be despawned after the action (default: false)
         virtual bool takeAction(Player* player, GameMap& map) override;
+
+        bool setFrozen(bool);
 
         virtual ~Enemy() = default;
 };

@@ -2,7 +2,8 @@
 
 #include <vector>
 #include <memory>
-#include "fstream"
+#include <fstream>
+#include <iostream>
 #include <string>
 
 #include "GameSubject.h"
@@ -58,7 +59,7 @@ class GameModel: public GameSubject {
             {'+', DOORWAY},
             {'\\', STAIR}
         };
-        
+
         const std::map<char, int> itemMap {
             {'0', RESTOREHEALTH},
             {'1', BOOSTATK},
@@ -114,6 +115,7 @@ class GameModel: public GameSubject {
         bool moveEnemyInRandomDirection();
         bool isValidMove(shared_ptr<GameObject> gameObject);
         bool freezeEnemy();
+        bool unfreezeEnemy();
         
 
         // Attack:
