@@ -13,7 +13,7 @@ using namespace std;
 
 class GameMap {
         map<pair<int, int>, vector<shared_ptr<Tile>>> game_map;
-        map<int, vector<pair<int, int>>> room_floortile_mapping;
+        map<int, vector<pair<int, int>>> room_floortile_coord_mapping;
         int num_rooms = 0;
     public:
         explicit GameMap();

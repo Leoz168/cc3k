@@ -54,7 +54,7 @@ bool GameMap::addTile(int x, int y, shared_ptr<Tile> new_tile) {
 }
 
 map<int, vector<pair<int, int>>>& GameMap::getRoomMapping() {
-    return room_mapping;
+    return room_floortile_coord_mapping;
 }
 
 
