@@ -1,47 +1,82 @@
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include <ctime>
+#include <string>
 
 #include "observer.h"
+#include "GameModel.h"
 #include "GameSubject.h"
 
 using namespace std;
 
 enum class PlayerCommand {NO, SO, EA, WE, NE, NW, SE, SW, U, A, F, R, Q, NONE};
 
-int main() {
-    srand(time(NULL));
-
-    char mode;
-    cin >> mode;
-    while (true) { // choose the race
-        switch (mode)
-        {
-        case 's': // shade
-            /* code */
-            break;
-
-        case 'd': // drow
-            /* code */
-            break;
-
-        case 'v': // vampire
-            /* code */
-            break;
-
-        case 'g': // goblin
-            /* code */
-            break;
-    
-        case 't': // troll
-            /* code */
-            break;
-        }
-    }
-    
-    string command;
+int main(int argc, char* argv[]) {
+    // srand(time(NULL));
+    srand((unsigned int)time(0));
+    GameModel gm;
+    gm.startGame();
     while (true) {
-        cin >> command;
+        string command;
+        string filename;
+        int i = 0;
+        if (argc == 2) {
+            while (argv[1][i]) {
+                filename += argv[1][i];       // read arg into fileName
+                ++i;
+            }
+            ifstream fs {filename};
+            gm.initializeMap(fs, true);
+        }
+
+        while (true) {
+            char race;
+            cin >> race;
+            switch (race)
+            {
+            case 's':
+                gm.createPlayerAtRandPosn(race);
+                break;
+
+            case 'd':
+                gm.createPlayerAtRandPosn(race);
+                break;
+
+            case 'v':
+                gm.createPlayerAtRandPosn(race);
+                break;
+
+            case 'g':
+                gm.createPlayerAtRandPosn(race);
+                break;
+
+            case 't':
+                gm.createPlayerAtRandPosn(race);
+                break;
+
+            case 'f':
+                gm.freezeEnemy();
+                while (true) {
+                    char is_refreeze;
+                    cin >> is_refreeze;
+                    if (is_refreeze == 'f') {
+                        gm.unfreezeEnemy();
+                        break;
+                    }
+                }
+                break;
+
+            case 'r':
+                gm.restartGame();
+                continue;
+            
+            default:
+                cout << "Invalid input" << endl;
+                break;
+            }
+        }
+
         if (cin.fail() && !cin.eof()) {
             cin.clear();
             cin.ignore();
