@@ -8,12 +8,22 @@ int GameModel::tileIDAt(int x, int y) {
 
 // Initialize the map
 void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
+    // Initialize the map from a file:
     ifstream empty_map_file{"MapFiles/emptyfloor.txt"};
     if (!isMapProvided) {
         readMap(empty_map_file);
     } else {
         readMap(mapFile);
     }
+
+    // Initialize the remaining objects which have not yet been created:
+    createPlayerAtRandPosn();
+    createStairAtRandPosition();
+    createPotionAtRandPosn();
+    createGoldAtRandPosn();
+    createEnemyAtRandPosn();
+    createDragonAndHoardAtRandPosn();
+
 }
 
 // Read the map from the file: either provided one or emptyfloor.txt
@@ -42,19 +52,27 @@ void GameModel::spawnObject(int x, int y, char type) {
 
     if (type == '@') { // Input char is player
         newObject = makePlayer.spawnPlayer(x, y, playerRace, ehr);
-        player = std::move(newObject);
+        player = std::move(newObject); // initialize the player
+        playerCreated = true;
+
     } else if (cellMap.count(type)) { // Input char is a cell
         id = cellMap[type];
+
+        if (id == STAIR) isStairCreated = true;
+
         newObject = makeCell.spawnTile(x, y, id, false);
-        cells.emplace_back(std::move(newObject));
+        cells.emplace_back(std::move(newObject)); // add to cell vector
+
     } else if (itemMap.count(type)) { // Input char is an Item
         id = itemMap[type];
         newObject = makeItem.spawnTile(x, y, id, false);
         items.emplace_back(std::move(newObject));
+
     } else if (enemyMap.count(type)) { // Input char is an Enemy
         id = enemyMap[type];
         newObject = makeEnemy.spawnTile(x, y, id, false);
-        enemies.emplace_back(std::move(newObject));
+        enemies.emplace_back(std::move(newObject)); // add to enemies vector
+
     } else {
         std::cerr << "Reached default. Invalid input " + type + "type in spawnObject class" << endl;
         return;
@@ -97,24 +115,22 @@ void GameModel::spawnRandObject(int x, int y, char type) {
 }
 
 // Create the player based on the chosen race
-bool GameModel::createPlayerAtRandPosn(char type) {
-    if (playerRaceMap.count(type)) { // input race is valid
-        playerRace = playerRaceMap[type];
-        pair<int, int> pos = randomPosition();
+bool GameModel::createPlayerAtRandPosn() {
+    if (isPlayerCreated) return false; // Player already exists
 
-        spawnObject(pos.x, pos.y, '@');
-
-        return true;
-    }
-    return false;
+    pair<int, int> pos = randomPosition();
+    spawnObject(pos.x, pos.y, '@');
+    return true;
 }
 
-void GameModel::createStairAtRandPosition() {
+void GameModel::createStairAtRandPosn() {
+    if (isStairCreated) return; // Stair already exists 
+
     pair<int, int> pos = randomPosition();
     spawnObject(pos.x, pos.y, '\\');
 }
 
-void createEnemyAtRandPosn() {
+void GameModel::createEnemyAtRandPosn() {
     const int MAX_ENEMIES = 20;
     int enemyCount = enemies.size();
     pair<int, int> pos = make_pair(0, 0);
@@ -126,7 +142,7 @@ void createEnemyAtRandPosn() {
     }
 }
 
-void createGoldAtRandPosn() {
+void GameModel::createGoldAtRandPosn() {
     const int MAX_GOLD_PILES = 10;
     int goldPileCount= 0;
     int itemId = NOTHING;
@@ -149,7 +165,7 @@ void createGoldAtRandPosn() {
     }
 }
 
-void createPotionAtRandPosn() {
+void GameModel::createPotionAtRandPosn() {
     const int MAX_POTIONS = 10;
     int potionCount= 0;
     int itemId = NOTHING;
@@ -170,6 +186,11 @@ void createPotionAtRandPosn() {
         spawnRandObject(pos.x, pos.y, 'P');
         ++potionCount;
     }
+}
+
+void GameModel::createDragonAndHoardAtRandPosn() {
+    if (isDragonHoardCreated && isDragonCreated) return; // both already exist
+    
 }
 
 // Move the player in the specified direction

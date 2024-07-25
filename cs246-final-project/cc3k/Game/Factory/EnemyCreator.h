@@ -64,10 +64,8 @@ class EnemyCreator : public Creator {
                 case HALFLING:
                     newEnemy = make_unique<Halfling>(x, y);
                     break;
-                case DRAGON:
-                    newEnemy = make_unique<Dragon>(x, y);
-                    break;
-                default:
+                case default:
+                    std::cerr << "Could Not initialize enemy. Invalid id" + std::to_string(id) + " in EnemyCreator" << endl;
                     break;
             }
 

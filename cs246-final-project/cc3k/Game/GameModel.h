@@ -82,6 +82,12 @@ class GameModel: public GameSubject {
             {'W', DWARF},
         };
 
+        // Keep track of what has already been created:
+        bool isPlayerCreated = false;
+        bool isStairCreated = false;
+        bool isDragonHoardCreated = false;
+        bool isDragonCreated = false;
+
     public:
         std::pair<int, int> randomPosition();
 
@@ -102,11 +108,12 @@ class GameModel: public GameSubject {
         // - G: gold
         void spawnRandObject(int x, int y, char type);
 
-        void createPlayerAtRandPosn(char type);
-        void createStairAtRandPosition();
+        void createPlayerAtRandPosn();
+        void createStairAtRandPosn();
         void createEnemyAtRandPosn();
         void createGoldAtRandPosn();
         void createPotionAtRandPosn();
+        void createDragonAndHoardAtRandPosn();
 
 
         // Move:
