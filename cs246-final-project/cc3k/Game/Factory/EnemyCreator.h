@@ -7,6 +7,7 @@
 #include "Dragon.h"
 #include "Dwarf.h"
 #include "Elf.h"
+#include "Orc.h"
 #include "Halfling.h"
 #include "Human.h"
 #include "Merchant.h"
@@ -66,7 +67,7 @@ class EnemyCreator : public Creator {
                 case DRAGON:
                     newEnemy = make_unique<Dragon>(x, y);
                     break;
-                case default:
+                default:
                     break;
             }
 

@@ -38,7 +38,7 @@ class PlayerFactory : public Creator {
                     newPlayer = make_unique<Goblin>(x, y, ehr);
                     break;
 
-                case default:
+                default:
                     newPlayer = make_unique<Shade>(x, y, ehr);
                     break;
             }

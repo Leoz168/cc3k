@@ -1,4 +1,4 @@
-#include "NormalPile.h"
+#include "NormalGold.h"
 #include "tileIDs.h"
 
 NormalGold::NormalGold(int x, int y) :

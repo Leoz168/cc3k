@@ -5,17 +5,18 @@
 #include "tileIDs.h"
 #include "Item.h"
 #include "Gold.h"
+#include "NormalGold.h"
+#include "SmallGold.h"
 #include "MerchantHoard.h"
 #include "DragonHoard.h"
-#include "BA.h"
-#include "BD.h"
-#include "RH.h"
-#include "PH.h"
-#include "WA.h"
-#include "WD.h"
+#include "BoostAtk.h"
+#include "BoostDef.h"
+#include "RestoreHealth.h"
+#include "PoisonHealth.h"
+#include "WoundAtk.h"
+#include "WoundDef.h"
 
-class ItemCreator : public Creator
-{
+class ItemCreator : public Creator {
 	// Potion probabilities
 	int totalGoldProbability = 6;
 	map<int, int> potionMap {
@@ -46,6 +47,7 @@ class ItemCreator : public Creator
             }
         }
         return NORMALGOLD;
+    }
 
     int choosePotionType() {
         int probabilityIndex = rand() % totalPotionProbability;
@@ -59,50 +61,49 @@ class ItemCreator : public Creator
         return RESTOREHEALTH;
     }
 
-public:
-    std::unique_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
-        std::unique_ptr<Tile> newItem;
-        if (is_rand_generated) {
-            if (id == GOLD) { // default values - provde in ObjectCreator
-                id = chooseGoldType();
-            } else if (id == RESTOREHEALTH) { // default values - provde in ObjectCreator
-                id = choosePotionType();
+    public:
+        std::unique_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
+            std::unique_ptr<Tile> newItem;
+            if (is_rand_generated) {
+                if (id == GOLD) { // default values - provde in ObjectCreator
+                    id = chooseGoldType();
+                } else if (id == RESTOREHEALTH) { // default values - provde in ObjectCreator
+                    id = choosePotionType();
+                }
             }
+
+
+            switch (id) {
+                case NORMALGOLD:
+                    newItem = std::make_unique<NormalGold>(x, y);
+                    break;
+                case SMALLGOLD:
+                    newItem = std::make_unique<SmallGold>(x, y);
+                    break;
+                case DRAGONHOARD:
+                    newItem = std::make_unique<DragonHoard>(x, y);
+                    break;
+                case RESTOREHEALTH:
+                    newItem = std::make_unique<RestoreHealth>(x, y);
+                    break;
+                case BOOSTATK:
+                    newItem = std::make_unique<BoostAtk>(x, y);
+                    break;
+                case BOOSTDEF:
+                    newItem = std::make_unique<BoostDef>(x, y);
+                    break;
+                case POISONHEALTH:
+                    newItem = std::make_unique<PoisonHealth>(x, y);
+                    break;
+                case WOUNDATK:
+                    newItem = std::make_unique<WoundAtk>(x, y);
+                    break;
+                case WOUNDDEF:
+                    newItem = std::make_unique<WoundDef>(x, y);
+                    break;
+            }
+            return newItem;
         }
-
-
-        switch (id) {
-            case NORMALGOLD:
-                newItem = std::make_unique<NormalGold>(x, y);
-                break;
-            case SMALLGOLD:
-                newItem = std::make_unique<SmallGold>(x, y);
-                break;
-            case DRAGONHOARD:
-                newItem = std::make_unique<DragonHoard>(x, y);
-                break;
-            case RESTOREHEALTH:
-                newItem = std::make_unique<RH>(x, y);
-                break;
-            case BOOSTATK:
-                newItem = std::make_unique<BA>(x, y);
-                break;
-            case BOOSTDEF:
-                newItem = std::make_unique<BD>(x, y);
-                break;
-            case POISONHEALTH:
-                newItem = std::make_unique<PH>(x, y);
-                break;
-            case WOUNDATK:
-                newItem = std::make_unique<WA>(x, y);
-                break;
-            case WOUNDDEF:
-                newItem = std::make_unique<WD>(x, y);
-                break;
-        }
-        return newItem;
-    }
-
 };
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef NORMALPILE_H
-#define NORMALPILE_H
+#ifndef NORMALGOLD_H
+#define NORMALGOLD_H
 
 #include "Gold.h"
 

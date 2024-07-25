@@ -13,7 +13,6 @@
 #include "Item.h"
 #include "Player.h"
 #include "GameMap.h"
-#include "Factory/ObjectCreator.h"
 #include "Factory/CellCreator.h"
 #include "Factory/EnemyCreator.h"
 #include "Factory/ItemCreator.h"
@@ -40,7 +39,7 @@ class GameModel: public GameSubject {
             {'v', VAMPIRE},
             {'g', GOBLIN},
             {'t', TROLL}
-        }
+        };
         int playerRace = SHADE;
         std::shared_ptr<EffectHandler> effectHandler;
 
@@ -58,7 +57,7 @@ class GameModel: public GameSubject {
             {'#', PASSAGE},
             {'+', DOORWAY},
             {'\\', STAIR}
-        }
+        };
         const std::map<char, int> itemMap {
             {'0', RESTOREHEALTH},
             {'1', BOOSTATK},
@@ -70,7 +69,7 @@ class GameModel: public GameSubject {
             {'7', SMALLGOLD}
             {'8', MERCHANTHOARD},
             {'9', DRAGONHOARD}
-        }
+        };
         const std::map<char, int> enemyMap {
             {'D', DRAGON},
             {'H', HUMAN},
@@ -79,7 +78,7 @@ class GameModel: public GameSubject {
             {'L', HALFLING},
             {'M', MERCHANT},
             {'W', DWARF},
-        }
+        };
 
     public:
         std::pair<int, int> randomPosition();
