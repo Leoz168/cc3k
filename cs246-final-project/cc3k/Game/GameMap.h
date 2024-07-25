@@ -14,6 +14,7 @@ using namespace std;
 class GameMap {
         map<pair<int, int>, vector<shared_ptr<Tile>>> game_map;
         map<int, vector<pair<int, int>>> room_mapping;
+        int num_rooms = 0;
     public:
         explicit GameMap();
         GameMap(string filename);
@@ -42,6 +43,10 @@ class GameMap {
         bool addTile(int x, int y, shared_ptr<Tile> new_tile);
 
         map<int, vector<pair<int, int>>>& getRoomMapping();
+
+        int getNumRooms();
+        int setNumRooms(int);
+        int addRoom();
 };
 
 #endif

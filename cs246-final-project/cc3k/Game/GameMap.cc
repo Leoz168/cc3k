@@ -56,3 +56,16 @@ bool GameMap::addTile(int x, int y, shared_ptr<Tile> new_tile) {
 map<int, vector<pair<int, int>>>& GameMap::getRoomMapping() {
     return room_mapping;
 }
+
+
+int GameMap::getNumRooms() {
+    return num_rooms;
+}
+
+int GameMap::setNumRooms(int num) {
+    num_rooms = num;
+}
+
+int GameMap::addRoom() {
+    num_rooms++;
+}
