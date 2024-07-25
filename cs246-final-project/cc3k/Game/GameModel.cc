@@ -96,7 +96,7 @@ void GameModel::spawnRandObject(int x, int y, char type) {
             break;
 
         case 'G':
-            newObject = makeItem.spawnTile(x, y, GOLD, true); // default value for id
+            newObject = makeItem.spawnTile(x, y, NORMALGOLD, true); // default value for id
             items.emplace_back(std::move(newObject));
             break;
 

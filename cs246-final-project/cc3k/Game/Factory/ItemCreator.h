@@ -18,7 +18,7 @@
 
 class ItemCreator : public Creator {
 	// Potion probabilities
-	int totalGoldProbability = 6;
+	int totalPotionProbability = 6;
 	map<int, int> potionMap {
 		{RESTOREHEALTH, 0},
 		{BOOSTATK, 1},
@@ -40,7 +40,7 @@ class ItemCreator : public Creator {
     int chooseGoldType() {
         int probabilityIndex = rand() % totalGoldProbability;
         int sum = 0;
-        for (const auto& entry : goldProbabilityMap) {
+        for (const auto& entry : goldMap) {
             sum += entry.second;
             if (sum >= probabilityIndex) {
                 return entry.first;
@@ -52,7 +52,7 @@ class ItemCreator : public Creator {
     int choosePotionType() {
         int probabilityIndex = rand() % totalPotionProbability;
         int sum = 0;
-        for (const auto& entry : potionProbabilityMap) {
+        for (const auto& entry : potionMap) {
             sum += entry.second;
             if (sum >= probabilityIndex) {
                 return entry.first;
@@ -65,7 +65,7 @@ class ItemCreator : public Creator {
         std::unique_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
             std::unique_ptr<Tile> newItem;
             if (is_rand_generated) {
-                if (id == GOLD) { // default values - provde in ObjectCreator
+                if (id == NORMALGOLD) { // default values - provde in ObjectCreator
                     id = chooseGoldType();
                 } else if (id == RESTOREHEALTH) { // default values - provde in ObjectCreator
                     id = choosePotionType();

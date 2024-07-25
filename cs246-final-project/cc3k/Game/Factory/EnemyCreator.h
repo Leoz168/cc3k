@@ -1,6 +1,10 @@
 #ifndef ENEMYCREATOR_H
 #define ENEMYCREATOR_H
 
+#include <vector>
+#include <stdlib.h>
+#include <iostream>
+
 #include "Creator.h"
 #include "tileIDs.h"
 #include "Enemy.h"
@@ -64,7 +68,7 @@ class EnemyCreator : public Creator {
                 case HALFLING:
                     newEnemy = make_unique<Halfling>(x, y);
                     break;
-                case default:
+                default:
                     std::cerr << "Could Not initialize enemy. Invalid id" + std::to_string(id) + " in EnemyCreator" << endl;
                     break;
             }
