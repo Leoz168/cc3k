@@ -13,12 +13,12 @@
 #include "Item.h"
 #include "Player.h"
 #include "GameMap.h"
-#include "Factory/CellCreator.h"
-#include "Factory/EnemyCreator.h"
-#include "Factory/ItemCreator.h"
-#include "Factory/PlayerCreator.h"
-#include "Handler/AttackHandler.h"
-#include "Handler/MoveHandler.h"
+#include "CellCreator.h"
+#include "EnemyCreator.h"
+#include "ItemCreator.h"
+#include "PlayerCreator.h"
+#include "AttackHandler.h"
+#include "MoveHandler.h"
 #include "EffectHandler.h"
 
 
@@ -58,6 +58,7 @@ class GameModel: public GameSubject {
             {'+', DOORWAY},
             {'\\', STAIR}
         };
+        
         const std::map<char, int> itemMap {
             {'0', RESTOREHEALTH},
             {'1', BOOSTATK},
