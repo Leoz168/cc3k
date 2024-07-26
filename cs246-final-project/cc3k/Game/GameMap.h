@@ -19,7 +19,6 @@ class GameMap {
         int cols = 0;
     public:
         explicit GameMap();
-        GameMap();
 
         // tileAt returns the frontmost tile pointer at (x, y)
         //     and nullptr if there is no tile there
