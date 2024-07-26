@@ -44,6 +44,12 @@ class GameMap {
 
         map<int, vector<pair<int, int>>>& getRoomMapping();
 
+        // addFloorTileCoordToRoomMap adds the coord to the floor tile coord mapping
+        //     at the roomNumber index (starting at 0), and returns true if successful.
+        // The function fails if roomNumber >= num_rooms or if the coord already exists
+        //     and returns false.
+        bool addFloorTileCoordToRoomMap(int room_number, pair<int, int> coord);
+
         int getNumRooms();
         int setNumRooms(int);
         int addRoom();
