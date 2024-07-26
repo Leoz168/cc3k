@@ -117,7 +117,7 @@ class GameModel: public GameSubject {
         bool startGame();
         void nextFloor(ifstream& mapFile, bool isMapProvided);
         bool restartGame();
-        int calculateScore();
+        double calculateScore();
         bool endGame();
 
         // Update Game State:

@@ -430,29 +430,19 @@ bool usePotion(Directions direction) {
 bool isValidAttack(int x, int y);
 bool usePotion(Directions direction);
 
-// Start the game
-bool GameModel::startGame() {
-
-}
 
 // Go to the next floor
 void GameModel::nextFloor(ifstream &mapFile, bool isMapProvided) {
 
 }
 
-// Restart the game
-bool GameModel::restartGame() {
-
-}
-
 // Set the score
-int calculateScore() {
-
-}
-
-// End the game
-bool GameModel::endGame() {
-
+double GameModel::calculateScore() {
+    int id = player->getTileID();
+    if (id == TileID::SHADE) {
+        return 1.5 * player->getGoldCount();
+    }
+    return player->getGoldCount();
 }
 
 // Update the game state
