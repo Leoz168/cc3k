@@ -34,18 +34,6 @@ class GameModel: public GameSubject {
         int enemySpawnCounter = 0;
         int goldSpawnCounter = 0;
 
-        // Direction Map: Direction <-> corresponding coordinate vector
-        const std::map<Directions, std::pair<int, int>> directionMap {
-            {Directions::N, make_pair<int, int>(0, -1)},
-            {Directions::E, make_pair<int, int>(1, 0)},
-            {Directions::S, make_pair<int, int>(0, 1)},
-            {Directions::W, make_pair<int, int>(-1, 0)},
-            {Directions::NE, make_pair<int, int>(1, -1)},
-            {Directions::NW, make_pair<int, int>(-1, -1)},
-            {Directions::SE, make_pair<int, int>(1, 1)},
-            {Directions::SW, make_pair<int, int>(-1, 1)},
-        };
-
         // Player variables:
         std::shared_ptr<Player> player;
         const std::map<char, int> playerRaceMap {
@@ -105,13 +93,13 @@ class GameModel: public GameSubject {
 
         std::pair<int,int> findAvailableTileAround(int x, int y);
 
-
         // Creators:
         void initializeMap(ifstream &mapFile, bool isMapProvided);
         void readMap(ifstream& mapFile, bool isMapProvided);
 
         // Spawn a specific type of game object and add it to the gameMap
         void spawnObject(int x, int y, char type, int room_number = NOASSOCIATEDROOM);
+
         // Spawn a random game object(Item or Enemy) and add it to the gameMap
         // types:
         // - E: enemy
@@ -136,6 +124,9 @@ class GameModel: public GameSubject {
         bool playerAttack(Directions direction);
         bool isValidAttack(int x, int y);
         bool usePotion(Directions direction);
+
+        // Enemy Behaviour:
+        bool enemyAction();
 
         GameMap &getMap();
         // Game State Control:
