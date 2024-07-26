@@ -4,6 +4,9 @@
 #include "../GameObject.h"
 #include "../../Handler/Effects/EffectHandler.h"
 #include <cmath>
+#include <memory>
+
+using namespace std;
 
 class Enemy;
 
@@ -18,7 +21,7 @@ class Player: public GameObject {
         unique_ptr<EffectHandler> ehr;
         bool merchant_hostility = false;
     public:
-        Player(int x, int y, int id, int hp_now, int hp_max, int atk, int def, int gold, EffectHandler *ehr);
+        Player(int x, int y, int id, int hp_now, int hp_max, int atk, int def, int gold);
         virtual int getTileID() = 0;
         virtual Tile* getTilePtr() = 0;
         int getHP();

@@ -2,7 +2,7 @@
 #include "../Enemy/Enemy.h"
 using namespace std;
 
-Shade::Shade(int x, int y, EffectHandler* ehr): Player(x, y, SHADE, 125, 125, 25, 25, 0, ehr) {}
+Shade::Shade(int x, int y): Player(x, y, SHADE, 125, 125, 25, 25, 0) {}
 
 bool Shade::attackEnemy(Enemy *e) {
     e->atkedByPlayer(this);

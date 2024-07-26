@@ -5,7 +5,7 @@
 
 class Shade : public Player {
     public:
-        Shade(int x, int y, EffectHandler* ehr);
+        Shade(int x, int y);
         bool attackEnemy(Enemy * e);
         void attackedBy(Enemy * e);
         bool triggerAbility(int id, int ab_ver);

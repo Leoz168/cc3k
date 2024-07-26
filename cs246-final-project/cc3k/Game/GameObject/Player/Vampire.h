@@ -5,7 +5,7 @@
 
 class Vampire : public Player {
     public:
-        Vampire(int x, int y, EffectHandler* ehr);
+        Vampire(int x, int y);
         bool attackEnemy(Enemy * e);
         void attackedBy(Enemy * e);
         bool triggerAbility(int id, int ab_ver);

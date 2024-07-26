@@ -5,7 +5,7 @@
 class DefModifier: public EffectDecorator {
         int def;
     public:
-        DefModifier(Effect *next, int def);
+        DefModifier(std::unique_ptr<Effect> next, int def);
         int getDefModifier() override;
         int getAtkModifier() override;
         void setDef(int def);

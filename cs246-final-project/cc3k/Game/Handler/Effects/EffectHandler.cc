@@ -1,6 +1,7 @@
 #include "EffectHandler.h"
 
-EffectHandler::EffectHandler(Effect *effect) {}
+EffectHandler::EffectHandler() :
+    effect{unique_ptr<Effect>{new NoEffect{}}} {}
 
 int EffectHandler::getAtkEffect() {
     return effect->getAtkModifier();
@@ -11,16 +12,15 @@ int EffectHandler::getDefEffect() {
 }
 
 void EffectHandler::addAtkEffect(int atk) {
-    effect = new AtkModifier{effect, atk};
+    effect.reset(new AtkModifier{std::move(effect), atk});
 }
 
 void EffectHandler::addDefEffect(int def) {
-    effect = new DefModifier{effect, def};
+    effect.reset(new DefModifier{std::move(effect), def});
 }
 
 void EffectHandler::removeAllEffects() {
-    delete effect;
-    effect = new NoEffect{};
+    effect.reset(new NoEffect{});
 }
 
-EffectHandler::~EffectHandler() { delete effect; }
+EffectHandler::~EffectHandler() {}

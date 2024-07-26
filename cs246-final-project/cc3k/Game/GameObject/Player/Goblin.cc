@@ -2,7 +2,7 @@
 #include "../Enemy/Enemy.h"
 using namespace std;
 
-Goblin::Goblin(int x, int y, EffectHandler* ehr): Player(x, y, GOBLIN, 110, 110, 15, 20, 0, ehr) {}
+Goblin::Goblin(int x, int y): Player(x, y, GOBLIN, 110, 110, 15, 20, 0) {}
 
 bool Goblin::attackEnemy(Enemy *e) {
     return (e->atkedByPlayer(this)).first;

@@ -5,7 +5,7 @@
 
 class Goblin : public Player {
     public:
-        Goblin(int x, int y, EffectHandler* ehr);
+        Goblin(int x, int y);
         bool attackEnemy(Enemy * e);
         void attackedBy(Enemy * e);
         bool triggerAbility(int id, int ab_ver);

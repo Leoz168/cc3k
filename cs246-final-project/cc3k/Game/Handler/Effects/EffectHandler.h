@@ -4,11 +4,14 @@
 #include "AtkModifier.h"
 #include "DefModifier.h"
 #include "NoEffect.h"
+#include <memory>
 
-class EffectHandler: public Effect {
-        Effect *effect;
+using namespace std;
+
+class EffectHandler {
+        unique_ptr<Effect> effect;
     public:
-        EffectHandler(Effect *effect);
+        EffectHandler();
         int getAtkEffect();
         int getDefEffect();
         void addAtkEffect(int atk);

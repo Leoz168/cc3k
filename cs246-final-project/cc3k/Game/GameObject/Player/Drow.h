@@ -5,7 +5,7 @@
 
 class Drow : public Player {
     public:
-        Drow(int x, int y, EffectHandler* ehr);
+        Drow(int x, int y);
         bool attackEnemy(Enemy * e);
         void attackedBy(Enemy * e);
         bool triggerAbility(int id, int ab_ver);

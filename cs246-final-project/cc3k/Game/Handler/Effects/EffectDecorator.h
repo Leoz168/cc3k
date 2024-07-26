@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Effect.h"
+#include <memory>
 class EffectDecorator: public Effect {
     protected:
-        Effect *next;
+        std::unique_ptr<Effect> next;
     public:
-        EffectDecorator(Effect *next);
+        EffectDecorator(std::unique_ptr<Effect> next);
         virtual ~EffectDecorator();
 };

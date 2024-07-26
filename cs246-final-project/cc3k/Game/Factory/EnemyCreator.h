@@ -43,30 +43,30 @@ class EnemyCreator : public Creator {
     }
 
     public:
-        std::unique_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
-            std::unique_ptr<Tile> newEnemy;
+        std::shared_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
+            std::shared_ptr<Tile> newEnemy;
             if (is_rand_generated) { // choose a random Enemy race
                 id = chooseEnemyRace();
             }
 
             switch (id) {
                 case HUMAN:
-                    newEnemy = make_unique<Human>(x, y);
+                    newEnemy = make_shared<Human>(x, y);
                     break;
                 case DWARF:
-                    newEnemy = make_unique<Dwarf>(x, y);
+                    newEnemy = make_shared<Dwarf>(x, y);
                     break;
                 case ELF:
-                    newEnemy = make_unique<Elf>(x, y);
+                    newEnemy = make_shared<Elf>(x, y);
                     break;
                 case ORC:
-                    newEnemy = make_unique<Orc>(x, y);
+                    newEnemy = make_shared<Orc>(x, y);
                     break;
                 case MERCHANT:
-                    newEnemy = make_unique<Merchant>(x, y);
+                    newEnemy = make_shared<Merchant>(x, y);
                     break;
                 case HALFLING:
-                    newEnemy = make_unique<Halfling>(x, y);
+                    newEnemy = make_shared<Halfling>(x, y);
                     break;
                 default:
                     std::cerr << "Could Not initialize enemy. Invalid id" + std::to_string(id) + " in EnemyCreator" << endl;

@@ -1,3 +1,3 @@
 #include "EffectDecorator.h"
-EffectDecorator::EffectDecorator(Effect *next): next{next} {}
+EffectDecorator::EffectDecorator(std::unique_ptr<Effect> next): next{std::move(next)} {}
 EffectDecorator::~EffectDecorator() {}

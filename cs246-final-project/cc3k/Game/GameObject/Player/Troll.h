@@ -5,7 +5,7 @@
 
 class Troll : public Player {
     public:
-        Troll(int x, int y, EffectHandler* ehr);
+        Troll(int x, int y);
         bool attackEnemy(Enemy * e);
         void attackedBy(Enemy * e);
         bool triggerAbility(int id, int ab_ver);

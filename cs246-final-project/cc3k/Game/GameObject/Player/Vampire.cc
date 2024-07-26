@@ -2,7 +2,7 @@
 #include "../Enemy/Enemy.h"
 using namespace std;
 
-Vampire::Vampire(int x, int y, EffectHandler* ehr): Player(x, y, VAMPIRE, 50, -1, 25, 25, 0, ehr) {}
+Vampire::Vampire(int x, int y): Player(x, y, VAMPIRE, 50, -1, 25, 25, 0) {}
 
 bool Vampire::attackEnemy(Enemy *e) {
     e->atkedByPlayer(this);

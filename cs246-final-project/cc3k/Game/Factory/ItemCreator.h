@@ -62,8 +62,8 @@ class ItemCreator : public Creator {
     }
 
     public:
-        std::unique_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
-            std::unique_ptr<Tile> newItem;
+        std::shared_ptr<Tile> spawnTile(int x, int y, int id = NOTHING, bool is_rand_generated = false) override {
+            std::shared_ptr<Tile> newItem;
             if (is_rand_generated) {
                 if (id == NORMALGOLD) { // default values - provde in ObjectCreator
                     id = chooseGoldType();
@@ -75,31 +75,31 @@ class ItemCreator : public Creator {
 
             switch (id) {
                 case NORMALGOLD:
-                    newItem = std::make_unique<NormalGold>(x, y);
+                    newItem = std::make_shared<NormalGold>(x, y);
                     break;
                 case SMALLGOLD:
-                    newItem = std::make_unique<SmallGold>(x, y);
+                    newItem = std::make_shared<SmallGold>(x, y);
                     break;
                 case DRAGONHOARD:
-                    newItem = std::make_unique<DragonHoard>(x, y);
+                    newItem = std::make_shared<DragonHoard>(x, y);
                     break;
                 case RESTOREHEALTH:
-                    newItem = std::make_unique<RestoreHealth>(x, y);
+                    newItem = std::make_shared<RestoreHealth>(x, y);
                     break;
                 case BOOSTATK:
-                    newItem = std::make_unique<BoostAtk>(x, y);
+                    newItem = std::make_shared<BoostAtk>(x, y);
                     break;
                 case BOOSTDEF:
-                    newItem = std::make_unique<BoostDef>(x, y);
+                    newItem = std::make_shared<BoostDef>(x, y);
                     break;
                 case POISONHEALTH:
-                    newItem = std::make_unique<PoisonHealth>(x, y);
+                    newItem = std::make_shared<PoisonHealth>(x, y);
                     break;
                 case WOUNDATK:
-                    newItem = std::make_unique<WoundAtk>(x, y);
+                    newItem = std::make_shared<WoundAtk>(x, y);
                     break;
                 case WOUNDDEF:
-                    newItem = std::make_unique<WoundDef>(x, y);
+                    newItem = std::make_shared<WoundDef>(x, y);
                     break;
             }
             return newItem;

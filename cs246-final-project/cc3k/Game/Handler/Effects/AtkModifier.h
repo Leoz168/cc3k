@@ -5,7 +5,7 @@
 class AtkModifier: public EffectDecorator {
         int atk;
     public:
-        AtkModifier(Effect *next, int atk);
+        AtkModifier(std::unique_ptr<Effect> next, int atk);
         int getAtkModifier() override;
         int getDefModifier() override;
         void setAtk(int atk);
