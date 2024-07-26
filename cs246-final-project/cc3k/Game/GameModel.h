@@ -60,7 +60,16 @@ class GameModel: public GameSubject {
         std::shared_ptr<Dragon> dragon = nullptr;
 
     public:
-        std::pair<int, int> randomSpawnablePosition();
+        // randomSpawnablePosition returns a random spawnable position (i.e. available floor tile)
+        //     based on the following algorithm:
+        // - Randomly chooses a room
+        // - Randomly chooses a floor tile in that room
+        // - If floor tile isn't available, iterates through the room
+        // - If room isn't available, iterates through the rooms
+        // - If nothing is avaialable, returns coordinate (-1, -1)
+        // Return value: a pair, where the first value is the room #, and the second value
+        //     is the pair of coordinates (x, y)
+        std::pair<int, std::pair<int, int>> randomSpawnablePosition();
 
         void setPlayerRace(char type);
 

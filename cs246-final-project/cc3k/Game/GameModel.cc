@@ -284,12 +284,12 @@ void GameModel::createDragonAndHoardAtRandPosn() {
 
 }
 
-std::pair<int, int> GameModel::randomSpawnablePosition() {
+pair<int, pair<int, int>> GameModel::randomSpawnablePosition() {
     map<int, vector<pair<int, int>>>& room_floortile_mapping = gameMap.getRoomMapping();
     int num_rooms = gameMap.getNumRooms();
 
     int rand_room = rand() % num_rooms;
-    
+
     for (int i = 0; i < num_rooms; i++) {
         rand_room = (rand_room + i) % num_rooms;
         vector<pair<int, int>> floortiles_in_room = room_floortile_mapping[rand_room];
@@ -298,12 +298,12 @@ std::pair<int, int> GameModel::randomSpawnablePosition() {
         for (int i = 0; i < room_size; i++) {
             rand_tile = (rand_tile + i) % room_size;
             if (gameMap.tileIDAt(floortiles_in_room[rand_tile].first, floortiles_in_room[rand_tile].second) == FLOORTILE) {
-                return floortiles_in_room[rand_tile];
+                return make_pair(rand_room, floortiles_in_room[rand_tile]);
             }
         }
     }
 
-    return make_pair(-1, -1);
+    return make_pair(-1, make_pair(-1, -1));
 }
 
 // Move the player in the specified direction
