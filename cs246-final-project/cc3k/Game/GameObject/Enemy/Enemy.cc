@@ -36,7 +36,7 @@ void Enemy::postAtkedByPlayerAction(Player* player) { return; }
 pair<bool, bool> Enemy::atkedByPlayer(Player* player) {
     preAtkedByPlayerAction(player);
 
-    takeDamage( ceil((100 / (100 + getDef())) * player->getAtk()) );
+    takeDamage( static_cast<int>(ceil((100.0 / (100.0 + getDef())) * player->getAtk())) );
 
     postAtkedByPlayerAction(player);
 

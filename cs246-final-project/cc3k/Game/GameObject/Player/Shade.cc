@@ -1,5 +1,6 @@
 #include "Shade.h"
 #include "../Enemy/Enemy.h"
+#include <iostream>
 using namespace std;
 
 Shade::Shade(int x, int y): Player(x, y, SHADE, 125, 125, 25, 25, 0) {}
@@ -9,7 +10,7 @@ bool Shade::attackEnemy(Enemy *e) {
 }
 
 void Shade::attackedBy(Enemy *e) {
-    hp_now -= ceil((100 / (100 + getDef())) * e->getAtk());
+    hp_now -= static_cast<int>(ceil((100.0 / (100.0 + getDef())) * e->getAtk()));
 }
 
 

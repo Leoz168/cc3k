@@ -604,12 +604,12 @@ double GameModel::calculateScore() {
 void GameModel::updateGame() {
     player->triggerAbility(TROLL, 0);
 
+    enemyAction();
+
     if (player->getHP() <= 0) {
         endGame(false);
         return;
     }
-
-    enemyAction();
 
     notifyobserver();
     status_message = "";
@@ -639,6 +639,7 @@ bool GameModel::endGame(bool win) {
         smsg += "Please press r to restart the game, q to quit, or if you'd like, keep exploring!\n";
     } else {
         smsg = "Oops! You Lose :(\n";
+        gameOver = true;
     }
 
     status_message = smsg;
@@ -670,6 +671,10 @@ void GameModel::getStatusMessage(string msg) {
 
 string GameModel::getStatusMessage() {
     return status_message;
+}
+
+bool GameModel::getGameOver() {
+    return gameOver;
 }
 
 // Destructor

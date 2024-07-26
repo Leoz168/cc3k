@@ -139,7 +139,7 @@ int main(int argc, char* argv[]) {
         gm.startGame();
         bool gameRunning = true;
 
-        while (gameRunning) {
+        while (gameRunning && !(gm.getGameOver())) {
             if (!(cin >> command)) {
                 gm.endGame(false);
             }

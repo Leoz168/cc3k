@@ -34,6 +34,7 @@ class GameModel: public GameSubject {
         int enemySpawnCounter = 0;
         int goldSpawnCounter = 0;
         bool enemyFrozen = false;
+        bool gameOver = false;
 
         // Player variables:
         std::shared_ptr<Player> player;
@@ -149,6 +150,7 @@ class GameModel: public GameSubject {
         void updateGame();
         
         bool resetFloor();
+        bool getGameOver();
 
         void getStatusMessage(string);
         string getStatusMessage();
