@@ -1,12 +1,12 @@
-#ifndef CELLCREATOR_H
-#define CELLCREATOR_H
+#ifndef FLOORTILECREATOR_H
+#define FLOORTILECREATOR_H
 
 #include "Creator.h"
 #include "../Floor/Cell/Cell.h"
 #include "../Floor/Cell/FloorTile.h"
 
 
-class CellCreator : public Creator {
+class FloorTileCreator : public Creator {
     public:
         std::shared_ptr<Tile> spawnFloorTile(int x, int y, int room_number, bool is_rand_generated = false) override {
             std::shared_ptr<Tile> newCell;

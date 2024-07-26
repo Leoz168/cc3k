@@ -19,17 +19,31 @@
 #include "Factory/EnemyCreator.h"
 #include "Factory/ItemCreator.h"
 #include "Factory/PlayerCreator.h"
+#include "Factory/FloorTileCreator.h"
 #include "Handler/Effects/EffectHandler.h"
+#include "tileGenConsts.h"
 
 class GameModel: public GameSubject {
         // Game State variables:
         int numRows = -1;
         int numCols= -1;
-        int floorLevel = 0;
+        int floorLevel = 1;
         int potionSpawnCounter = 0;
         int enemySpawnCounter = 0;
         int goldSpawnCounter = 0;
         std::ifstream map_file;
+
+        // Direction Map: Direction <-> corresponding coordinate vector
+        const std::map<Directions, std::pair<int, int>> directionMap {
+            {Directions::N, make_pair<int, int>(0, -1)},
+            {Directions::E, make_pair<int, int>(1, 0)},
+            {Directions::S, make_pair<int, int>(0, 1)},
+            {Directions::W, make_pair<int, int>(-1, 0)},
+            {Directions::NE, make_pair<int, int>(1, -1)},
+            {Directions::NW, make_pair<int, int>(-1, -1)},
+            {Directions::SE, make_pair<int, int>(1, 1)},
+            {Directions::SW, make_pair<int, int>(-1, 1)},
+        };
 
         // Player variables:
         std::shared_ptr<Player> player;
@@ -88,7 +102,7 @@ class GameModel: public GameSubject {
         void readMap(ifstream& mapFile, bool isMapProvided);
 
         // Spawn a specific type of game object and add it to the gameMap
-        void spawnObject(int x, int y, char type);
+        void spawnObject(int x, int y, char type, int room_number = NOASSOCIATEDROOM);
         // Spawn a random game object(Item or Enemy) and add it to the gameMap
         // types:
         // - E: enemy

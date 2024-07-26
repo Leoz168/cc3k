@@ -82,17 +82,45 @@ void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
     }
 }
 
+
+bool isFloodfillValid(char type, map<int, char> reverseCellMap) {
+    return type == reverseCellMap[FLOORTILE] || type == reverseCellMap[STAIR] || type == playerChar || itemMap.count(type) || enemyMap.count(type);
+}
+
+
+void floodfillInit(GameModel* model, int x, int y, vector<string>& floor_lines, vector<vector<bool>>& tiles_processed, int room_number, map<int, char>& reverseCellMap) {
+    tiles_processed[y][x] = true;
+    
+    char type = floor_lines[y][x];
+    model->spawnObject(x, y, type);
+
+    for (auto it : DIRECTIONS_POSN_CHANGE) {
+        int newx = x + it.second.first;
+        int newy = y + it.second.second;
+        if (newx >= 0 && newy >= 0 
+            && newy < floor_lines.size() 
+            && newx < floor_lines[y].length()
+            && tiles_processed[y][x] == false
+            && isFloodfillValid(type, reverseCellMap)) {
+                floodfillInit(model, newx, newy, floor_lines, tiles_processed, room_number, reverseCellMap);
+            }
+    }
+}
+
+
 // Read the map from the file: either provided one or emptyfloor.txt
+// NOTE: for floors from a file, floorLevel MUST represent the floor to generate.
 void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
     string line;
     int y = 0; // Line number
-    map<int, string> reverseCellMap;
+    map<int, char> reverseCellMap;
+    int max_col_size = 0;
 
     for (auto it : cellMap) {
         reverseCellMap[it.second] = reverseCellMap[it.first];
     }
 
-    const regex horizontal_border{"\\" + reverseCellMap[VWALL] + reverseCellMap[HWALL] + "*\\" + reverseCellMap[VWALL]};
+    const regex horizontal_border{"\\" + string{reverseCellMap[VWALL]} + string{reverseCellMap[HWALL]} + "*\\" + string{reverseCellMap[VWALL]}};
 
     if (isMapProvided) {
         for (int i = 1; i < floorLevel; i++) {
@@ -103,53 +131,64 @@ void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
         }
     }
 
-    std::vector<string> floor_lines;
-    std::vector<std::vector<bool>> tiles_processed;
+    vector<string> floor_lines;
+    vector<vector<bool>> tiles_processed;
 
     int borders = 0;
     while (getline(mapFile, line) && borders < 2) {
         int line_size = line.length();
+        if (line_size > max_col_size) max_col_size = line_size;
+
         std::vector<bool> line_processed;
         for (int i = 0; i < line_size; i++) {
             line_processed.emplace_back(false);
         }
 
-        floor_lines.emplace_back(line);
+        if (regex_match(line, horizontal_border)) borders++;
+
+        floor_lines.emplace_back(move(line));
 
         tiles_processed.emplace_back(move(line_processed));
-
-        if (regex_match(line, horizontal_border)) borders++;
     }
 
-    for (int i = 0; i < floor_lines.size(); ++i) {
-        string& line = floor_lines[i];
-        for (int j = 0; line.size(); ++j) {
-            char type = line[j];
-            if (type == reverseCellMap)
+    int room_number = 0;
+
+    for (int y = 0; y < floor_lines.size(); ++y) {
+        string& floor_line = floor_lines[y];
+        for (int x = 0; floor_line.size(); ++y) {
+            if (tiles_processed[y][x] == false) {
+                char type = floor_line[x];
+                tiles_processed[y][x] = true;
+                if (isFloodfillValid(type, reverseCellMap)) {
+                    floodfillInit(this, x, y, floor_lines, tiles_processed, room_number, reverseCellMap);
+                    room_number++;
+                } else {
+                    spawnObject(x, y, type);
+                }
+            }
         }
     }
 
-        for (int x = 0; x < line.size(); ++x) {
-            char type = line[x];
-            // Process each character - spawn new object and add it to the gameMap
-            spawnObject(x, y, type);
-        } //for
-        y++; // Move to the next line
-    } //while
+    numRows = floor_lines.size();
+    numCols = max_col_size;
+    gameMap.setMapSize(numRows, numCols);
 }
 
 // Spawn a specific type of game object and add it to the gameMap
-void GameModel::spawnObject(int x, int y, char type) {
+void GameModel::spawnObject(int x, int y, char type, int room_number) {
     CellCreator makeCell;
     EnemyCreator makeEnemy;
     ItemCreator makeItem;
     PlayerCreator makePlayer;
+    FloorTileCreator makeFloorTile;
     std::shared_ptr<Tile> newObject;
+    std::shared_ptr<Player> newPlayer;
     int id = NOTHING;
+    bool floorCreated = false;
 
-    if (type == '@') { // Input char is player
-        newObject = makePlayer.spawnPlayer(x, y, playerRace, effectHandler.get());
-        player = std::move(newObject); // initialize the player
+    if (type == playerChar) { // Input char is player
+        newPlayer = makePlayer.spawnPlayer(x, y, playerRace);
+        player = newPlayer; // initialize the player
         isPlayerCreated = true;
 
     } else if (cellMap.count(type)) { // Input char is a cell
@@ -157,7 +196,12 @@ void GameModel::spawnObject(int x, int y, char type) {
 
         if (id == STAIR) isStairCreated = true;
 
-        newObject = makeCell.spawnTile(x, y, id, false);
+        if (id == FLOORTILE) {
+            newObject = makeFloorTile.spawnFloorTile(x, y, room_number);
+        } else {
+            newObject = makeCell.spawnTile(x, y, id, false);
+        }
+
         cells.emplace_back(std::move(newObject)); // add to cell vector
 
     } else if (itemMap.count(type)) { // Input char is an Item
@@ -201,7 +245,8 @@ void GameModel::spawnObject(int x, int y, char type) {
     }
 
     // Add newObject to gameMap:
-    gameMap.addTile(x, y, newObject.get());
+    if (isPlayerCreated) gameMap.addTile(x, y, newPlayer);
+    else gameMap.addTile(x, y, newObject);
 }
 
 // Spawn a random game object(Item or Enemy) and add it to the gameMap
@@ -209,7 +254,7 @@ void GameModel::spawnRandObject(int x, int y, char type) {
     CellCreator makeCell;
     EnemyCreator makeEnemy;
     ItemCreator makeItem;
-    std::unique_ptr<Tile> newObject;
+    std::shared_ptr<Tile> newObject;
 
     switch (type) {
         case 'E':
@@ -357,74 +402,72 @@ pair<int, pair<int, int>> GameModel::randomSpawnablePosition() {
     return make_pair(-1, make_pair(-1, -1));
 }
 
+bool GameModel::canMoveHere(int x, int y) {
+    int id = gameMap.tileIDAt(x, y);
+    if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR || id == NORMALGOLD || id == SMALLGOLD || id == MERCHANTHOARD) {
+        return true;
+    }
+    return false;
+}
 
 // {N = 0, NE, E, SE, S, SW, W, NW}
-// Move the player in the specified direction
+// Move the player in the specified direction on the gameMap and updates Player's internal position
 bool GameModel::movePlayer(Directions direction) {
-    pair posNow = player->getPosn();
-    switch (direction)
-    {
-    case Directions::N:
-        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::NE:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, 1, -1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::E:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second);
-        if (id == FLOORTILE || id == PASSAGE) {
-            gameMap.moveTile(posNow.first, posNow.second, 1, 0, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::SE:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second + 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, 1, 1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::S:
-        int id = gameMap.tileIDAt(posNow.first, posNow.second + 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, 0, 1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::SW:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, 0, 1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::W:
-        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, -1, 0, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::NW:
-        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, -1, -1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
+    pair<int, int> posNow = player->getPosn();
+    pair<int, int> moveDirection = directionMap.at(direction);
+    pair<int, int> newPosn = make_pair<int, int>(posNow.first + moveDirection.first, posNow.second + moveDirection.second);
+    const int id = gameMap.tileIDAt(newPosn.first, newPosn.second);
+    Tile * tileAtNewPosn = gameMap.tileAt(newPosn.first, newPosn.second);
     
-    default:
-        break;
+    if (canMoveHere(newPosn.first, newPosn.second)) {
+        // Add gold pick-up functionality
+        if (id == NORMALGOLD || id == SMALLGOLD || id == MERCHANTHOARD || (id == DRAGONHOARD && dynamic_cast<DragonHoard *> (tileAtNewPosn)->canPlayerPickUp(player))) {
+            player->setGoldCount(player->getGoldCount() + dynamic_cast<Gold *>(tileAtNewPosn)->getValue());
+            gameMap.removeTile(newPosn.first, newPosn.second);
+        }
+
+        // Move the player to the new square:
+        player->setPosition(newPosn.first, newPosn.second);
+        gameMap.moveTile(posNow.first, posNow.second, moveDirection.first, moveDirection.second, gameMap.tileAt(posNow.first, posNow.second));
+    }
+
+}
+
+bool GameModel::playerAttack(Directions direction) {
+    pair<int, int> posNow = player->getPosn();
+    pair<int, int> attackDirection = directionMap.at(direction);
+    pair<int, int> enemyPosn = make_pair<int, int>(posNow.first + attackDirection.first, posNow.second + attackDirection.second);
+
+    if (isValidAttack(enemyPosn.first, enemyPosn.second)) {
+        Enemy * enemyToAttack = dynamic_cast<Enemy *>(gameMap.tileAt(enemyPosn.first, enemyPosn.second));
+        int enemyID = gameMap.tileIDAt(enemyPosn.first, enemyPosn.second);
+        player->attackEnemy(enemyToAttack);
+
+        // handle enemy death 
+        if (enemyToAttack->getHP() <= 0) {
+            // Remove the enemy:
+            gameMap.removeTile(enemyPosn.first, enemyPosn.second);
+            
+            // Add gold to player
+            if (enemyID != HUMAN) {
+                player->setGoldCount(setGoldCount() + 1);
+            } else {
+                spawnObject(enemyPosn.first, enemyPosn.second, '6'); // 6 - NormalGold
+                std::pair<int, int> spawnSecondGoldPosn = findAvailableTileAround(enemyPosn.first, enemyPosn.second);
+                spawnObject(spawnSecondGoldPosn.first, spawnSecondGoldPosn.second, '6');
+            }
+            
+        }
     }
 }
 
+bool GameModel::isValidAttack(int x, int y) {
+    int tileType = gameMap.typeTypeAt(x, y);
+    if (tileType == ENEMY) {
+        return true;
+    }
+    return false;
+}
 
 // Use a potion
 bool GameModel::usePotion(Directions direction) {
@@ -471,8 +514,6 @@ bool GameModel::usePotion(Directions direction) {
         break;
     }
 }
-bool isValidAttack(int x, int y);
-bool usePotion(Directions direction);
 
 GameMap &GameModel::getMap() {
     return gameMap; 

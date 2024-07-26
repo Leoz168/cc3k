@@ -34,3 +34,5 @@ const std::map<char, int> enemyMap {
     {'M', MERCHANT},
     {'W', DWARF},
 };
+
+const char playerChar = '@';

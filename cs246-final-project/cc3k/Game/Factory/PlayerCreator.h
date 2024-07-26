@@ -14,32 +14,32 @@ class EffectHandler;
 class PlayerCreator : public Creator {
 
     public:
-        std::unique_ptr<Tile> spawnPlayer(int x, int y, int id) override {
-            std::unique_ptr<Player> newPlayer;
+        std::shared_ptr<Player> spawnPlayer(int x, int y, int id) override {
+            std::shared_ptr<Player> newPlayer;
 
             switch (id) {
                 case SHADE:
-                    newPlayer = make_unique<Shade>(x, y);
+                    newPlayer = make_shared<Shade>(x, y);
                     break;
 
                 case DROW:
-                    newPlayer = make_unique<Drow>(x, y);
+                    newPlayer = make_shared<Drow>(x, y);
                     break;
 
                 case VAMPIRE:
-                    newPlayer = make_unique<Vampire>(x, y);
+                    newPlayer = make_shared<Vampire>(x, y);
                     break;
 
                 case TROLL:
-                    newPlayer = make_unique<Troll>(x, y);
+                    newPlayer = make_shared<Troll>(x, y);
                     break;
 
                 case GOBLIN:
-                    newPlayer = make_unique<Goblin>(x, y);
+                    newPlayer = make_shared<Goblin>(x, y);
                     break;
 
                 default:
-                    newPlayer = make_unique<Shade>(x, y);
+                    newPlayer = make_shared<Shade>(x, y);
                     break;
             }
 
