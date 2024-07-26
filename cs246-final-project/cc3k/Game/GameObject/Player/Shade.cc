@@ -9,7 +9,7 @@ bool Shade::attackEnemy(Enemy *e) {
 }
 
 void Shade::attackedBy(Enemy *e) {
-    ceil((100 / (100 + getDef())) * e->getAtk());
+    hp_now -= ceil((100 / (100 + getDef())) * e->getAtk());
 }
 
 

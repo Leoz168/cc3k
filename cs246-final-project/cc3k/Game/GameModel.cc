@@ -529,9 +529,15 @@ bool GameModel::playerAttack(Directions direction) {
         player->attackEnemy(enemyToAttack);
 
         // handle enemy death 
-        if (enemyToAttack->getHP() <= 0) {
+        if (enemyToAttack->isDead()) {
             // Remove the enemy:
             gameMap.removeTile(enemyPosn.first, enemyPosn.second);
+            for (auto it = enemies.begin(); it != enemies.end(); it++) {
+                if ((*it).get() == enemyToAttack) {
+                    enemies.erase(it);
+                    break;
+                }
+            }
             
             // Add gold to player
             if (enemyID != HUMAN) {
