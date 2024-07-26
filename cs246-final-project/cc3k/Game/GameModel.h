@@ -50,6 +50,7 @@ class GameModel: public GameSubject {
         std::vector<std::shared_ptr<Enemy>> enemies;
         std::vector<std::shared_ptr<Item>> items;
         std::vector<std::shared_ptr<Cell>> cells;
+        shared_ptr<Tile> stair;
 
         // Keep track of what has already been created:
         bool isPlayerCreated = false;
@@ -63,6 +64,7 @@ class GameModel: public GameSubject {
         std::shared_ptr<DragonHoard> dragonHoard = nullptr;
         std::shared_ptr<Dragon> dragon = nullptr;
 
+        string status_message;
     public:
         explicit GameModel(bool isMapProvided = false, string mapFile = "emptyfloor.txt");
         // randomSpawnablePosition returns a random spawnable position (i.e. available floor tile)
@@ -134,7 +136,7 @@ class GameModel: public GameSubject {
         void nextFloor();
         bool restartGame();
         double calculateScore();
-        bool endGame();
+        bool endGame(bool win);
 
         // Update Game State:
 
@@ -144,7 +146,10 @@ class GameModel: public GameSubject {
         //     (i.e. calling Tile->takeAction())
         void updateGame();
         
-        bool resetFloor(Tile*);
+        bool resetFloor();
+
+        void getStatusMessage(string);
+        string getStatusMessage();
 
         // Destructor:
         ~GameModel();     

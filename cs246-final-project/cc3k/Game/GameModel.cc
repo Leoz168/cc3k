@@ -227,12 +227,14 @@ void GameModel::spawnObject(int x, int y, char type, int room_number) {
     } else if (cellMap.count(type)) { // Input char is a cell
         id = cellMap.at(type);
 
-        if (id == STAIR) isStairCreated = true;
-
         if (id == FLOORTILE) {
             newObject = makeFloorTile.spawnFloorTile(x, y, room_number);
         } else {
             newObject = makeCell.spawnTile(x, y, id, false);
+            if (id == STAIR) {
+                isStairCreated = true;
+                stair = newObject;
+            }
         }
 
         cells.emplace_back(std::move(newObject)); // add to cell vector
@@ -533,12 +535,9 @@ GameMap &GameModel::getMap() {
 void GameModel::nextFloor() {
     if (floorLevel < 5) {
         floorLevel += 1;
-        GameMap new_map;
-        gameMap = new_map;
-        ifstream mapFileStream{mapFile};
-        initializeMap(mapFileStream, isMapProvided);
+        resetFloor();
     } else {
-        endGame();
+        endGame(true);
     }
 }
 
@@ -554,11 +553,32 @@ double GameModel::calculateScore() {
 // Update the game state
 void GameModel::updateGame() {
     enemyAction();
+    if (player->getHP() <= 0) {
+        endGame(false);
+    } else if (player->getPosn() == stair->getPosn()) {
+        nextFloor();
+    }
 }
 
 // Reset the floor
-bool GameModel::resetFloor(Tile* tile) {
+bool GameModel::resetFloor() {
+    GameMap new_map;
+    gameMap = new_map;
+    ifstream mapFileStream{mapFile};
+    initializeMap(mapFileStream, isMapProvided);
+}
 
+bool GameModel::endGame(bool win) {
+    string smsg;
+    if (win) {
+        smsg = "Congratuations! You Win!!!\n";
+    } else {
+        smsg = "Oops! You Lose :(";
+    }
+
+    smsg += "Your score is: " + to_string(calculateScore());
+
+    notifyobserver();
 }
 
 bool GameModel::freezeEnemy() {
@@ -571,6 +591,14 @@ bool GameModel::unfreezeEnemy() {
     for (auto it : enemies) {
         (it.get())->setFrozen(false);
     }
+}
+
+void GameModel::getStatusMessage(string msg) {
+    status_message = msg;
+}
+
+string GameModel::getStatusMessage() {
+    return status_message;
 }
 
 // Destructor
