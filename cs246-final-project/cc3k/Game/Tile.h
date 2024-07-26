@@ -16,12 +16,15 @@ class Tile {
         int x, y;
         int id;
         int room_number;
+        int tile_type;
     public:
-        Tile(int x, int y, int id, int room_number = NOASSOCIATEDROOM);
+        Tile(int x, int y, int id, int room_number = NOASSOCIATEDROOM, int tile_type = NOTYPE);
 
         // getTileID gets the unique tile id defined in the consts.h file
         // Default: returns this class' id field
         virtual int getTileID();
+
+        virtual int getTileType();
 
         // getTilePtr gets the ptr to the Tile object
         virtual Tile* getTilePtr() = 0;

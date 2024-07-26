@@ -29,6 +29,7 @@ class GameModel: public GameSubject {
         int potionSpawnCounter = 0;
         int enemySpawnCounter = 0;
         int goldSpawnCounter = 0;
+        std::ifstream map_file;
 
         // Player variables:
         std::shared_ptr<Player> player;
@@ -76,14 +77,14 @@ class GameModel: public GameSubject {
         // Getters:
         int tileIDAt(int x, int y);
         bool isAvailableTileForSpawn(int x, int y);
-        bool canMoveHere(int x, int y)
+        bool canMoveHere(int x, int y);
 
         std::pair<int,int> findAvailableTileAround(int x, int y);
 
 
         // Creators:
         void initializeMap(ifstream &mapFile, bool isMapProvided);
-        void readMap(ifstream& mapFile);
+        void readMap(ifstream& mapFile, bool isMapProvided);
 
         // Spawn a specific type of game object and add it to the gameMap
         void spawnObject(int x, int y, char type);

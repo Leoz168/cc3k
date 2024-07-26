@@ -44,4 +44,13 @@ enum TileID {
     GOBLIN
 };
 
+enum TileType {
+    NOTYPE = -1,
+    CELL = 0,
+    TREASURE,
+    POTION,
+    ENEMY,
+    PLAYER
+};
+
 #endif

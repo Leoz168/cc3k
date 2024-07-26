@@ -27,6 +27,8 @@ class GameMap {
         //     and the constant NOTHING if there is no tile there
         int tileIDAt(int x, int y);
 
+        int typeTypeAt(int x, int y);
+
         // moveTile moves the tile at (x, y) by (dx, dy)
         //     REGARDLESS of whether the tile "can" be moved or not
         // Returns false if there is no tile with the specificed pointer there

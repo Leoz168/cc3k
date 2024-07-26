@@ -4,7 +4,7 @@ using namespace std;
 
 Gold::Gold(int value, string description, int x, int y, int id) :
     value{value},
-    Item{description, x, y, id} {}
+    Item{description, x, y, id, TREASURE} {}
 
 Tile* Gold::getTilePtr() { return this; }
 

@@ -6,7 +6,7 @@
 
 class GameObject : public Tile {
     public:
-        GameObject(int x, int y, int id, int room_number = NOASSOCIATEDROOM);
+        GameObject(int x, int y, int id, int room_number = NOASSOCIATEDROOM, int tile_type = NOTYPE);
         virtual ~GameObject() = default;
 };
 

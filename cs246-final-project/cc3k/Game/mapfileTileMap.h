@@ -4,6 +4,7 @@
 #include <map>
 
 const std::map<char, int> cellMap {
+    {' ', BLANK},
     {'.', FLOORTILE},
     {'|', VWALL},
     {'-', HWALL},
