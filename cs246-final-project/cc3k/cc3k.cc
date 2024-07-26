@@ -119,6 +119,8 @@ int main(int argc, char* argv[]) {
             case 'r':
                 gm.restartGame();
                 continue;
+            case 'q':
+                return 0;
             default:
                 cout << "Invalid input" << endl;
                 continue;
@@ -273,7 +275,26 @@ int main(int argc, char* argv[]) {
                     }
                     break;
                 }
-
+                case PlayerCommand::F:
+                    gm.freezeEnemy();
+                    while (true) {
+                        char is_refreeze;
+                        cin >> is_refreeze;
+                        if (cin.fail() && !cin.eof()) {
+                            cin.ignore();
+                            cin.clear();
+                        }
+                        if (is_refreeze == 'f') {
+                            gm.unfreezeEnemy();
+                            break;
+                        }
+                    }
+                    break;
+                case PlayerCommand::R:
+                    gm.restartGame();
+                    continue;
+                case PlayerCommand::Q:
+                    return 0;
                 default:
                     cout << "BOOM! U cannot break the wall. U're restricted in 2D universe" << endl;
                     break;
