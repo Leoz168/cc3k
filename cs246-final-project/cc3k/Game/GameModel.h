@@ -87,11 +87,22 @@ class GameModel: public GameSubject {
         bool isDragonHoardCreated = false;
         bool isDragonCreated = false;
 
+        // Dragon and Hoard Positions:
+        std::pair<int, int> dragonPosn = std::make_pair(-1, -1);
+        std::pair<int, int> dragonHoardPosn = std::make_pair(-1, -1);
+        std::shared_ptr<DragonHoard> dragonHoard = nullptr;
+        std::shared_ptr<Dragon> dragon = nullptr;
+
     public:
         std::pair<int, int> randomPosition();
 
+        void setPlayerRace(char type);
+
         // Getters:
         int tileIDAt(int x, int y);
+        bool isAvailableTileForSpawn(int x, int y);
+
+        std::pair<int,int> findAvailableTileAround(int x, int y);
 
 
         // Creators:

@@ -1,9 +1,54 @@
 #include "GameModel.h"
 using namespace std;
 
+void GameModel::setPlayerRace(char type){
+    int id = playerRaceMap.at(type);
+    playerRace = id;
+}
+
 // Get the ID of the tile at the given coordinates
 int GameModel::tileIDAt(int x, int y) {
     return gameMap.tileIDAt(x, y);
+}
+
+bool GameModel::isAvailableTileForSpawn(int x, int y) {
+    int id = gameMap.tileIDAt(x, y);
+    if (id == FLOORTILE || id == BLANK) {
+        return true;
+    }
+    return false;
+}
+
+std::pair<int, int> GameModel::findAvailableTileAround(int x, int y) {
+    std::pair<int, int> firstAvailableTile = std::make_pair(0, 0);
+    if (isAvailableTileForSpawn(x + 1, y)) {
+        firstAvailableTile.first = x + 1;
+        firstAvailableTile.second = y;
+    } else if (isAvailableTileForSpawn(x - 1, y)) {
+        firstAvailableTile.first = x - 1;
+        firstAvailableTile.second = y;
+    } else if (isAvailableTileForSpawn(x, y + 1)) {
+        firstAvailableTile.first = x;
+        firstAvailableTile.second = y + 1;
+    } else if (isAvailableTileForSpawn(x, y - 1)) {
+        firstAvailableTile.first = x;
+        firstAvailableTile.second = y - 1;
+    } else if (isAvailableTileForSpawn(x + 1, y + 1)) {
+        firstAvailableTile.first = x + 1;
+        firstAvailableTile.second = y + 1;
+    } else if (isAvailableTileForSpawn(x + 1, y - 1)) {
+        firstAvailableTile.first = x + 1;
+        firstAvailableTile.second = y - 1;
+    } else if (isAvailableTileForSpawn(x - 1, y + 1)) {
+        firstAvailableTile.first = x - 1;
+        firstAvailableTile.second = y + 1;
+    } else if (isAvailableTileForSpawn(x - 1, y - 1)) {
+        firstAvailableTile.first = x - 1;
+        firstAvailableTile.second = y - 1;
+    } else {
+        cerr << "Inside findAvailableTileAround(). Cannot find available tile for position: " + std::to_string(x) + " " + std::to_string(y) << endl;
+    }
+    return firstAvailableTile;
 }
 
 // Initialize the map
@@ -65,21 +110,46 @@ void GameModel::spawnObject(int x, int y, char type) {
 
     } else if (itemMap.count(type)) { // Input char is an Item
         id = itemMap.at(type);
+
+        if (!isDragonHoardCreated && id == DRAGONHOARD) { // init dragon hoard separately
+            dragonHoardPosn = std::make_pair(x, y)
+            dragonHoard = std::make_shared<DragonHoard>(x, y, true);
+            isDragonHoardCreated = true;
+            items.emplace_back(dragonHoard);
+            gameMap.addTile(x, y, dragonHoard);
+            return;
+        }
+
         newObject = makeItem.spawnTile(x, y, id, false);
         items.emplace_back(std::move(newObject));
 
     } else if (enemyMap.count(type)) { // Input char is an Enemy
         id = enemyMap.at(type);
+
+        if (!isDragonCreated && id == DRAGON) { //init dragon separately
+            if (isDragonHoardCreated) { // dragonHoard already exists -> just init Dragon
+                isDragonCreated = true;
+                dragon = std::make_shared<Dragon>(x, y, dragonHoard);
+                enemies.emplace_back(dragon);
+                gameMap.addTile(x, y, dragon);
+
+            } else { // dragonHoard does not yet exist -> store dragon posn into a pair
+                dragonPosn = std::make_pair(x, y);
+                isDragonCreated = false; // dragon not yet created
+            }
+            return;
+        }
+
         newObject = makeEnemy.spawnTile(x, y, id, false);
         enemies.emplace_back(std::move(newObject)); // add to enemies vector
 
     } else {
-        std::cerr << "Reached default. Invalid input " + to_string(type) + "type in spawnObject class" << endl;
+        std::cerr << "Reached default. Invalid input " + std::to_string(type) + "type in spawnObject class" << endl;
         return;
     }
 
     // Add newObject to gameMap:
-    gameMap.addTile(x, y, std::move(newObject));
+    gameMap.addTile(x, y, newObject.get());
 }
 
 // Spawn a random game object(Item or Enemy) and add it to the gameMap
@@ -106,8 +176,8 @@ void GameModel::spawnRandObject(int x, int y, char type) {
             break;
 
         default:
-            std::cerr << "Reached default. Invalid input " + to_string(type) + "type in spawnRandObject class" << endl;
-            return;
+            std::cerr << "Reached default. Incorrect input " + std::to_string(type) + "type in spawnRandObject class" << endl;
+            break;
     }
 
     // Add newObject to gameMap:
@@ -190,7 +260,27 @@ void GameModel::createPotionAtRandPosn() {
 
 void GameModel::createDragonAndHoardAtRandPosn() {
     if (isDragonHoardCreated && isDragonCreated) return; // both already exist
-    
+    if (isDragonHoardCreated) { // only DragonHoard exists
+        if (!(dragonPosn.first >=0 && dragonPosn.second >= 0)) { // dragonHoard exists but dragon does not
+            dragonPosn = findAvailableTileAround(dragonHoardPosn.first, dragonHoardPosn.second);
+        }
+        isDragonCreated = true;
+        dragon = std::make_shared<Dragon>(dragonPosn.first, dragonPosn.second, dragonHoard);
+        enemies.emplace_back(dragon);
+        gameMap.addTile(dragonPosn.first, dragonPosn.second, dragon);
+    } else { // neither Dragon nor Dragonhoard exist
+        dragonPosn = randomPosition();
+        dragonHoardPosn = findAvailableTileAround(dragonPosn.first, dragonPosn.second);
+        isDragonCreated = true;
+        isDragonHoardCreated = true;
+        dragonHoard = std::make_shared<DragonHoard>(dragonHoardPosn.first, dragonHoardPosn.second, true);
+        dragon = std::make_shared<Dragon>(dragonPosn.first, dragonPosn.second, dragonHoard);
+        enemies.emplace_back(dragon);
+        items.emplace_back(dragonHoard);
+        gameMap.addTile(dragonPosn.first, dragonPosn.second, dragon);
+        gameMap.addTile(dragonHoardPosn.first, dragonHoardPosn.second, dragonHoard);
+    }
+
 }
 
 PlayerCommand processCommand(const string& command) {
