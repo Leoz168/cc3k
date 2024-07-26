@@ -167,6 +167,7 @@ void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
 
     numRows = floor_lines.size();
     numCols = max_col_size;
+    gameMap.setMapSize(numRows, numCols);
 }
 
 // Spawn a specific type of game object and add it to the gameMap

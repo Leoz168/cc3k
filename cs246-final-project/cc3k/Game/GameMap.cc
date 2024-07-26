@@ -15,6 +15,15 @@ Tile* GameMap::tileAt(int x, int y) {
     else return (tile_vector.back())->getTilePtr();
 }
 
+ vector<Tile*> GameMap::allTilesAt(int x, int y) {
+    vector<Tile*> ret;
+    vector<shared_ptr<Tile>> tile_vector = game_map[make_pair(x, y)];
+    for (auto it : tile_vector) {
+        ret.emplace_back(it->getTilePtr());
+    }
+    return ret;
+ }
+
 int GameMap::tileIDAt(int x, int y) {
     Tile* tileAtPosn = tileAt(x, y);
     if (tileAtPosn == nullptr) return NOTHING;
@@ -71,6 +80,18 @@ map<int, vector<pair<int, int>>>& GameMap::getRoomMapping() {
     return room_floortile_coord_mapping;
 }
 
+int GameMap::getMapRows() {
+    return rows;
+}
+
+int GameMap::getMapCols() {
+    return cols;
+}
+
+void GameMap::setMapSize(int rows, int cols) {
+    this->rows = rows;
+    this->cols = cols;
+}
 
 int GameMap::getNumRooms() {
     return num_rooms;
