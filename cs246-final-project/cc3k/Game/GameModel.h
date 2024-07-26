@@ -20,6 +20,7 @@
 #include "Factory/PlayerCreator.h"
 #include "Handler/Effects/EffectHandler.h"
 
+enum class PlayerCommand {NO, SO, EA, WE, NE, NW, SE, SW, U, A, F, R, Q, NONE};
 
 class GameModel: public GameSubject {
         // Game State variables:

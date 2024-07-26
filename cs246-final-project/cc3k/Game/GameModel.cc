@@ -193,8 +193,31 @@ void GameModel::createDragonAndHoardAtRandPosn() {
     
 }
 
+PlayerCommand processCommand(const string& command) {
+    PlayerCommand enumCom;
+
+    if (command == "no") enumCom = PlayerCommand::NO;
+    else if (command == "so") enumCom = PlayerCommand::SO;
+    else if (command == "ea") enumCom = PlayerCommand::EA;
+    else if (command == "we") enumCom = PlayerCommand::WE;
+    else if (command == "ne") enumCom = PlayerCommand::NE;
+    else if (command == "nw") enumCom = PlayerCommand::NW;
+    else if (command == "se") enumCom = PlayerCommand::SE;
+    else if (command == "sw") enumCom = PlayerCommand::SW;
+    else if (command == "u") enumCom = PlayerCommand::U;
+    else if (command == "a") enumCom = PlayerCommand::A;
+    else if (command == "f") enumCom = PlayerCommand::F;
+    else if (command == "r") enumCom = PlayerCommand::R;
+    else if (command == "q") enumCom = PlayerCommand::Q;
+    else enumCom = PlayerCommand::NONE;
+
+    return enumCom;
+}
+
 // Move the player in the specified direction
 bool GameModel::movePlayer(string direction) {
+    PlayerCommand dir = processCommand(direction);
+    
     
 }
 
@@ -213,10 +236,6 @@ bool GameModel::playerAttack(string direction, shared_ptr<GameObject> enemyToAtt
 
 }
 
-// Check if the attack is valid
-bool GameModel::isValidAttack(shared_ptr<GameObject> enemy) {
-
-}
 
 // Use a potion
 bool GameModel::usePotion(string) {
