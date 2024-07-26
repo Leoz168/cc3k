@@ -284,52 +284,58 @@ void GameModel::createDragonAndHoardAtRandPosn() {
 
 }
 
-PlayerCommand processCommand(const string& command) {
-    PlayerCommand enumCom;
 
-    if (command == "no") enumCom = PlayerCommand::NO;
-    else if (command == "so") enumCom = PlayerCommand::SO;
-    else if (command == "ea") enumCom = PlayerCommand::EA;
-    else if (command == "we") enumCom = PlayerCommand::WE;
-    else if (command == "ne") enumCom = PlayerCommand::NE;
-    else if (command == "nw") enumCom = PlayerCommand::NW;
-    else if (command == "se") enumCom = PlayerCommand::SE;
-    else if (command == "sw") enumCom = PlayerCommand::SW;
-    else if (command == "u") enumCom = PlayerCommand::U;
-    else if (command == "a") enumCom = PlayerCommand::A;
-    else if (command == "f") enumCom = PlayerCommand::F;
-    else if (command == "r") enumCom = PlayerCommand::R;
-    else if (command == "q") enumCom = PlayerCommand::Q;
-    else enumCom = PlayerCommand::NONE;
-
-    return enumCom;
-}
+// N = 0, NE, E, SE, S, SW, W, NW;
+// isAvailableTileForSpawn(int x, int y)
 
 // Move the player in the specified direction
-bool GameModel::movePlayer(string direction) {
-    PlayerCommand dir = processCommand(direction);
+bool GameModel::movePlayer(Directions direction) {
+    pair posNow = player->getPosn();
+    switch (direction)
+    {
+    case Directions::N:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE) {
+            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::NE:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE) {
+            gameMap.moveTile(posNow.first, posNow.second, 1, -1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::N:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE) {
+            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::N:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE) {
+            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::N:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE) {
+            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
     
-    
-}
-
-// Move the enemy in a random direction
-bool GameModel::moveEnemyInRandomDirection() {
-
-}
-
-// Attack the player
-bool GameModel::enemyAttack(shared_ptr<GameObject> enemyThatAttacks) {
-
-}
-
-// Player attack
-bool GameModel::playerAttack(string direction, shared_ptr<GameObject> enemyToAttack) {
-
+    default:
+        break;
+    }
 }
 
 
 // Use a potion
-bool GameModel::usePotion(string) {
+bool usePotion(Directions direction) {
 
 }
 
@@ -348,13 +354,8 @@ bool GameModel::restartGame() {
 
 }
 
-// Quit the game
-void GameModel::quitGame() {
-
-}
-
 // Set the score
-bool GameModel::setScore() {
+int calculateScore() {
 
 }
 
