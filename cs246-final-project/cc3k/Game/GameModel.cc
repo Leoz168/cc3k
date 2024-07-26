@@ -402,7 +402,7 @@ bool GameModel::canMoveHere(int x, int y) {
 // Move the player in the specified direction on the gameMap and updates Player's internal position
 bool GameModel::movePlayer(Directions direction) {
     pair<int, int> posNow = player->getPosn();
-    pair<int, int> moveDirection = directionMap.at(direction);
+    pair<int, int> moveDirection = DIRECTIONS_POSN_CHANGE.at(direction);
     pair<int, int> newPosn = make_pair<int, int>(posNow.first + moveDirection.first, posNow.second + moveDirection.second);
     const int id = gameMap.tileIDAt(newPosn.first, newPosn.second);
     Tile * tileAtNewPosn = gameMap.tileAt(newPosn.first, newPosn.second);
@@ -412,18 +412,29 @@ bool GameModel::movePlayer(Directions direction) {
         if (id == NORMALGOLD || id == SMALLGOLD || id == MERCHANTHOARD || (id == DRAGONHOARD && dynamic_cast<DragonHoard *> (tileAtNewPosn)->canPlayerPickUp(player))) {
             player->setGoldCount(player->getGoldCount() + dynamic_cast<Gold *>(tileAtNewPosn)->getValue());
             gameMap.removeTile(newPosn.first, newPosn.second);
+        } else if (id == STAIR) {
+            nextFloor();
         }
 
         // Move the player to the new square:
         player->setPosition(newPosn.first, newPosn.second);
         gameMap.moveTile(posNow.first, posNow.second, moveDirection.first, moveDirection.second, gameMap.tileAt(posNow.first, posNow.second));
     }
+    return true;
+}
 
+
+bool GameModel::isValidAttack(int x, int y) {
+    int tileType = gameMap.typeTypeAt(x, y);
+    if (tileType == ENEMY) {
+        return true;
+    }
+    return false;
 }
 
 bool GameModel::playerAttack(Directions direction) {
     pair<int, int> posNow = player->getPosn();
-    pair<int, int> attackDirection = directionMap.at(direction);
+    pair<int, int> attackDirection = DIRECTIONS_POSN_CHANGE.at(direction);
     pair<int, int> enemyPosn = make_pair<int, int>(posNow.first + attackDirection.first, posNow.second + attackDirection.second);
 
     if (isValidAttack(enemyPosn.first, enemyPosn.second)) {
@@ -447,59 +458,26 @@ bool GameModel::playerAttack(Directions direction) {
             
         }
     }
+    return true;
 }
 
-bool GameModel::isValidAttack(int x, int y) {
-    int tileType = gameMap.typeTypeAt(x, y);
-    if (tileType == ENEMY) {
-        return true;
+bool GameModel::enemyAction() {
+    for (auto enemy: enemies) {
+        enemy.takeAction(player, gameMap);
     }
-    return false;
+    return true;
+}
+
 
 // Use a potion
 bool GameModel::usePotion(Directions direction) {
-    pair posNow = player->getPosn();
-    switch (direction)
-    {
-    case Directions::N:
-        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
-        player->usePotion(id);
-        break;
+    pair<int, int> directionVec = DIRECTIONS_POSN_CHANGE.at(direction);
+    pair<int, int> posNow = player->getPosn();
+    pair<int, int> potionPosn = make_pair(posNow.first + directionVec.first, posNow.second + directionVec.second);
 
-    case Directions::NE:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
-        player->usePotion(id);
-        break;
-
-    case Directions::E:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second);
-        player->usePotion(id);
-        break;
-
-    case Directions::SE:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second + 1);
-        player->usePotion(id);
-        break;
-
-    case Directions::S:
-        int id = gameMap.tileIDAt(posNow.first, posNow.second + 1);
-        player->usePotion(id);
-        break;
-
-    case Directions::W:
-        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second);
-        player->usePotion(id);
-        break;
-
-    case Directions::NW:
-        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second - 1);
-        player->usePotion(id);
-        break;
-    
-    default:
-        cout << "Tho you tried really hard, you didn't manage to become superman..." << endl;
-        break;
-    }
+    int id = gameMap.tileIDAt(potionPosn.first, potionPosn.second);
+    player->usePotion(id);
+    return true;
 }
 
 
