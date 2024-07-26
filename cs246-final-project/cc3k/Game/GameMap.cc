@@ -69,3 +69,16 @@ int GameMap::setNumRooms(int num) {
 int GameMap::addRoom() {
     num_rooms++;
 }
+
+bool GameMap::addFloorTileCoordToRoomMap(int room_number, pair<int, int> coord) {
+    if (room_number >= num_rooms) return false;
+
+    vector<pair<int, int>>& coords_at_room = room_floortile_coord_mapping[room_number];
+
+    for (auto it : coords_at_room) {
+        if (it.first == coord.first && it.second == coord.second) return false;
+    }
+
+    coords_at_room.emplace_back(coord);
+    return true;
+}
