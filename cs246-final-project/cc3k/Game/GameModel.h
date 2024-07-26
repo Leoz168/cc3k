@@ -7,7 +7,7 @@
 #include <string>
 
 #include "../Display/GameSubject.h"
-#include "Game/Directions.h"
+#include "Directions.h"
 #include "Tile.h"
 #include "tileIDs.h"
 #include "Floor/Cell/Cell.h"
