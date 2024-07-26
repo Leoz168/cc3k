@@ -526,7 +526,7 @@ GameMap &GameModel::getMap() {
 
 // Go to the next floor
 void GameModel::nextFloor() {
-    if (floorLevel < 1) {
+    if (floorLevel < 5) {
         floorLevel += 1;
         isStairCreated = false;
         resetFloor();
