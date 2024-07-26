@@ -52,6 +52,8 @@ Directions commandToDirection(const PlayerCommand command) {
             return Directions::W;
         case PlayerCommand::NW:
             return Directions::NW;
+        default:
+            return Directions::N;
     }
 }
 
