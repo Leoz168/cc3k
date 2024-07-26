@@ -4,129 +4,136 @@
 #include "../Game/tileIDs.h"
 #include <iostream>
 #include <map>
+#include <string>
 
-char IDToChar(int id) {
+std::string RED = "\033[31m";
+std::string GREEN = "\033[32m";
+std::string BLUE = "\033[34m";
+std::string YELLOW = "\033[33m";
+
+
+string IDToChar(int id) {
     switch (id)
     {
     case BLANK:
-        return ' ';
+        return " ";
         break;
     
     case FLOORTILE:
-        return '.';
+        return ".";
         break;
 
     case HWALL:
-        return '-';
+        return "-";
         break;
 
     case VWALL:
-        return '|';
+        return "|";
         break;
 
     case PASSAGE:
-        return '#';
+        return "#";
         break;
 
     case DOORWAY:
-        return '+';
+        return "+";
         break;
 
     case STAIR:
-        return '\\';
+        return BLUE + "\\" + "\033[0m";
         break;
 
     case SMALLGOLD:
-        return 'G';
+        return YELLOW + "G" + "\033[0m";
         break;
 
     case NORMALGOLD:
-        return 'G';
+        return YELLOW + "G" + "\033[0m";
         break;
 
     case MERCHANTHOARD:
-        return 'G';
+        return YELLOW + "G" + "\033[0m";
         break;
 
     case DRAGONHOARD:
-        return 'G';
+        return YELLOW + "G" + "\033[0m";
         break;
 
     case RESTOREHEALTH:
-        return 'P';
+        return GREEN + "P" + "\033[0m";
         break;
     
     case BOOSTATK:
-        return 'P';
+        return GREEN + "P" + "\033[0m";
         break;
 
     case BOOSTDEF:
-        return 'P';
+        return GREEN + "P" + "\033[0m";
         break;
 
     case POISONHEALTH:
-        return 'P';
+        return GREEN + "P" + "\033[0m";
         break;
 
     case WOUNDATK:
-        return 'P';
+        return GREEN + "P" + "\033[0m";
         break;
 
     case WOUNDDEF:
-        return 'P';
+        return GREEN + "P" + "\033[0m";
         break;
 
     case HUMAN:
-        return 'H';
+        return RED + "H" + "\033[0m";
         break;
 
     case MERCHANT:
-        return 'M';
+        return RED + "M" + "\033[0m";
         break;
 
     case DRAGON:
-        return 'D';
+        return RED + "D" + "\033[0m";
         break;
 
     case HALFLING:
-        return 'L';
+        return RED + "L" + "\033[0m";
         break;
 
     case ORC:
-        return 'O';
+        return RED + "O" + "\033[0m";
         break;
 
     case ELF:
-        return 'E';
+        return RED + "E" + "\033[0m";
         break;
 
     case DWARF:
-        return 'W';
+        return RED + "W" + "\033[0m";
         break;
 
     case SHADE:
-        return '@';
+        return BLUE + "@" + "\033[0m";
         break;
 
     case DROW:
-        return '@';
+        return BLUE + "@" + "\033[0m";
         break;
 
     case VAMPIRE:
-        return '@';
+        return BLUE + "@" + "\033[0m";
         break;
 
     case TROLL:
-        return '@';
+        return BLUE + "@" + "\033[0m";
         break;
 
     case GOBLIN:
-        return '@';
+        return BLUE + "@" + "\033[0m";
         break;
 
     default:
         std::cerr << "wtf you are getting" << std::endl;
-        return ' ';
+        return " ";
         break;
     }
 }
