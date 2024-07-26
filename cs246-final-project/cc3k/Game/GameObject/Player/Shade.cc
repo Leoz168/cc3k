@@ -18,5 +18,6 @@ int Shade::getTileID() { return id; };
 Tile* Shade::getTilePtr() { return this; };
 
 bool Shade::triggerAbility(int id, int ab_ver) {
+    if (id == SHADE) return true;
     return false;
 }

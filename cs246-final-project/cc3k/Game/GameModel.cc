@@ -215,6 +215,7 @@ void GameModel::spawnObject(int x, int y, char type, int room_number) {
             isPlayerCreated = true;
         } else {
             newPlayer = player;
+            player->setPosition(x, y);
         }
         playerCreated = true;
     } else if (cellMap.count(type)) { // Input char is a cell
@@ -581,12 +582,12 @@ bool GameModel::resetFloor() {
 bool GameModel::endGame(bool win) {
     string smsg;
     if (win) {
-        smsg = "Congratuations! You Win!!!\n";
+        smsg = "Congratuations! You Win!!! Your score is: " + to_string(calculateScore()) + "\n";
     } else {
-        smsg = "Oops! You Lose :(";
+        smsg = "Oops! You Lose :(\n";
     }
 
-    smsg += "Your score is: " + to_string(calculateScore());
+    smsg += "Please press r to restart the game to q to quit.\n";
 
     notifyobserver();
     status_message = "";
