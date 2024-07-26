@@ -16,9 +16,15 @@ Tile* GameMap::tileAt(int x, int y) {
 }
 
 int GameMap::tileIDAt(int x, int y) {
-    vector<shared_ptr<Tile>> tile_vector = game_map[make_pair(x, y)];
-    if (tile_vector.empty()) return NOTHING;
-    else return (tile_vector.back())->getTileID();
+    Tile* tileAtPosn = tileAt(x, y);
+    if (tileAtPosn == nullptr) return NOTHING;
+    else return tileAtPosn->getTileID();
+}
+
+int GameMap::typeTypeAt(int x, int y) {
+    Tile* tileAtPosn = tileAt(x, y);
+    if (tileAtPosn == nullptr) return NOTHING;
+    else return tileAtPosn->getTileType();
 }
 
 bool GameMap::moveTile(int x, int y, int dx, int dy, Tile* tile) {

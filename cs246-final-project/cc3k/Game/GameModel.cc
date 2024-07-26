@@ -1,5 +1,7 @@
 #include "GameModel.h"
 #include "mapfileTileMap.h"
+#include <regex>
+#include <algorithm>
 using namespace std;
 
 void GameModel::setPlayerRace(char type){
@@ -65,7 +67,7 @@ std::pair<int, int> GameModel::findAvailableTileAround(int x, int y) {
 void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
     // Initialize the map from a file:
     if (!isMapProvided) {
-        readMap(mapFile);
+        readMap(mapFile, isMapProvided);
         createPlayerAtRandPosn();
         createStairAtRandPosn();
         createPotionAtRandPosn();
@@ -73,16 +75,57 @@ void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
         createEnemyAtRandPosn();
         createDragonAndHoardAtRandPosn();
     } else {
-        readMap(mapFile);
+        readMap(mapFile, isMapProvided);
     }
 }
 
 // Read the map from the file: either provided one or emptyfloor.txt
-void GameModel::readMap(std::ifstream &mapFile) {
+void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
     string line;
     int y = 0; // Line number
+    map<int, string> reverseCellMap;
 
-    while (getline(mapFile, line)) {
+    for (auto it : cellMap) {
+        reverseCellMap[it.second] = reverseCellMap[it.first];
+    }
+
+    const regex horizontal_border{"\\" + reverseCellMap[VWALL] + reverseCellMap[HWALL] + "*\\" + reverseCellMap[VWALL]};
+
+    if (isMapProvided) {
+        for (int i = 1; i < floorLevel; i++) {
+            int borders = 0;
+            while (getline(mapFile, line) && borders < 2) {
+                if (regex_match(line, horizontal_border)) borders++;
+            }
+        }
+    }
+
+    std::vector<string> floor_lines;
+    std::vector<std::vector<bool>> tiles_processed;
+
+    int borders = 0;
+    while (getline(mapFile, line) && borders < 2) {
+        int line_size = line.length();
+        std::vector<bool> line_processed;
+        for (int i = 0; i < line_size; i++) {
+            line_processed.emplace_back(false);
+        }
+
+        floor_lines.emplace_back(line);
+
+        tiles_processed.emplace_back(move(line_processed));
+
+        if (regex_match(line, horizontal_border)) borders++;
+    }
+
+    for (int i = 0; i < floor_lines.size(); ++i) {
+        string& line = floor_lines[i];
+        for (int j = 0; line.size(); ++j) {
+            char type = line[j];
+            if (type == reverseCellMap)
+        }
+    }
+
         for (int x = 0; x < line.size(); ++x) {
             char type = line[x];
             // Process each character - spawn new object and add it to the gameMap
@@ -98,7 +141,7 @@ void GameModel::spawnObject(int x, int y, char type) {
     EnemyCreator makeEnemy;
     ItemCreator makeItem;
     PlayerCreator makePlayer;
-    std::unique_ptr<Tile> newObject;
+    std::shared_ptr<Tile> newObject;
     int id = NOTHING;
 
     if (type == '@') { // Input char is player
