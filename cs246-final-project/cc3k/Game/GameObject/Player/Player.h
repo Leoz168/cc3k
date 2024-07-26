@@ -40,6 +40,7 @@ class Player: public GameObject {
         void usePotion(int id);
         std::pair<int, int> getPosition();
         void setPosition(int x, int y);
+        void setRoom(int room);
         void move(int x, int y, int dx, int dy);
         virtual bool attackEnemy(Enemy * e) = 0;
         virtual void attackedBy(Enemy * e) = 0;

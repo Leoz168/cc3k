@@ -119,6 +119,34 @@ void floodfillInit(GameModel* model, int x, int y, vector<string>& floor_lines, 
     char type = floor_lines[y][x];
     if (type != '.') model->spawnObject(x, y, '.', room_number);
     model->spawnObject(x, y, type, room_number);
+    
+    if (type == 'D') {
+        for (auto it : DIRECTIONS_POSN_CHANGE) {
+            int newx = x + it.second.first;
+            int newy = y + it.second.second;
+            if (newx >= 0 && newy >= 0 
+                && newy < floor_lines.size() 
+                && newx < floor_lines[newy].length()
+                && tiles_processed[newy][newx] == false
+                && floor_lines[newy][newx] == '9') {
+                    floodfillInit(model, newx, newy, floor_lines, tiles_processed, room_number);
+            }
+        }
+    }
+
+    if (type == '9') {
+        for (auto it : DIRECTIONS_POSN_CHANGE) {
+            int newx = x + it.second.first;
+            int newy = y + it.second.second;
+            if (newx >= 0 && newy >= 0 
+                && newy < floor_lines.size() 
+                && newx < floor_lines[newy].length()
+                && tiles_processed[newy][newx] == false
+                && floor_lines[newy][newx] == 'D') {
+                    floodfillInit(model, newx, newy, floor_lines, tiles_processed, room_number);
+            }
+        }
+    }
 
     for (auto it : DIRECTIONS_POSN_CHANGE) {
         int newx = x + it.second.first;
@@ -212,10 +240,12 @@ void GameModel::spawnObject(int x, int y, char type, int room_number) {
         if (isPlayerCreated == false) {
             newPlayer = makePlayer.spawnPlayer(x, y, playerRace);
             player = newPlayer; // initialize the player
+            player->setRoom(room_number);
             isPlayerCreated = true;
         } else {
             newPlayer = player;
             player->setPosition(x, y);
+            player->setRoom(room_number);
         }
         playerCreated = true;
     } else if (cellMap.count(type)) { // Input char is a cell
@@ -236,12 +266,15 @@ void GameModel::spawnObject(int x, int y, char type, int room_number) {
     } else if (itemMap.count(type)) { // Input char is an Item
         id = itemMap.at(type);
 
-        if (!isDragonHoardCreated && id == DRAGONHOARD) { // init dragon hoard separately
+        if (id == DRAGONHOARD) { // init dragon hoard separately
             dragonHoardPosn = std::make_pair(x, y);
             dragonHoard = std::make_shared<DragonHoard>(x, y, true);
             isDragonHoardCreated = true;
             items.emplace_back(dragonHoard);
             gameMap.addTile(x, y, dragonHoard);
+            if (isDragonCreated) {
+                spawnObject(dragonPosn.first, dragonPosn.second, 'D');
+            }
             return;
         }
 
@@ -251,16 +284,17 @@ void GameModel::spawnObject(int x, int y, char type, int room_number) {
     } else if (enemyMap.count(type)) { // Input char is an Enemy
         id = enemyMap.at(type);
 
-        if (!isDragonCreated && id == DRAGON) { //init dragon separately
+        if (id == DRAGON) { //init dragon separately
             if (isDragonHoardCreated) { // dragonHoard already exists -> just init Dragon
                 isDragonCreated = true;
                 dragon = std::make_shared<Dragon>(x, y, dragonHoard);
                 enemies.emplace_back(dragon);
                 gameMap.addTile(x, y, dragon);
-
+                isDragonHoardCreated = false;
+                isDragonCreated = false;
             } else { // dragonHoard does not yet exist -> store dragon posn into a pair
                 dragonPosn = std::make_pair(x, y);
-                isDragonCreated = false; // dragon not yet created
+                isDragonCreated = true; // dragon not yet created
             }
             return;
         }
@@ -312,15 +346,27 @@ void GameModel::spawnRandObject(int x, int y, char type) {
 
 // Create the player based on the chosen race
 bool GameModel::createPlayerAtRandPosn() {
-    pair<int, int> pos = randomSpawnablePosition().second;
-    spawnObject(pos.first, pos.second, '@');
+    pair<int, pair<int, int>> pos_pair = randomSpawnablePosition();
+    int room = pos_pair.first;
+    pair<int, int> pos = pos_pair.second;
+
+    spawnObject(pos.first, pos.second, '@', room);
     return true;
 }
 
 void GameModel::createStairAtRandPosn() {
     if (isStairCreated) return; // Stair already exists 
 
-    pair<int, int> pos = randomSpawnablePosition().second;
+    pair<int, pair<int, int>> pos_pair = randomSpawnablePosition();
+    int room = pos_pair.first;
+    pair<int, int> pos = pos_pair.second;
+
+    while (room == player->getRoomNumber()) {
+        pos_pair = randomSpawnablePosition();
+        room = pos_pair.first;
+        pos = pos_pair.second;
+    }
+
     spawnObject(pos.first, pos.second, '\\');
 }
 
@@ -517,6 +563,7 @@ bool GameModel::usePotion(Directions direction) {
 
     int id = gameMap.tileIDAt(potionPosn.first, potionPosn.second);
     player->usePotion(id);
+    gameMap.removeTile(potionPosn.first, potionPosn.second);
     return true;
 }
 
@@ -583,11 +630,10 @@ bool GameModel::endGame(bool win) {
     string smsg;
     if (win) {
         smsg = "Congratuations! You Win!!! Your score is: " + to_string(calculateScore()) + "\n";
+        smsg += "Please press r to restart the game, q to quit, or if you'd like, keep exploring!\n";
     } else {
         smsg = "Oops! You Lose :(\n";
     }
-
-    smsg += "Please press r to restart the game, q to quit, or if you'd like, keep exploring!\n";
 
     status_message = smsg;
     notifyobserver();
