@@ -455,6 +455,7 @@ bool GameModel::isValidAttack(int x, int y) {
         return true;
     }
     return false;
+}
 
 // Use a potion
 bool GameModel::usePotion(Directions direction) {
