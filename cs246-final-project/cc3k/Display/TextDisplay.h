@@ -6,7 +6,7 @@
 #include "../GameModel.h"
 
 class TextDisplay: public Observer {
-        
+        GameModel *gm;
     public:
         void notify() override;
 };

@@ -78,6 +78,7 @@ class GameModel: public GameSubject {
         int tileIDAt(int x, int y);
         bool isAvailableTileForSpawn(int x, int y);
         bool canMoveHere(int x, int y);
+        int getCols();
 
         std::pair<int,int> findAvailableTileAround(int x, int y);
 
@@ -113,6 +114,7 @@ class GameModel: public GameSubject {
         bool isValidAttack(int x, int y);
         bool usePotion(Directions direction);
 
+        GameMap &getMap();
         // Game State Control:
         bool startGame();
         void nextFloor(ifstream& mapFile, bool isMapProvided);

@@ -30,6 +30,9 @@ bool GameModel::canMoveHere(int x, int y) {
     return false;
 }
 
+int GameModel::getCols() {
+    return numCols;
+}
 
 std::pair<int, int> GameModel::findAvailableTileAround(int x, int y) {
     std::pair<int, int> firstAvailableTile = std::make_pair(0, 0);
@@ -471,6 +474,9 @@ bool GameModel::usePotion(Directions direction) {
 bool isValidAttack(int x, int y);
 bool usePotion(Directions direction);
 
+GameMap &GameModel::getMap() {
+    return gameMap; 
+}
 
 // Go to the next floor
 void GameModel::nextFloor(ifstream &mapFile, bool isMapProvided) {
@@ -497,6 +503,4 @@ bool GameModel::resetFloor(Tile* tile) {
 }
 
 // Destructor
-GameModel::~GameModel() {
-
-}
+GameModel::~GameModel() {}
