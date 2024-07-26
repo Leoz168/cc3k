@@ -20,6 +20,15 @@ bool GameModel::isAvailableTileForSpawn(int x, int y) {
     return false;
 }
 
+bool GameModel::canMoveHere(int x, int y) {
+    int id = gameMap.tileIDAt(x, y);
+    if (id == FLOORTILE || id == DOORWAY || id == PASSAGE) {
+        return true;
+    }
+    return false;
+}
+
+
 std::pair<int, int> GameModel::findAvailableTileAround(int x, int y) {
     std::pair<int, int> firstAvailableTile = std::make_pair(0, 0);
     if (isAvailableTileForSpawn(x + 1, y)) {
@@ -375,6 +384,8 @@ bool GameModel::movePlayer(Directions direction) {
 bool usePotion(Directions direction) {
 
 }
+bool isValidAttack(int x, int y);
+bool usePotion(Directions direction);
 
 // Start the game
 bool GameModel::startGame() {
