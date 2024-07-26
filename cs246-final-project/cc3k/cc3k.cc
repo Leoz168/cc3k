@@ -52,8 +52,6 @@ Directions commandToDirection(const PlayerCommand command) {
             return Directions::W;
         case PlayerCommand::NW:
             return Directions::NW;
-        default:
-            return Directions::N;
     }
 }
 
@@ -133,42 +131,42 @@ int main(int argc, char* argv[]) {
                 switch (processCommand(command))
                 {
                 case PlayerCommand::NO:
-                    gm.moveEnemy(command);
+                    gm.movePlayer(commandToDirection(processCommand(command)));
                     gm.updateGame();
                     break;
 
                 case PlayerCommand::SO:
-                    gm.moveEnemy(command);
+                    gm.movePlayer(commandToDirection(processCommand(command)));
                     gm.updateGame();
                     break;
                 
                 case PlayerCommand::EA:
-                    gm.moveEnemy(command);
+                    gm.movePlayer(commandToDirection(processCommand(command)));
                     gm.updateGame();
                     break;
                 
                 case PlayerCommand::WE:
-                    gm.moveEnemy(command);
+                    gm.movePlayer(commandToDirection(processCommand(command)));
                     gm.updateGame();
                     break;
 
                 case PlayerCommand::NE:
-                    gm.moveEnemy(command);
+                    gm.movePlayer(commandToDirection(processCommand(command)));
                     gm.updateGame();
                     break;
 
                 case PlayerCommand::NW:
-                    gm.moveEnemy(command);
+                    gm.movePlayer(commandToDirection(processCommand(command)));
                     gm.updateGame();
                     break;
 
                 case PlayerCommand::SE:
-                    gm.moveEnemy(command);
+                    gm.movePlayer(commandToDirection(processCommand(command)));
                     gm.updateGame();
                     break;
 
                 case PlayerCommand::SW:
-                    gm.moveEnemy(command);
+                    gm.movePlayer(commandToDirection(processCommand(command)));
                     gm.updateGame();
                     break;
 
@@ -179,42 +177,42 @@ int main(int argc, char* argv[]) {
 
                     switch (direction) {                            // use potion in direction
                     case PlayerCommand::NO:
-                        gm.usePotion(command);
+                        gm.usePotion(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::SO:
-                        gm.usePotion(command);
+                        gm.usePotion(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::EA:
-                        gm.usePotion(command);
+                        gm.usePotion(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::WE:
-                        gm.usePotion(command);
+                        gm.usePotion(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::NE:
-                        gm.usePotion(command);
+                        gm.usePotion(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::NW:
-                        gm.usePotion(command);
+                        gm.usePotion(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::SE:
-                        gm.usePotion(command);
+                        gm.usePotion(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::SW:
-                        gm.usePotion(command);
+                        gm.usePotion(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
@@ -232,42 +230,42 @@ int main(int argc, char* argv[]) {
 
                     switch (direction) {                            // use potion in direction
                     case PlayerCommand::NO:
-                        gm.playerAttack(command);
+                        gm.playerAttack(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::SO:
-                        gm.playerAttack(command);
+                        gm.playerAttack(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::EA:
-                        gm.playerAttack(command);
+                        gm.playerAttack(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::WE:
-                        gm.playerAttack(command);
+                        gm.playerAttack(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::NE:
-                        gm.playerAttack(command);
+                        gm.playerAttack(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::NW:
-                        gm.playerAttack(command);
+                        gm.playerAttack(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::SE:
-                        gm.playerAttack(command);
+                        gm.playerAttack(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
                     case PlayerCommand::SW:
-                        gm.playerAttack(command);
+                        gm.playerAttack(commandToDirection(processCommand(command)));
                         gm.updateGame();
                         break;
 
