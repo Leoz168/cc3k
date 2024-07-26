@@ -3,6 +3,7 @@
 
 #include <map>
 #include <utility>
+#include <string>
 
 const int NUM_DIRECTIONS = 8;
 enum Directions {N = 0, NE, E, SE, S, SW, W, NW};
@@ -15,6 +16,17 @@ const std::map<Directions, pair<int, int>> DIRECTIONS_POSN_CHANGE {
     {SW, make_pair(-1, 1)},
     {W, make_pair(-1, 0)},
     {NW, make_pair(-1, -1)}
+};
+
+const std::map<Directions, std::string> DIRECTIONS_NAMES {
+    {N, "North"},
+    {NE, "Northeast"},
+    {E, "East"},
+    {SE, "Southeast"},
+    {S, "South"},
+    {SW, "Southwest"},
+    {W, "West"},
+    {NW, "Northwest"}
 };
 
 #endif

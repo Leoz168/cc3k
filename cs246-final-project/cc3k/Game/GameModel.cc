@@ -1,5 +1,6 @@
 #include "GameModel.h"
 #include "mapfileTileMap.h"
+#include "../Display/tileCharMapping.h"
 #include <regex>
 #include <algorithm>
 #include <iostream>
@@ -174,7 +175,7 @@ void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
     if (isMapProvided) {
         for (int i = 1; i < floorLevel; i++) {
             int borders = 0;
-            while (getline(mapFile, line) && borders < 2) {
+            while (borders < 2 && getline(mapFile, line)) {
                 if (regex_match(line, horizontal_border)) borders++;
             }
         }
@@ -505,8 +506,12 @@ bool GameModel::movePlayer(Directions direction) {
         // Move the player to the new square:
         player->setPosition(newPosn.first, newPosn.second);
         gameMap.moveTile(posNow.first, posNow.second, moveDirection.first, moveDirection.second, gameMap.tileAt(posNow.first, posNow.second));
+        status_message = "You've moved " + DIRECTIONS_NAMES.at(direction) + "\n";
+        return true;
+    } else {
+        status_message = "There seems to be something blocking your way in the " + DIRECTIONS_NAMES.at(direction) + " direction...\n";
+        return false;
     }
-    return true;
 }
 
 
@@ -525,11 +530,17 @@ bool GameModel::playerAttack(Directions direction) {
 
     if (isValidAttack(enemyPosn.first, enemyPosn.second)) {
         Enemy * enemyToAttack = dynamic_cast<Enemy *>(gameMap.tileAt(enemyPosn.first, enemyPosn.second));
+        int initialEnemyHP = enemyToAttack->getHP();
+        bool killed = false;
+
         int enemyID = gameMap.tileIDAt(enemyPosn.first, enemyPosn.second);
         player->attackEnemy(enemyToAttack);
 
+        int finalEnemyHP = enemyToAttack->getHP();
+
         // handle enemy death 
         if (enemyToAttack->isDead()) {
+            killed = true;
             // Remove the enemy:
             gameMap.removeTile(enemyPosn.first, enemyPosn.second);
             for (auto it = enemies.begin(); it != enemies.end(); it++) {
@@ -549,8 +560,13 @@ bool GameModel::playerAttack(Directions direction) {
             }
             
         }
+        status_message = "PC deals " + to_string(initialEnemyHP - finalEnemyHP) + " damage to " + IDToChar(enemyID) + ".\n";
+        if (killed) status_message += "PC killed " + IDToChar(enemyID) + "!\n";
+        else status_message += IDToChar(enemyID) + " now has " + to_string(finalEnemyHP) + " HP.\n";
+        return true;
     }
-    return true;
+    status_message = "There's nothing to attack over " + DIRECTIONS_NAMES.at(direction) + " there!\n";
+    return false;
 }
 
 bool GameModel::enemyAction() {
@@ -560,6 +576,13 @@ bool GameModel::enemyAction() {
     return true;
 }
 
+bool GameModel::canUse(int x, int y) {
+    int tileType = gameMap.typeTypeAt(x, y);
+    if (tileType == POTION) {
+        return true;
+    }
+    return false;
+}
 
 // Use a potion
 bool GameModel::usePotion(Directions direction) {
@@ -568,9 +591,12 @@ bool GameModel::usePotion(Directions direction) {
     pair<int, int> potionPosn = make_pair(posNow.first + directionVec.first, posNow.second + directionVec.second);
 
     int id = gameMap.tileIDAt(potionPosn.first, potionPosn.second);
-    player->usePotion(id);
-    gameMap.removeTile(potionPosn.first, potionPosn.second);
-    return true;
+    if(canUse(potionPosn.first, potionPosn.second)) {
+        player->usePotion(id);
+        gameMap.removeTile(potionPosn.first, potionPosn.second);
+        return true;
+    }
+    return false;
 }
 
 GameMap &GameModel::getMap() {
@@ -584,6 +610,7 @@ void GameModel::nextFloor() {
         isStairCreated = false;
         resetFloor();
         status_message = "You've moved up a floor!";
+        player->ehr->removeAllEffects();
         notifyobserver();
         status_message = "";
     } else {

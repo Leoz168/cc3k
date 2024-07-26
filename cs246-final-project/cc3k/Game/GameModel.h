@@ -124,6 +124,7 @@ class GameModel: public GameSubject {
         bool freezeEnemy();
         bool unfreezeEnemy();
         bool isEnemyFrozen();
+        bool canUse(int, int);
         
 
         // Attack:
