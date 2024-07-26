@@ -33,6 +33,7 @@ class GameModel: public GameSubject {
         int potionSpawnCounter = 0;
         int enemySpawnCounter = 0;
         int goldSpawnCounter = 0;
+        bool enemyFrozen = false;
 
         // Player variables:
         std::shared_ptr<Player> player;
@@ -120,6 +121,7 @@ class GameModel: public GameSubject {
         bool movePlayer(Directions direction);
         bool freezeEnemy();
         bool unfreezeEnemy();
+        bool isEnemyFrozen();
         
 
         // Attack:
@@ -134,7 +136,6 @@ class GameModel: public GameSubject {
         // Game State Control:
         bool startGame();
         void nextFloor();
-        bool restartGame();
         double calculateScore();
         bool endGame(bool win);
 

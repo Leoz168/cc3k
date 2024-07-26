@@ -561,20 +561,8 @@ void GameModel::updateGame() {
 }
 
 bool GameModel::startGame() {
-    cout << "Welcome to CC3K. Enter one of supported commands: " << endl;
-    cout << "s: selects SHADE race." << endl;
-    cout << "d: selects DROW race." << endl;
-    cout << "g: selects GOBLIN race." << endl;
-    cout << "t: selects TROLL race." << endl;
-    cout << "v: selects VAMPIRE race." << endl;
-    cout << "f: freeze ALL enemies, until f is pressed again." << endl;
-    cout << "r: RESTART the game." << endl;
-    cout << "q: QUIT the game." << endl;
-    cout << "" << endl;
-    cout << "After selecting the race, use the following commands:" << endl;
-    cout << "no,so,ea,we,ne,nw,se,sw: moves the player character one block in the appropriate cardinal direction." << endl;
-    cout << "u direction: uses the potion indicated by the direction." << endl;
-    cout << "a direction: attacks the enemy in the specified direction." << endl;
+    status_message = "Game Start! Input your commands: ";
+    notifyobserver();
 }
 
 // Reset the floor
@@ -602,12 +590,18 @@ bool GameModel::freezeEnemy() {
     for (auto it : enemies) {
         (it.get())->setFrozen(true);
     }
+    enemyFrozen = true;
 }
 
 bool GameModel::unfreezeEnemy() {
     for (auto it : enemies) {
         (it.get())->setFrozen(false);
     }
+    enemyFrozen = false;
+}
+
+bool GameModel::isEnemyFrozen() {
+    return enemyFrozen;
 }
 
 void GameModel::getStatusMessage(string msg) {
