@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
         while (true) {
             char race;
             cin >> race;
-            switch (race) {
+            switch (std::tolower(race)) {
             case 's':
                 gm.setPlayerRace(race);
                 if (filename == "") gm.initializeMap(ifs_map, false);
