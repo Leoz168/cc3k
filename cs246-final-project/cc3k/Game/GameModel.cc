@@ -110,6 +110,7 @@ void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
     string line;
     int y = 0; // Line number
     map<int, char> reverseCellMap;
+    int max_col_size = 0;
 
     for (auto it : cellMap) {
         reverseCellMap[it.second] = reverseCellMap[it.first];
@@ -132,25 +133,27 @@ void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
     int borders = 0;
     while (getline(mapFile, line) && borders < 2) {
         int line_size = line.length();
+        if (line_size > max_col_size) max_col_size = line_size;
+
         std::vector<bool> line_processed;
         for (int i = 0; i < line_size; i++) {
             line_processed.emplace_back(false);
         }
 
-        floor_lines.emplace_back(line);
+        if (regex_match(line, horizontal_border)) borders++;
+
+        floor_lines.emplace_back(move(line));
 
         tiles_processed.emplace_back(move(line_processed));
-
-        if (regex_match(line, horizontal_border)) borders++;
     }
 
     int room_number = 0;
 
     for (int y = 0; y < floor_lines.size(); ++y) {
-        string& line = floor_lines[y];
-        for (int x = 0; line.size(); ++y) {
+        string& floor_line = floor_lines[y];
+        for (int x = 0; floor_line.size(); ++y) {
             if (tiles_processed[y][x] == false) {
-                char type = line[x];
+                char type = floor_line[x];
                 tiles_processed[y][x] = true;
                 if (isFloodfillValid(type, reverseCellMap)) {
                     floodfillInit(this, x, y, floor_lines, tiles_processed, room_number, reverseCellMap);
@@ -161,6 +164,9 @@ void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
             }
         }
     }
+
+    numRows = floor_lines.size();
+    numCols = max_col_size;
 }
 
 // Spawn a specific type of game object and add it to the gameMap
