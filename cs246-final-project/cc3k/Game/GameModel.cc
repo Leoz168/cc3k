@@ -517,6 +517,7 @@ bool GameModel::usePotion(Directions direction) {
 
     int id = gameMap.tileIDAt(potionPosn.first, potionPosn.second);
     player->usePotion(id);
+    gameMap.removeTile(potionPosn.first, potionPosn.second);
     return true;
 }
 
