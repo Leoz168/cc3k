@@ -25,13 +25,14 @@
 
 class GameModel: public GameSubject {
         // Game State variables:
+        bool isMapProvided;
+        string mapFile;
         int numRows = -1;
         int numCols= -1;
         int floorLevel = 1;
         int potionSpawnCounter = 0;
         int enemySpawnCounter = 0;
         int goldSpawnCounter = 0;
-        std::ifstream map_file;
 
         // Direction Map: Direction <-> corresponding coordinate vector
         const std::map<Directions, std::pair<int, int>> directionMap {
@@ -75,6 +76,7 @@ class GameModel: public GameSubject {
         std::shared_ptr<Dragon> dragon = nullptr;
 
     public:
+        explicit GameModel(bool isMapProvided = false, string mapFile = "emptyfloor.txt");
         // randomSpawnablePosition returns a random spawnable position (i.e. available floor tile)
         //     based on the following algorithm:
         // - Randomly chooses a room
@@ -138,7 +140,7 @@ class GameModel: public GameSubject {
         GameMap &getMap();
         // Game State Control:
         bool startGame();
-        void nextFloor(ifstream& mapFile, bool isMapProvided);
+        void nextFloor();
         bool restartGame();
         double calculateScore();
         bool endGame();

@@ -7,7 +7,7 @@ using namespace std;
 explicit GameMap::GameMap() {}
 
 // todo
-GameMap::GameMap(string filename) {}
+GameMap::GameMap() {}
 
 Tile* GameMap::tileAt(int x, int y) {
     vector<shared_ptr<Tile>> tile_vector = game_map[make_pair(x, y)];

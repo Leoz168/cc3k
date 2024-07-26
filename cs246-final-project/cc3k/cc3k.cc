@@ -56,19 +56,20 @@ Directions commandToDirection(const PlayerCommand command) {
 }
 
 int main(int argc, char* argv[]) {
+    const string emptyFloorFile = "emptyfloor.txt";
+
     // srand(time(NULL));
     srand((unsigned int)time(0));
-    GameModel gm;
+    string filename = "";
+    if (argc == 2) {
+        filename = argv[1];
+    } else {
+        filename = emptyFloorFile;
+    }
+    GameModel gm{filename == emptyFloorFile ? false : true, filename};
     gm.startGame();
     while (true) {
         string command;
-        string filename = "";
-        int i = 0;
-        if (argc == 2) {
-            filename = argv[1];
-        } else {
-            filename = "emptyfloor.txt";
-        }
         ifstream ifs_map {filename};
         // handle race
         while (true) {
