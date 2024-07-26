@@ -88,6 +88,13 @@ class GameModel: public GameSubject {
 
         void setPlayerRace(char type);
 
+        int getPlayerRace();
+        int getGold();
+        int getFloor();
+        int getHP();
+        int getAtk();
+        int getdef();
+
         // Getters:
         int tileIDAt(int x, int y);
         bool isAvailableTileForSpawn(int x, int y);

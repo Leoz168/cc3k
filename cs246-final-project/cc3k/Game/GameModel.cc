@@ -34,6 +34,30 @@ int GameModel::getCols() {
     return numCols;
 }
 
+int GameModel::getPlayerRace() {
+    return player->getTileID();
+}
+
+int GameModel::getGold() {
+    return player->getGoldCount();
+}
+
+int GameModel::getFloor() {
+    return floorLevel;
+}
+
+int GameModel::getHP() {
+    return player->getHP();
+}
+
+int GameModel::getAtk() {
+    return player->getAtk();
+}
+
+int GameModel::getdef() {
+    return player->getDef();
+}
+
 std::pair<int, int> GameModel::findAvailableTileAround(int x, int y) {
     std::pair<int, int> firstAvailableTile = std::make_pair(0, 0);
     if (isAvailableTileForSpawn(x + 1, y)) {
