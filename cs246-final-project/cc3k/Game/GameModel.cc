@@ -1,4 +1,5 @@
 #include "GameModel.h"
+#include "MapFiles/mapfileTileMap.h"
 using namespace std;
 
 void GameModel::setPlayerRace(char type){
@@ -112,7 +113,7 @@ void GameModel::spawnObject(int x, int y, char type) {
         id = itemMap.at(type);
 
         if (!isDragonHoardCreated && id == DRAGONHOARD) { // init dragon hoard separately
-            dragonHoardPosn = std::make_pair(x, y)
+            dragonHoardPosn = std::make_pair(x, y);
             dragonHoard = std::make_shared<DragonHoard>(x, y, true);
             isDragonHoardCreated = true;
             items.emplace_back(dragonHoard);

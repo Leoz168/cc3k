@@ -7,6 +7,7 @@
 #include <string>
 
 #include "../Display/GameSubject.h"
+#include "Game/Directions.h"
 #include "Tile.h"
 #include "tileIDs.h"
 #include "Floor/Cell/Cell.h"
@@ -39,45 +40,12 @@ class GameModel: public GameSubject {
             {'t', TROLL}
         };
         int playerRace = SHADE;
-        std::shared_ptr<EffectHandler> effectHandler;
 
         // Map and objects on the Map
         GameMap gameMap;
         std::vector<std::shared_ptr<Enemy>> enemies;
         std::vector<std::shared_ptr<Item>> items;
         std::vector<std::shared_ptr<Cell>> cells;
-
-        // Map between char and tileID - for reading input from a file 
-        const std::map<char, int> cellMap {
-            {'.', FLOORTILE},
-            {'|', VWALL},
-            {'-', HWALL},
-            {'#', PASSAGE},
-            {'+', DOORWAY},
-            {'\\', STAIR}
-        };
-
-        const std::map<char, int> itemMap {
-            {'0', RESTOREHEALTH},
-            {'1', BOOSTATK},
-            {'2', BOOSTDEF},
-            {'3', POISONHEALTH},
-            {'4', WOUNDATK},
-            {'5', WOUNDDEF},
-            {'6', NORMALGOLD},
-            {'7', SMALLGOLD},
-            {'8', MERCHANTHOARD},
-            {'9', DRAGONHOARD}
-        };
-        const std::map<char, int> enemyMap {
-            {'D', DRAGON},
-            {'H', HUMAN},
-            {'E', ELF},
-            {'O', ORC},
-            {'L', HALFLING},
-            {'M', MERCHANT},
-            {'W', DWARF},
-        };
 
         // Keep track of what has already been created:
         bool isPlayerCreated = false;
@@ -123,32 +91,32 @@ class GameModel: public GameSubject {
         void createPotionAtRandPosn();
         void createDragonAndHoardAtRandPosn();
 
-
         // Move:
-        bool movePlayer(string direction);
-        bool moveEnemy(string direction);
-        bool moveEnemyInRandomDirection();
-        bool isValidMove(shared_ptr<GameObject> gameObject);
+        bool movePlayer(Directions direction);
         bool freezeEnemy();
         bool unfreezeEnemy();
         
 
         // Attack:
-        bool enemyAttack(shared_ptr<GameObject> enemyThatAttacks);
-        bool playerAttack(string direction, shared_ptr<GameObject> enemyToAttack);
-        bool isValidAttack(shared_ptr<GameObject> enemy);
-        bool usePotion(string);
+        bool playerAttack(Directions direction);
+        bool isValidAttack(int x, int y);
+        bool usePotion(Directions direction);
 
         // Game State Control:
         bool startGame();
         void nextFloor(ifstream& mapFile, bool isMapProvided);
         bool restartGame();
-        void quitGame();
-        bool setScore();
+        int calculateScore();
         bool endGame();
 
         // Update Game State:
+
+        // updateGame should be called at the end of every "turn", which by default is
+        //     after every player action (e.g. move, atk, use, etc.). The function 
+        //     causes all actionable GameObjects to "take a turn" (e.g. enemies will move/atk)
+        //     (i.e. calling Tile->takeAction())
         void updateGame();
+        
         bool resetFloor(Tile*);
 
         // Destructor:
