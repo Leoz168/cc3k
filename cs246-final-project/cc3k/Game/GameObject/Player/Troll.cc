@@ -12,4 +12,7 @@ void Troll::attackedBy(Enemy *e) {
     hp_now -= ceil((100 / (100 + getDef())) * e->getAtk());
 }
 
+int Troll::getTileID() { return id; };
+Tile* Troll::getTilePtr() { return this; };
+
 bool triggerAbility(int id, int ab_ver);

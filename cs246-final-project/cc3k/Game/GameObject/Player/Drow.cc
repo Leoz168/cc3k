@@ -12,4 +12,7 @@ void Drow::attackedBy(Enemy *e) {
     hp_now -= ceil((100 / (100 + getDef())) * e->getAtk());
 }
 
+int Drow::getTileID() { return id; };
+Tile* Drow::getTilePtr() { return this; };
+
 bool triggerAbility(int id, int ab_ver);

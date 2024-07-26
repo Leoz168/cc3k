@@ -12,5 +12,8 @@ void Vampire::attackedBy(Enemy *e) {
     hp_now -= ceil((100 / (100 + getDef())) * e->getAtk());
 }
 
+int Vampire::getTileID() { return id; };
+Tile* Vampire::getTilePtr() { return this; };
+
 bool triggerAbility(int id, int ab_ver);
 

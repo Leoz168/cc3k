@@ -12,4 +12,7 @@ void Goblin::attackedBy(Enemy *e) {
     hp_now -= ceil((100 / (100 + getDef())) * e->getAtk());
 }
 
+int Goblin::getTileID() { return id; };
+Tile* Goblin::getTilePtr() { return this; };
+
 bool triggerAbility(int id, int ab_ver) {}

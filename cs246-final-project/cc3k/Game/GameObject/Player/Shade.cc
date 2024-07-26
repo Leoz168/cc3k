@@ -12,4 +12,7 @@ void Shade::attackedBy(Enemy *e) {
     ceil((100 / (100 + getDef())) * e->getAtk());
 }
 
+int Shade::getTileID() { return id; };
+Tile* Shade::getTilePtr() { return this; };
+
 bool triggerAbility(int id, int ab_ver);

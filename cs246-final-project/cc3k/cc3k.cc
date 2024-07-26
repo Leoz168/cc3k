@@ -7,6 +7,7 @@
 #include "Display/observer.h"
 #include "Game/GameModel.h"
 #include "Display/GameSubject.h"
+#include "Game/Directions.h"
 
 using namespace std;
 
@@ -31,6 +32,27 @@ PlayerCommand processCommand(const string& command) {
     else enumCom = PlayerCommand::NONE;
 
     return enumCom;
+}
+
+Directions commandToDirection(const PlayerCommand command) {
+    switch (command){
+        case PlayerCommand::NO:
+            return Directions::N;
+        case PlayerCommand::NE:
+            return Directions::NE;
+        case PlayerCommand::EA:
+            return Directions::E;
+        case PlayerCommand::SE:
+            return Directions::SE;
+        case PlayerCommand::SO:
+            return Directions::S;
+        case PlayerCommand::SW:
+            return Directions::SW;
+        case PlayerCommand::WE:
+            return Directions::W;
+        case PlayerCommand::NW:
+            return Directions::NW;
+    }
 }
 
 int main(int argc, char* argv[]) {
