@@ -11,7 +11,7 @@ class GameSubject {
         void attach(Observer *o);
         void detach(Observer *o);
         void notifyobserver();
-        virtual ~GameSubject() = 0;
+        virtual ~GameSubject() = default;
 };
 
 #endif
