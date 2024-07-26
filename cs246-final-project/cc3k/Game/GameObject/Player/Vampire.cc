@@ -15,7 +15,7 @@ bool Vampire::attackEnemy(Enemy *e) {
 }
 
 void Vampire::attackedBy(Enemy *e) {
-    hp_now -= ceil((100 / (100 + getDef())) * e->getAtk());
+    hp_now -= static_cast<int>(ceil((100.0 / (100.0 + getDef())) * e->getAtk()));
 }
 
 int Vampire::getTileID() { return id; };

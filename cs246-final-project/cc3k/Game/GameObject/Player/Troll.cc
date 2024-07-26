@@ -9,7 +9,7 @@ bool Troll::attackEnemy(Enemy *e) {
 }
 
 void Troll::attackedBy(Enemy *e) {
-    hp_now -= ceil((100 / (100 + getDef())) * e->getAtk());
+    hp_now -= static_cast<int>(ceil((100.0 / (100.0 + getDef())) * e->getAtk()));
 }
 
 int Troll::getTileID() { return id; };

@@ -16,6 +16,6 @@ void GameSubject::detach(Observer *o) {
   }
 }
 void GameSubject::notifyobserver() {
-    cout << CLEAR_COMMAND << endl;
+    //cout << CLEAR_COMMAND << endl;
     for(auto it: observers) {it->notify();}
 }
