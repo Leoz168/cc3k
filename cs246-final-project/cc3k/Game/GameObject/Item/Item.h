@@ -11,7 +11,7 @@ class Item : public GameObject {
     protected:
         string description;
     public:
-        Item(string description, int x, int y, int id);
+        Item(string description, int x, int y, int id, int tile_type = NOTYPE);
 
         // Gets the description of the item
         virtual string getDescription();

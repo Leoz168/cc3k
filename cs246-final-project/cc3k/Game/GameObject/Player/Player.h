@@ -3,6 +3,7 @@
 
 #include "../GameObject.h"
 #include "../../Handler/Effects/EffectHandler.h"
+#include "Directions.h"
 #include <cmath>
 #include <memory>
 
@@ -18,9 +19,9 @@ class Player: public GameObject {
         int def;
         int id;
         int gold;
-        unique_ptr<EffectHandler> ehr;
         bool merchant_hostility = false;
     public:
+        unique_ptr<EffectHandler> ehr;
         Player(int x, int y, int id, int hp_now, int hp_max, int atk, int def, int gold);
         virtual int getTileID() = 0;
         virtual Tile* getTilePtr() = 0;
@@ -36,6 +37,7 @@ class Player: public GameObject {
         void setDef(int def);
         void setGoldCount(int gold);
         void setMerchantHostility(bool);
+        void usePotion(int id);
         std::pair<int, int> getPosition();
         void setPosition(int x, int y);
         void move(int x, int y, int dx, int dy);

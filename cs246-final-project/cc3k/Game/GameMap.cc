@@ -15,10 +15,25 @@ Tile* GameMap::tileAt(int x, int y) {
     else return (tile_vector.back())->getTilePtr();
 }
 
-int GameMap::tileIDAt(int x, int y) {
+ vector<Tile*> GameMap::allTilesAt(int x, int y) {
+    vector<Tile*> ret;
     vector<shared_ptr<Tile>> tile_vector = game_map[make_pair(x, y)];
-    if (tile_vector.empty()) return NOTHING;
-    else return (tile_vector.back())->getTileID();
+    for (auto it : tile_vector) {
+        ret.emplace_back(it->getTilePtr());
+    }
+    return ret;
+ }
+
+int GameMap::tileIDAt(int x, int y) {
+    Tile* tileAtPosn = tileAt(x, y);
+    if (tileAtPosn == nullptr) return NOTHING;
+    else return tileAtPosn->getTileID();
+}
+
+int GameMap::typeTypeAt(int x, int y) {
+    Tile* tileAtPosn = tileAt(x, y);
+    if (tileAtPosn == nullptr) return NOTHING;
+    else return tileAtPosn->getTileType();
 }
 
 bool GameMap::moveTile(int x, int y, int dx, int dy, Tile* tile) {
@@ -50,6 +65,14 @@ bool GameMap::addTile(int x, int y, shared_ptr<Tile> new_tile) {
     bool return_val = false;
     if (tile_vector.empty()) return_val = true;
     tile_vector.emplace_back(new_tile);
+
+    if (new_tile->getTileID() == FLOORTILE) {
+        int floortile_room_number = new_tile->getRoomNumber();
+        if (floortile_room_number != NOASSOCIATEDROOM) {
+            addFloorTileCoordToRoomMap(floortile_room_number, new_tile->getPosn());
+        }
+    }
+
     return return_val;
 }
 
@@ -57,6 +80,18 @@ map<int, vector<pair<int, int>>>& GameMap::getRoomMapping() {
     return room_floortile_coord_mapping;
 }
 
+int GameMap::getMapRows() {
+    return rows;
+}
+
+int GameMap::getMapCols() {
+    return cols;
+}
+
+void GameMap::setMapSize(int rows, int cols) {
+    this->rows = rows;
+    this->cols = cols;
+}
 
 int GameMap::getNumRooms() {
     return num_rooms;

@@ -19,16 +19,19 @@
 #include "Factory/EnemyCreator.h"
 #include "Factory/ItemCreator.h"
 #include "Factory/PlayerCreator.h"
+#include "Factory/FloorTileCreator.h"
 #include "Handler/Effects/EffectHandler.h"
+#include "tileGenConsts.h"
 
 class GameModel: public GameSubject {
         // Game State variables:
         int numRows = -1;
         int numCols= -1;
-        int floorLevel = 0;
+        int floorLevel = 1;
         int potionSpawnCounter = 0;
         int enemySpawnCounter = 0;
         int goldSpawnCounter = 0;
+        std::ifstream map_file;
 
         // Direction Map: Direction <-> corresponding coordinate vector
         const std::map<Directions, std::pair<int, int>> directionMap {
@@ -95,10 +98,10 @@ class GameModel: public GameSubject {
 
         // Creators:
         void initializeMap(ifstream &mapFile, bool isMapProvided);
-        void readMap(ifstream& mapFile);
+        void readMap(ifstream& mapFile, bool isMapProvided);
 
         // Spawn a specific type of game object and add it to the gameMap
-        void spawnObject(int x, int y, char type);
+        void spawnObject(int x, int y, char type, int room_number = NOASSOCIATEDROOM);
         // Spawn a random game object(Item or Enemy) and add it to the gameMap
         // types:
         // - E: enemy
@@ -128,7 +131,7 @@ class GameModel: public GameSubject {
         bool startGame();
         void nextFloor(ifstream& mapFile, bool isMapProvided);
         bool restartGame();
-        int calculateScore();
+        double calculateScore();
         bool endGame();
 
         // Update Game State:

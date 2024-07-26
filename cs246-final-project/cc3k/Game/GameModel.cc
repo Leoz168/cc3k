@@ -1,5 +1,7 @@
 #include "GameModel.h"
 #include "mapfileTileMap.h"
+#include <regex>
+#include <algorithm>
 using namespace std;
 
 void GameModel::setPlayerRace(char type){
@@ -56,7 +58,7 @@ std::pair<int, int> GameModel::findAvailableTileAround(int x, int y) {
 void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
     // Initialize the map from a file:
     if (!isMapProvided) {
-        readMap(mapFile);
+        readMap(mapFile, isMapProvided);
         createPlayerAtRandPosn();
         createStairAtRandPosn();
         createPotionAtRandPosn();
@@ -64,37 +66,117 @@ void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
         createEnemyAtRandPosn();
         createDragonAndHoardAtRandPosn();
     } else {
-        readMap(mapFile);
+        readMap(mapFile, isMapProvided);
     }
 }
 
+
+bool isFloodfillValid(char type, map<int, char> reverseCellMap) {
+    return type == reverseCellMap[FLOORTILE] || type == reverseCellMap[STAIR] || type == playerChar || itemMap.count(type) || enemyMap.count(type);
+}
+
+
+void floodfillInit(GameModel* model, int x, int y, vector<string>& floor_lines, vector<vector<bool>>& tiles_processed, int room_number, map<int, char>& reverseCellMap) {
+    tiles_processed[y][x] = true;
+    
+    char type = floor_lines[y][x];
+    model->spawnObject(x, y, type);
+
+    for (auto it : DIRECTIONS_POSN_CHANGE) {
+        int newx = x + it.second.first;
+        int newy = y + it.second.second;
+        if (newx >= 0 && newy >= 0 
+            && newy < floor_lines.size() 
+            && newx < floor_lines[y].length()
+            && tiles_processed[y][x] == false
+            && isFloodfillValid(type, reverseCellMap)) {
+                floodfillInit(model, newx, newy, floor_lines, tiles_processed, room_number, reverseCellMap);
+            }
+    }
+}
+
+
 // Read the map from the file: either provided one or emptyfloor.txt
-void GameModel::readMap(std::ifstream &mapFile) {
+// NOTE: for floors from a file, floorLevel MUST represent the floor to generate.
+void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
     string line;
     int y = 0; // Line number
+    map<int, char> reverseCellMap;
+    int max_col_size = 0;
 
-    while (getline(mapFile, line)) {
-        for (int x = 0; x < line.size(); ++x) {
-            char type = line[x];
-            // Process each character - spawn new object and add it to the gameMap
-            spawnObject(x, y, type);
-        } //for
-        y++; // Move to the next line
-    } //while
+    for (auto it : cellMap) {
+        reverseCellMap[it.second] = reverseCellMap[it.first];
+    }
+
+    const regex horizontal_border{"\\" + string{reverseCellMap[VWALL]} + string{reverseCellMap[HWALL]} + "*\\" + string{reverseCellMap[VWALL]}};
+
+    if (isMapProvided) {
+        for (int i = 1; i < floorLevel; i++) {
+            int borders = 0;
+            while (getline(mapFile, line) && borders < 2) {
+                if (regex_match(line, horizontal_border)) borders++;
+            }
+        }
+    }
+
+    vector<string> floor_lines;
+    vector<vector<bool>> tiles_processed;
+
+    int borders = 0;
+    while (getline(mapFile, line) && borders < 2) {
+        int line_size = line.length();
+        if (line_size > max_col_size) max_col_size = line_size;
+
+        std::vector<bool> line_processed;
+        for (int i = 0; i < line_size; i++) {
+            line_processed.emplace_back(false);
+        }
+
+        if (regex_match(line, horizontal_border)) borders++;
+
+        floor_lines.emplace_back(move(line));
+
+        tiles_processed.emplace_back(move(line_processed));
+    }
+
+    int room_number = 0;
+
+    for (int y = 0; y < floor_lines.size(); ++y) {
+        string& floor_line = floor_lines[y];
+        for (int x = 0; floor_line.size(); ++y) {
+            if (tiles_processed[y][x] == false) {
+                char type = floor_line[x];
+                tiles_processed[y][x] = true;
+                if (isFloodfillValid(type, reverseCellMap)) {
+                    floodfillInit(this, x, y, floor_lines, tiles_processed, room_number, reverseCellMap);
+                    room_number++;
+                } else {
+                    spawnObject(x, y, type);
+                }
+            }
+        }
+    }
+
+    numRows = floor_lines.size();
+    numCols = max_col_size;
+    gameMap.setMapSize(numRows, numCols);
 }
 
 // Spawn a specific type of game object and add it to the gameMap
-void GameModel::spawnObject(int x, int y, char type) {
+void GameModel::spawnObject(int x, int y, char type, int room_number) {
     CellCreator makeCell;
     EnemyCreator makeEnemy;
     ItemCreator makeItem;
     PlayerCreator makePlayer;
-    std::unique_ptr<Tile> newObject;
+    FloorTileCreator makeFloorTile;
+    std::shared_ptr<Tile> newObject;
+    std::shared_ptr<Player> newPlayer;
     int id = NOTHING;
+    bool floorCreated = false;
 
-    if (type == '@') { // Input char is player
-        newObject = makePlayer.spawnPlayer(x, y, playerRace, effectHandler.get());
-        player = std::move(newObject); // initialize the player
+    if (type == playerChar) { // Input char is player
+        newPlayer = makePlayer.spawnPlayer(x, y, playerRace);
+        player = newPlayer; // initialize the player
         isPlayerCreated = true;
 
     } else if (cellMap.count(type)) { // Input char is a cell
@@ -102,7 +184,12 @@ void GameModel::spawnObject(int x, int y, char type) {
 
         if (id == STAIR) isStairCreated = true;
 
-        newObject = makeCell.spawnTile(x, y, id, false);
+        if (id == FLOORTILE) {
+            newObject = makeFloorTile.spawnFloorTile(x, y, room_number);
+        } else {
+            newObject = makeCell.spawnTile(x, y, id, false);
+        }
+
         cells.emplace_back(std::move(newObject)); // add to cell vector
 
     } else if (itemMap.count(type)) { // Input char is an Item
@@ -146,7 +233,8 @@ void GameModel::spawnObject(int x, int y, char type) {
     }
 
     // Add newObject to gameMap:
-    gameMap.addTile(x, y, newObject.get());
+    if (isPlayerCreated) gameMap.addTile(x, y, newPlayer);
+    else gameMap.addTile(x, y, newObject);
 }
 
 // Spawn a random game object(Item or Enemy) and add it to the gameMap
@@ -154,7 +242,7 @@ void GameModel::spawnRandObject(int x, int y, char type) {
     CellCreator makeCell;
     EnemyCreator makeEnemy;
     ItemCreator makeItem;
-    std::unique_ptr<Tile> newObject;
+    std::shared_ptr<Tile> newObject;
 
     switch (type) {
         case 'E':
@@ -367,33 +455,66 @@ bool GameModel::isValidAttack(int x, int y) {
         return true;
     }
     return false;
+
+// Use a potion
+bool GameModel::usePotion(Directions direction) {
+    pair posNow = player->getPosn();
+    switch (direction)
+    {
+    case Directions::N:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+        player->usePotion(id);
+        break;
+
+    case Directions::NE:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
+        player->usePotion(id);
+        break;
+
+    case Directions::E:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second);
+        player->usePotion(id);
+        break;
+
+    case Directions::SE:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second + 1);
+        player->usePotion(id);
+        break;
+
+    case Directions::S:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second + 1);
+        player->usePotion(id);
+        break;
+
+    case Directions::W:
+        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second);
+        player->usePotion(id);
+        break;
+
+    case Directions::NW:
+        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second - 1);
+        player->usePotion(id);
+        break;
+    
+    default:
+        cout << "Tho you tried really hard, you didn't manage to become superman..." << endl;
+        break;
+    }
 }
 
-bool usePotion(Directions direction);
-
-// Start the game
-bool GameModel::startGame() {
-
-}
 
 // Go to the next floor
 void GameModel::nextFloor(ifstream &mapFile, bool isMapProvided) {
 
 }
 
-// Restart the game
-bool GameModel::restartGame() {
-
-}
-
 // Set the score
-int calculateScore() {
-
-}
-
-// End the game
-bool GameModel::endGame() {
-
+double GameModel::calculateScore() {
+    int id = player->getTileID();
+    if (id == TileID::SHADE) {
+        return 1.5 * player->getGoldCount();
+    }
+    return player->getGoldCount();
 }
 
 // Update the game state

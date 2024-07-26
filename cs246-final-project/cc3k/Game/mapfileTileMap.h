@@ -4,6 +4,7 @@
 #include <map>
 
 const std::map<char, int> cellMap {
+    {' ', BLANK},
     {'.', FLOORTILE},
     {'|', VWALL},
     {'-', HWALL},
@@ -33,3 +34,5 @@ const std::map<char, int> enemyMap {
     {'M', MERCHANT},
     {'W', DWARF},
 };
+
+const char playerChar = '@';

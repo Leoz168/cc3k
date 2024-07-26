@@ -14,7 +14,7 @@ class EffectHandler;
 class Creator {
     protected:
         // creates a Player object
-        virtual std::unique_ptr<Tile> spawnPlayer(int x, int y, int id) {
+        virtual std::shared_ptr<Player> spawnPlayer(int x, int y, int id) {
             return nullptr;
         }
 

@@ -15,6 +15,8 @@ class GameMap {
         map<pair<int, int>, vector<shared_ptr<Tile>>> game_map;
         map<int, vector<pair<int, int>>> room_floortile_coord_mapping;
         int num_rooms = 0;
+        int rows = 0;
+        int cols = 0;
     public:
         explicit GameMap();
         GameMap(string filename);
@@ -23,9 +25,13 @@ class GameMap {
         //     and nullptr if there is no tile there
         Tile* tileAt(int x, int y);
 
+        vector<Tile*> allTilesAt(int x, int y);
+
         // tileIDAt returns the frontmost tile's tile ID at (x, y)
         //     and the constant NOTHING if there is no tile there
         int tileIDAt(int x, int y);
+
+        int typeTypeAt(int x, int y);
 
         // moveTile moves the tile at (x, y) by (dx, dy)
         //     REGARDLESS of whether the tile "can" be moved or not
@@ -49,6 +55,10 @@ class GameMap {
         // The function fails if roomNumber >= num_rooms or if the coord already exists
         //     and returns false.
         bool addFloorTileCoordToRoomMap(int room_number, pair<int, int> coord);
+
+        int getMapRows();
+        int getMapCols();
+        void setMapSize(int rows, int cols);
 
         int getNumRooms();
         int setNumRooms(int);
