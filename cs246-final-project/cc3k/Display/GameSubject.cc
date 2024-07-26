@@ -1,4 +1,9 @@
 #include <GameSubject.h>
+#include <iostream>
+#include "ANSIconsts.h"
+
+using namespace std;
+
 void GameSubject::attach(Observer *o) {
     observers.emplace_back(o);
 }
@@ -11,5 +16,6 @@ void GameSubject::detach(Observer *o) {
   }
 }
 void GameSubject::notifyobserver() {
+    cout << CLEAR_COMMAND << endl;
     for(auto it: observers) {it->notify();}
 }
