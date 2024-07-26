@@ -3,7 +3,6 @@
 
 #include "Creator.h"
 #include "../Floor/Cell/Cell.h"
-#include "../Floor/Cell/FloorTile.h"
 #include "../Floor/Cell/Doorway.h"
 #include "../Floor/Cell/HWall.h"
 #include "../Floor/Cell/VWall.h"
@@ -18,9 +17,6 @@ class CellCreator : public Creator {
             std::shared_ptr<Tile> newCell;
 
             switch (id) {
-                case FLOORTILE:
-                    newCell = make_shared<FloorTile>(x, y);
-                    break;
                 case HWALL:
                     newCell = make_shared<HWall>(x, y);
                     break;
