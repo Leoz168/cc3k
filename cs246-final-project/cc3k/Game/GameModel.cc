@@ -431,7 +431,7 @@ pair<int, pair<int, int>> GameModel::randomSpawnablePosition() {
 
 bool GameModel::canMoveHere(int x, int y) {
     int id = gameMap.tileIDAt(x, y);
-    if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR || id == NORMALGOLD || id == SMALLGOLD || id == MERCHANTHOARD) {
+    if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR || id == NORMALGOLD || id == SMALLGOLD || id == MERCHANTHOARD || id == DRAGONHOARD || id == STAIR) {
         return true;
     }
     return false;
@@ -526,7 +526,7 @@ GameMap &GameModel::getMap() {
 
 // Go to the next floor
 void GameModel::nextFloor() {
-    if (floorLevel < 5) {
+    if (floorLevel < 1) {
         floorLevel += 1;
         isStairCreated = false;
         resetFloor();
@@ -541,7 +541,7 @@ void GameModel::nextFloor() {
 // Set the score
 double GameModel::calculateScore() {
     int id = player->getTileID();
-    if (id == TileID::SHADE) {
+    if (player->triggerAbility(SHADE, 0)) {
         return 1.5 * player->getGoldCount();
     }
     return player->getGoldCount();
@@ -587,8 +587,9 @@ bool GameModel::endGame(bool win) {
         smsg = "Oops! You Lose :(\n";
     }
 
-    smsg += "Please press r to restart the game to q to quit.\n";
+    smsg += "Please press r to restart the game, q to quit, or if you'd like, keep exploring!\n";
 
+    status_message = smsg;
     notifyobserver();
     status_message = "";
 }
