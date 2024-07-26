@@ -2,7 +2,7 @@
 #define BLANKTILE_H
 
 #include <utility>
-#include "Tile.h"
+#include "../Tile.h"
 
 class BlankTile: public Tile {
     public:

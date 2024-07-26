@@ -1,8 +1,10 @@
+#ifndef INFODISPLAY_H
+#define INFODISPLAY_H
+
 #include <iostream>
 
 #include "observer.h"
 #include "../Game/GameModel.h"
-#include "../consts.h"
 
 class InfoDisplay: public Observer {
         GameModel *gm;
@@ -10,3 +12,5 @@ class InfoDisplay: public Observer {
         void notify() override;
 
 };
+
+#endif

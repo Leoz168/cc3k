@@ -6,21 +6,19 @@
 #include <iostream>
 #include <string>
 
-#include "GameSubject.h"
+#include "../Display/GameSubject.h"
 #include "Tile.h"
 #include "tileIDs.h"
-#include "Cell.h"
-#include "Enemy.h"
-#include "Item.h"
-#include "Player.h"
+#include "Floor/Cell/Cell.h"
+#include "GameObject/Enemy/Enemy.h"
+#include "GameObject/Item/Item.h"
+#include "GameObject/Player/Player.h"
 #include "GameMap.h"
-#include "CellCreator.h"
-#include "EnemyCreator.h"
-#include "ItemCreator.h"
-#include "PlayerCreator.h"
-#include "AttackHandler.h"
-#include "MoveHandler.h"
-#include "EffectHandler.h"
+#include "Factory/CellCreator.h"
+#include "Factory/EnemyCreator.h"
+#include "Factory/ItemCreator.h"
+#include "Factory/PlayerCreator.h"
+#include "Handler/Effects/EffectHandler.h"
 
 
 class GameModel: public GameSubject {

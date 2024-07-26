@@ -1,7 +1,7 @@
 #ifndef GOLD_H
 #define GOLD_H
 
-#include "Item.h"
+#include "../Item.h"
 #include <string>
 
 using namespace std;

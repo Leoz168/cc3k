@@ -2,7 +2,6 @@
 #define GOBLIN_H
 
 #include "Player.h"
-#include "tileIDs.h"
 
 class Goblin : public Player {
     public:

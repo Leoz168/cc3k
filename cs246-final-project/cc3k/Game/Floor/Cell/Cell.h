@@ -2,8 +2,8 @@
 #define CELL_H
 
 #include <utility>
-#include "Tile.h"
-#include "tileGenConsts.h"
+#include "../../Tile.h"
+#include "../../tileGenConsts.h"
 
 class Cell : public Tile {
     public:

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "EffectDecorator.h"
 
 class AtkModifier: public EffectDecorator {

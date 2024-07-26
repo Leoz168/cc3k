@@ -4,11 +4,12 @@
 #include <utility>
 #include <vector>
 #include <memory>
-#include "GameMap.h"
 #include "tileGenConsts.h"
+#include "tileIDs.h"
 using namespace std;
 
 class Player;
+class GameMap;
 
 class Tile {
     protected:

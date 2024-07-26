@@ -2,19 +2,19 @@
 #define ITEMCREATOR_H
 
 #include "Creator.h"
-#include "tileIDs.h"
-#include "Item.h"
-#include "Gold.h"
-#include "NormalGold.h"
-#include "SmallGold.h"
-#include "MerchantHoard.h"
-#include "DragonHoard.h"
-#include "BoostAtk.h"
-#include "BoostDef.h"
-#include "RestoreHealth.h"
-#include "PoisonHealth.h"
-#include "WoundAtk.h"
-#include "WoundDef.h"
+#include "../tileIDs.h"
+#include "../GameObject/Item/Item.h"
+#include "../GameObject/Item/Treasure/Gold.h"
+#include "../GameObject/Item/Treasure/NormalGold.h"
+#include "../GameObject/Item/Treasure/SmallGold.h"
+#include "../GameObject/Item/Treasure/MerchantHoard.h"
+#include "../GameObject/Item/Treasure/DragonHoard.h"
+#include "../GameObject/Item/Potion/BoostAtk.h"
+#include "../GameObject/Item/Potion/BoostDef.h"
+#include "../GameObject/Item/Potion/RestoreHealth.h"
+#include "../GameObject/Item/Potion/PoisonHealth.h"
+#include "../GameObject/Item/Potion/WoundAtk.h"
+#include "../GameObject/Item/Potion/WoundDef.h"
 
 class ItemCreator : public Creator {
 	// Potion probabilities

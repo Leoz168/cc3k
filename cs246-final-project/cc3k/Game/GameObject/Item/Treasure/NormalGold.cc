@@ -1,5 +1,4 @@
 #include "NormalGold.h"
-#include "tileIDs.h"
 
 NormalGold::NormalGold(int x, int y) :
     Gold{2, "a normal pile of gold", x, y, NORMALGOLD} {}

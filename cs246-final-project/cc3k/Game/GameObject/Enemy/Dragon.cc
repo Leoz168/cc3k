@@ -1,8 +1,8 @@
 #include "Dragon.h"
-#include "tileIDs.h"
-#include "Player.h"
-#include "GameMap.h"
-#include "Directions.h"
+#include "../../tileIDs.h"
+#include "../Player/Player.h"
+#include "../../GameMap.h"
+#include "../../Directions.h"
 
 using namespace std;
 

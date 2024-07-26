@@ -1,8 +1,8 @@
 #include "Merchant.h"
-#include "tileIDs.h"
-#include "Directions.h"
-#include "Player.h"
-#include "GameMap.h"
+#include "../../tileIDs.h"
+#include "../Player/Player.h"
+#include "../../GameMap.h"
+#include "../../Directions.h"
 #include <iostream>
 
 using namespace std;

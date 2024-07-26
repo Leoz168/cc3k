@@ -1,5 +1,8 @@
+#ifndef GAMESUBJECT_H
+#define GAMESUBJECT_H
+
 #include <vector>
-#include "../Display/observer.h"
+#include "observer.h"
 using namespace std;
 
 class GameSubject {
@@ -10,3 +13,5 @@ class GameSubject {
         void notifyobserver();
         virtual ~GameSubject() = 0;
 };
+
+#endif

@@ -2,12 +2,12 @@
 #define PLAYERCREATOR_H
 
 #include "Creator.h"
-#include "Player.h"
-#include "Shade.h"
-#include "Drow.h"
-#include "Goblin.h"
-#include "Troll.h"
-#include "Vampire.h"
+#include "../GameObject/Player/Player.h"
+#include "../GameObject/Player/Shade.h"
+#include "../GameObject/Player/Drow.h"
+#include "../GameObject/Player/Goblin.h"
+#include "../GameObject/Player/Troll.h"
+#include "../GameObject/Player/Vampire.h"
 
 class EffectHandler;
 

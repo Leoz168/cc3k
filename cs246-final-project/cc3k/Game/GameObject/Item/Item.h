@@ -1,7 +1,8 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include "GameObject.h"
+#include "../GameObject.h"
+#include "../../tileIDs.h"
 #include <string>
 
 using namespace std;

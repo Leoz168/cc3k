@@ -1,10 +1,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "GameObject.h"
-#include "Tile.h"
-#include "tileIDs.h"
-#include "GameMap.h"
+#include "../GameObject.h"
+#include "../../Tile.h"
+#include "../../GameMap.h"
 #include <utility>
 
 using namespace std;

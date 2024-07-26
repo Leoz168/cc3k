@@ -1,6 +1,4 @@
 #include "BoostDef.h"
-#include "tileIDs.h"
-
 using namespace std;
 
 BoostDef::BoostDef(int x, int y) :

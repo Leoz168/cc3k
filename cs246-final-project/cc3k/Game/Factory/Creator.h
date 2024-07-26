@@ -5,8 +5,8 @@
 #include <cstdlib>
 #include <memory>
 
-#include "Tile.h"
-#include "tileIDs.h"
+#include "../Tile.h"
+#include "../tileIDs.h"
 
 class EffectHandler;
 

@@ -1,6 +1,6 @@
 #include "Orc.h"
-#include "tileIDs.h"
-#include "Player.h"
+#include "../../tileIDs.h"
+#include "../Player/Player.h"
 
 using namespace std;
 

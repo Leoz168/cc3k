@@ -1,9 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "GameObject.h"
-#include "EffectHandler.h"
-#include "tileIDs.h"
+#include "../GameObject.h"
+#include "../../Handler/Effects/EffectHandler.h"
 #include <cmath>
 
 class Enemy;
@@ -36,8 +35,8 @@ class Player: public GameObject {
         std::pair<int, int> getPosition();
         void setPosition(int x, int y);
         void move(int x, int y, int dx, int dy);
-        virtual bool Player::attackEnemy(Enemy * e);
-        virtual void Player::attackedBy(Enemy * e);
+        virtual bool attackEnemy(Enemy * e);
+        virtual void attackedBy(Enemy * e);
         virtual bool triggerAbility(int id, int ab_ver) = 0;
         ~Player();
 };

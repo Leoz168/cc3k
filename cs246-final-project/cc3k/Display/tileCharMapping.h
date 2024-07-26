@@ -1,0 +1,4 @@
+#ifndef TILECHARMAPPING
+#define TILECHARMAPPING
+
+#endif

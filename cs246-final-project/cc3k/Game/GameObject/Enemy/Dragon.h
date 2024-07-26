@@ -2,7 +2,7 @@
 #define DRAGON_H
 
 #include "Enemy.h"
-#include "DragonHoard.h"
+#include "../Item/Treasure/DragonHoard.h"
 #include <memory>
 
 using namespace std;

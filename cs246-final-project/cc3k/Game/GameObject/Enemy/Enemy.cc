@@ -1,6 +1,6 @@
 #include "Enemy.h"
-#include "Player.h"
-#include "Directions.h"
+#include "../Player/Player.h"
+#include "../../Directions.h"
 #include <cstdlib>
 #include <ctime>
 #include <cmath>

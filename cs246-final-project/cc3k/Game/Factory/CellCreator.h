@@ -2,14 +2,14 @@
 #define CELLCREATOR_H
 
 #include "Creator.h"
-#include "Cell.h"
-#include "FloorTile.h"
-#include "Doorway.h"
-#include "HWall.h"
-#include "VWall.h"
-#include "Passage.h"
-#include "Stair.h"
-#include "BlankTile.h"
+#include "../Floor/Cell/Cell.h"
+#include "../Floor/Cell/FloorTile.h"
+#include "../Floor/Cell/Doorway.h"
+#include "../Floor/Cell/HWall.h"
+#include "../Floor/Cell/VWall.h"
+#include "../Floor/Cell/Passage.h"
+#include "../Floor/Cell/Stair.h"
+#include "../Floor/BlankTile.h"
 
 
 class CellCreator : public Creator {

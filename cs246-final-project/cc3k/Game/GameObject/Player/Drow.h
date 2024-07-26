@@ -2,7 +2,6 @@
 #define DROW_H
 
 #include "Player.h"
-#include "tileIDs.h"
 
 class Drow : public Player {
     public:

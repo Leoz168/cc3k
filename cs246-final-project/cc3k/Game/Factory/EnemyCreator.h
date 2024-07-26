@@ -6,15 +6,15 @@
 #include <iostream>
 
 #include "Creator.h"
-#include "tileIDs.h"
-#include "Enemy.h"
-#include "Dragon.h"
-#include "Dwarf.h"
-#include "Elf.h"
-#include "Orc.h"
-#include "Halfling.h"
-#include "Human.h"
-#include "Merchant.h"
+#include "../tileIDs.h"
+#include "../GameObject/Enemy/Enemy.h"
+#include "../GameObject/Enemy/Dragon.h"
+#include "../GameObject/Enemy/Dwarf.h"
+#include "../GameObject/Enemy/Elf.h"
+#include "../GameObject/Enemy/Orc.h"
+#include "../GameObject/Enemy/Halfling.h"
+#include "../GameObject/Enemy/Human.h"
+#include "../GameObject/Enemy/Merchant.h"
 
 
 class EnemyCreator : public Creator {

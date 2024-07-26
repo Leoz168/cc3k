@@ -1,7 +1,8 @@
 #ifndef POTION_H
 #define POTION_H
 
-#include "Item.h"
+#include "../Item.h"
+#include "../../../tileIDs.h"
 #include <string>
 
 using namespace std;

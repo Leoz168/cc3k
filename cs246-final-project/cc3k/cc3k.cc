@@ -4,9 +4,9 @@
 #include <ctime>
 #include <string>
 
-#include "observer.h"
-#include "GameModel.h"
-#include "GameSubject.h"
+#include "Display/observer.h"
+#include "Game/GameModel.h"
+#include "Display/GameSubject.h"
 
 using namespace std;
 
