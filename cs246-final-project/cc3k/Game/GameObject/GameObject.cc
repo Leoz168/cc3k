@@ -1,2 +1,2 @@
 #include "GameObject.h"
-GameObject::GameObject(int x, int y, int id): Tile{x, y, id} {}
+GameObject::GameObject(int x, int y, int id, int room_number = NOASSOCIATEDROOM): Tile{x, y, id, room_number} {}

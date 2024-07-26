@@ -12,7 +12,6 @@ class CellCreator : public Creator {
             std::shared_ptr<Tile> newCell;
             newCell = make_shared<FloorTile>(x, y, room_number);
             return newCell;
-            
         }
 };
 

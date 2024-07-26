@@ -1,5 +1,5 @@
 #include "GameModel.h"
-#include "MapFiles/mapfileTileMap.h"
+#include "mapfileTileMap.h"
 using namespace std;
 
 void GameModel::setPlayerRace(char type){
@@ -55,21 +55,17 @@ std::pair<int, int> GameModel::findAvailableTileAround(int x, int y) {
 // Initialize the map
 void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
     // Initialize the map from a file:
-    ifstream empty_map_file{"MapFiles/emptyfloor.txt"};
     if (!isMapProvided) {
-        readMap(empty_map_file);
+        readMap(mapFile);
+        createPlayerAtRandPosn();
+        createStairAtRandPosn();
+        createPotionAtRandPosn();
+        createGoldAtRandPosn();
+        createEnemyAtRandPosn();
+        createDragonAndHoardAtRandPosn();
     } else {
         readMap(mapFile);
     }
-
-    // Initialize the remaining objects which have not yet been created:
-    createPlayerAtRandPosn();
-    createStairAtRandPosn();
-    createPotionAtRandPosn();
-    createGoldAtRandPosn();
-    createEnemyAtRandPosn();
-    createDragonAndHoardAtRandPosn();
-
 }
 
 // Read the map from the file: either provided one or emptyfloor.txt
@@ -189,7 +185,7 @@ void GameModel::spawnRandObject(int x, int y, char type) {
 bool GameModel::createPlayerAtRandPosn() {
     if (isPlayerCreated) return false; // Player already exists
 
-    pair<int, int> pos = randomPosition();
+    pair<int, int> pos = randomSpawnablePosition();
     spawnObject(pos.first, pos.second, '@');
     return true;
 }
@@ -197,7 +193,7 @@ bool GameModel::createPlayerAtRandPosn() {
 void GameModel::createStairAtRandPosn() {
     if (isStairCreated) return; // Stair already exists 
 
-    pair<int, int> pos = randomPosition();
+    pair<int, int> pos = randomSpawnablePosition();
     spawnObject(pos.first, pos.second, '\\');
 }
 
@@ -207,7 +203,7 @@ void GameModel::createEnemyAtRandPosn() {
     pair<int, int> pos = make_pair(0, 0);
 
     while (enemyCount < MAX_ENEMIES) {
-        pair = randomPosition();
+        pair = randomSpawnablePosition();
         spawnRandObject(pos.first, pos.second, 'E');
         ++enemyCount;
     }
@@ -230,7 +226,7 @@ void GameModel::createGoldAtRandPosn() {
     
     // Spawn remaining Gold to make 10
     while (goldPileCount < MAX_GOLD_PILES) {
-        pair = randomPosition();
+        pair = randomSpawnablePosition();
         spawnRandObject(pos.first, pos.second, 'G');
         ++goldPileCount;
     }
@@ -253,7 +249,7 @@ void GameModel::createPotionAtRandPosn() {
     
     // Spawn remaining Potion to make 10
     while (potionCount < MAX_POTIONS) {
-        pair = randomPosition();
+        pair = randomSpawnablePosition();
         spawnRandObject(pos.first, pos.second, 'P');
         ++potionCount;
     }
@@ -270,7 +266,7 @@ void GameModel::createDragonAndHoardAtRandPosn() {
         enemies.emplace_back(dragon);
         gameMap.addTile(dragonPosn.first, dragonPosn.second, dragon);
     } else { // neither Dragon nor Dragonhoard exist
-        dragonPosn = randomPosition();
+        dragonPosn = randomSpawnablePosition();
         dragonHoardPosn = findAvailableTileAround(dragonPosn.first, dragonPosn.second);
         isDragonCreated = true;
         isDragonHoardCreated = true;
@@ -284,9 +280,27 @@ void GameModel::createDragonAndHoardAtRandPosn() {
 
 }
 
+pair<int, pair<int, int>> GameModel::randomSpawnablePosition() {
+    map<int, vector<pair<int, int>>>& room_floortile_mapping = gameMap.getRoomMapping();
+    int num_rooms = gameMap.getNumRooms();
 
-// N = 0, NE, E, SE, S, SW, W, NW;
-// isAvailableTileForSpawn(int x, int y)
+    int rand_room = rand() % num_rooms;
+
+    for (int i = 0; i < num_rooms; i++) {
+        rand_room = (rand_room + i) % num_rooms;
+        vector<pair<int, int>> floortiles_in_room = room_floortile_mapping[rand_room];
+        int room_size = floortiles_in_room.size();
+        int rand_tile = rand() % room_size;
+        for (int i = 0; i < room_size; i++) {
+            rand_tile = (rand_tile + i) % room_size;
+            if (gameMap.tileIDAt(floortiles_in_room[rand_tile].first, floortiles_in_room[rand_tile].second) == FLOORTILE) {
+                return make_pair(rand_room, floortiles_in_room[rand_tile]);
+            }
+        }
+    }
+
+    return make_pair(-1, make_pair(-1, -1));
+}
 
 // Move the player in the specified direction
 bool GameModel::movePlayer(Directions direction) {
