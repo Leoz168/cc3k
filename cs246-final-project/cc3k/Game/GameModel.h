@@ -60,7 +60,7 @@ class GameModel: public GameSubject {
         std::shared_ptr<Dragon> dragon = nullptr;
 
     public:
-        std::pair<int, int> randomPosition();
+        std::pair<int, int> randomSpawnablePosition();
 
         void setPlayerRace(char type);
 
