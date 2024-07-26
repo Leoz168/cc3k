@@ -20,15 +20,6 @@ bool GameModel::isAvailableTileForSpawn(int x, int y) {
     return false;
 }
 
-bool GameModel::canMoveHere(int x, int y) {
-    int id = gameMap.tileIDAt(x, y);
-    if (id == FLOORTILE || id == DOORWAY || id == PASSAGE) {
-        return true;
-    }
-    return false;
-}
-
-
 std::pair<int, int> GameModel::findAvailableTileAround(int x, int y) {
     std::pair<int, int> firstAvailableTile = std::make_pair(0, 0);
     if (isAvailableTileForSpawn(x + 1, y)) {
@@ -311,80 +302,73 @@ pair<int, pair<int, int>> GameModel::randomSpawnablePosition() {
     return make_pair(-1, make_pair(-1, -1));
 }
 
+bool GameModel::canMoveHere(int x, int y) {
+    int id = gameMap.tileIDAt(x, y);
+    if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR || id == NORMALGOLD || id == SMALLGOLD || id == MERCHANTHOARD) {
+        return true;
+    }
+    return false;
+}
 
 // {N = 0, NE, E, SE, S, SW, W, NW}
-// Move the player in the specified direction
+// Move the player in the specified direction on the gameMap and updates Player's internal position
 bool GameModel::movePlayer(Directions direction) {
-    pair posNow = player->getPosn();
-    switch (direction)
-    {
-    case Directions::N:
-        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::NE:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, 1, -1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::E:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second);
-        if (id == FLOORTILE || id == PASSAGE) {
-            gameMap.moveTile(posNow.first, posNow.second, 1, 0, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::SE:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second + 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, 1, 1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::S:
-        int id = gameMap.tileIDAt(posNow.first, posNow.second + 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, 0, 1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::SW:
-        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, 0, 1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::W:
-        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, -1, 0, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
-
-    case Directions::NW:
-        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
-            gameMap.moveTile(posNow.first, posNow.second, -1, -1, gameMap.tileAt(posNow.first, posNow.second));
-        }
-        break;
+    pair<int, int> posNow = player->getPosn();
+    pair<int, int> moveDirection = directionMap.at(direction);
+    pair<int, int> newPosn = make_pair<int, int>(posNow.first + moveDirection.first, posNow.second + moveDirection.second);
+    const int id = gameMap.tileIDAt(newPosn.first, newPosn.second);
+    Tile * tileAtNewPosn = gameMap.tileAt(newPosn.first, newPosn.second);
     
-    default:
-        break;
+    if (canMoveHere(newPosn.first, newPosn.second)) {
+        // Add gold pick-up functionality
+        if (id == NORMALGOLD || id == SMALLGOLD || id == MERCHANTHOARD || (id == DRAGONHOARD && dynamic_cast<DragonHoard *> (tileAtNewPosn)->canPlayerPickUp(player))) {
+            player->setGoldCount(player->getGoldCount() + dynamic_cast<Gold *>(tileAtNewPosn)->getValue());
+            gameMap.removeTile(newPosn.first, newPosn.second);
+        }
+
+        // Move the player to the new square:
+        player->setPosition(newPosn.first, newPosn.second);
+        gameMap.moveTile(posNow.first, posNow.second, moveDirection.first, moveDirection.second, gameMap.tileAt(posNow.first, posNow.second));
+    }
+
+}
+
+bool GameModel::playerAttack(Directions direction) {
+    pair<int, int> posNow = player->getPosn();
+    pair<int, int> attackDirection = directionMap.at(direction);
+    pair<int, int> enemyPosn = make_pair<int, int>(posNow.first + attackDirection.first, posNow.second + attackDirection.second);
+
+    if (isValidAttack(enemyPosn.first, enemyPosn.second)) {
+        Enemy * enemyToAttack = dynamic_cast<Enemy *>(gameMap.tileAt(enemyPosn.first, enemyPosn.second));
+        int enemyID = gameMap.tileIDAt(enemyPosn.first, enemyPosn.second);
+        player->attackEnemy(enemyToAttack);
+
+        // handle enemy death 
+        if (enemyToAttack->getHP() <= 0) {
+            // Remove the enemy:
+            gameMap.removeTile(enemyPosn.first, enemyPosn.second);
+            
+            // Add gold to player
+            if (enemyID != HUMAN) {
+                player->setGoldCount(setGoldCount() + 1);
+            } else {
+                spawnObject(enemyPosn.first, enemyPosn.second, '6'); // 6 - NormalGold
+                std::pair<int, int> spawnSecondGoldPosn = findAvailableTileAround(enemyPosn.first, enemyPosn.second);
+                spawnObject(spawnSecondGoldPosn.first, spawnSecondGoldPosn.second, '6');
+            }
+            
+        }
     }
 }
 
-
-// Use a potion
-bool usePotion(Directions direction) {
-
+bool GameModel::isValidAttack(int x, int y) {
+    int tileType = gameMap.typeTypeAt(x, y);
+    if (tileType == ENEMY) {
+        return true;
+    }
+    return false;
 }
-bool isValidAttack(int x, int y);
+
 bool usePotion(Directions direction);
 
 // Start the game

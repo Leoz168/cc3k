@@ -39,8 +39,8 @@ class Player: public GameObject {
         std::pair<int, int> getPosition();
         void setPosition(int x, int y);
         void move(int x, int y, int dx, int dy);
-        virtual bool attackEnemy(Enemy * e);
-        virtual void attackedBy(Enemy * e);
+        virtual bool attackEnemy(Enemy * e) = 0;
+        virtual void attackedBy(Enemy * e) = 0;
         virtual bool triggerAbility(int id, int ab_ver) = 0;
         ~Player();
 };

@@ -17,6 +17,8 @@ class DragonHoard : public Gold {
 
         // sets state of dragon, true for alive, false for dead
         void setDragonStatus(bool dragon_status);
+
+        int getGoldValue();
         
         ~DragonHoard();
 };

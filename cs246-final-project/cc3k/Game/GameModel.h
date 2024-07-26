@@ -30,6 +30,18 @@ class GameModel: public GameSubject {
         int enemySpawnCounter = 0;
         int goldSpawnCounter = 0;
 
+        // Direction Map: Direction <-> corresponding coordinate vector
+        const std::map<Directions, std::pair<int, int>> directionMap {
+            {Directions::N, make_pair<int, int>(0, -1)},
+            {Directions::E, make_pair<int, int>(1, 0)},
+            {Directions::S, make_pair<int, int>(0, 1)},
+            {Directions::W, make_pair<int, int>(-1, 0)},
+            {Directions::NE, make_pair<int, int>(1, -1)},
+            {Directions::NW, make_pair<int, int>(-1, -1)},
+            {Directions::SE, make_pair<int, int>(1, 1)},
+            {Directions::SW, make_pair<int, int>(-1, 1)},
+        };
+
         // Player variables:
         std::shared_ptr<Player> player;
         const std::map<char, int> playerRaceMap {
@@ -76,7 +88,7 @@ class GameModel: public GameSubject {
         // Getters:
         int tileIDAt(int x, int y);
         bool isAvailableTileForSpawn(int x, int y);
-        bool canMoveHere(int x, int y)
+        bool canMoveHere(int x, int y);
 
         std::pair<int,int> findAvailableTileAround(int x, int y);
 
