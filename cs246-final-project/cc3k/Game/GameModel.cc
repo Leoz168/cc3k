@@ -4,6 +4,10 @@
 #include <algorithm>
 using namespace std;
 
+GameModel::GameModel(bool isMapProvided, string mapFile) : 
+    isMapProvided{isMapProvided}, 
+    mapFile{mapFile} {}
+
 void GameModel::setPlayerRace(char type){
     int id = playerRaceMap.at(type);
     playerRace = id;
@@ -185,12 +189,17 @@ void GameModel::spawnObject(int x, int y, char type, int room_number) {
     std::shared_ptr<Player> newPlayer;
     int id = NOTHING;
     bool floorCreated = false;
+    bool playerCreated = false;
 
     if (type == playerChar) { // Input char is player
-        newPlayer = makePlayer.spawnPlayer(x, y, playerRace);
-        player = newPlayer; // initialize the player
-        isPlayerCreated = true;
-
+        if (isPlayerCreated == false) {
+            newPlayer = makePlayer.spawnPlayer(x, y, playerRace);
+            player = newPlayer; // initialize the player
+            isPlayerCreated = true;
+        } else {
+            newPlayer = player;
+        }
+        playerCreated = true;
     } else if (cellMap.count(type)) { // Input char is a cell
         id = cellMap.at(type);
 
@@ -245,7 +254,7 @@ void GameModel::spawnObject(int x, int y, char type, int room_number) {
     }
 
     // Add newObject to gameMap:
-    if (isPlayerCreated) gameMap.addTile(x, y, newPlayer);
+    if (playerCreated) gameMap.addTile(x, y, newPlayer);
     else gameMap.addTile(x, y, newObject);
 }
 
@@ -285,7 +294,7 @@ void GameModel::spawnRandObject(int x, int y, char type) {
 bool GameModel::createPlayerAtRandPosn() {
     if (isPlayerCreated) return false; // Player already exists
 
-    pair<int, int> pos = randomSpawnablePosition();
+    pair<int, int> pos = randomSpawnablePosition().second;
     spawnObject(pos.first, pos.second, '@');
     return true;
 }
@@ -293,7 +302,7 @@ bool GameModel::createPlayerAtRandPosn() {
 void GameModel::createStairAtRandPosn() {
     if (isStairCreated) return; // Stair already exists 
 
-    pair<int, int> pos = randomSpawnablePosition();
+    pair<int, int> pos = randomSpawnablePosition().second;
     spawnObject(pos.first, pos.second, '\\');
 }
 
@@ -303,7 +312,7 @@ void GameModel::createEnemyAtRandPosn() {
     pair<int, int> pos = make_pair(0, 0);
 
     while (enemyCount < MAX_ENEMIES) {
-        pair = randomSpawnablePosition();
+        pair<int, int> pos = randomSpawnablePosition().second;
         spawnRandObject(pos.first, pos.second, 'E');
         ++enemyCount;
     }
@@ -326,7 +335,7 @@ void GameModel::createGoldAtRandPosn() {
     
     // Spawn remaining Gold to make 10
     while (goldPileCount < MAX_GOLD_PILES) {
-        pair = randomSpawnablePosition();
+        pair<int, int> pos = randomSpawnablePosition().second;
         spawnRandObject(pos.first, pos.second, 'G');
         ++goldPileCount;
     }
@@ -349,7 +358,7 @@ void GameModel::createPotionAtRandPosn() {
     
     // Spawn remaining Potion to make 10
     while (potionCount < MAX_POTIONS) {
-        pair = randomSpawnablePosition();
+        pair<int, int> pos = randomSpawnablePosition().second;
         spawnRandObject(pos.first, pos.second, 'P');
         ++potionCount;
     }
@@ -366,7 +375,7 @@ void GameModel::createDragonAndHoardAtRandPosn() {
         enemies.emplace_back(dragon);
         gameMap.addTile(dragonPosn.first, dragonPosn.second, dragon);
     } else { // neither Dragon nor Dragonhoard exist
-        dragonPosn = randomSpawnablePosition();
+        dragonPosn = randomSpawnablePosition().second;
         dragonHoardPosn = findAvailableTileAround(dragonPosn.first, dragonPosn.second);
         isDragonCreated = true;
         isDragonHoardCreated = true;
@@ -421,7 +430,7 @@ bool GameModel::movePlayer(Directions direction) {
     
     if (canMoveHere(newPosn.first, newPosn.second)) {
         // Add gold pick-up functionality
-        if (id == NORMALGOLD || id == SMALLGOLD || id == MERCHANTHOARD || (id == DRAGONHOARD && dynamic_cast<DragonHoard *> (tileAtNewPosn)->canPlayerPickUp(player))) {
+        if (id == NORMALGOLD || id == SMALLGOLD || id == MERCHANTHOARD || (id == DRAGONHOARD && dynamic_cast<DragonHoard *> (tileAtNewPosn)->canPlayerPickup(player.get()))) {
             player->setGoldCount(player->getGoldCount() + dynamic_cast<Gold *>(tileAtNewPosn)->getValue());
             gameMap.removeTile(newPosn.first, newPosn.second);
         }
@@ -450,7 +459,7 @@ bool GameModel::playerAttack(Directions direction) {
             
             // Add gold to player
             if (enemyID != HUMAN) {
-                player->setGoldCount(setGoldCount() + 1);
+                player->setGoldCount(player->getGoldCount() + (rand() % 2) + 1);
             } else {
                 spawnObject(enemyPosn.first, enemyPosn.second, '6'); // 6 - NormalGold
                 std::pair<int, int> spawnSecondGoldPosn = findAvailableTileAround(enemyPosn.first, enemyPosn.second);
@@ -520,8 +529,16 @@ GameMap &GameModel::getMap() {
 }
 
 // Go to the next floor
-void GameModel::nextFloor(ifstream &mapFile, bool isMapProvided) {
-
+void GameModel::nextFloor() {
+    if (floorLevel < 5) {
+        floorLevel += 1;
+        GameMap new_map;
+        gameMap = new_map;
+        ifstream mapFileStream{mapFile};
+        initializeMap(mapFileStream, isMapProvided);
+    } else {
+        endGame();
+    }
 }
 
 // Set the score
