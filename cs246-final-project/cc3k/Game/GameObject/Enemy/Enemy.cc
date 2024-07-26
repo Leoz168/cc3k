@@ -14,7 +14,7 @@ Enemy::Enemy(int hp, int atk, int def, Enemy* thisEnemy, int x, int y, int id, b
     def{def}, 
     thisEnemy{thisEnemy},
     hostile{hostility},
-    GameObject{x, y, id, ENEMY} {}
+    GameObject{x, y, id, NOASSOCIATEDROOM, ENEMY} {}
 
 int Enemy::getHP() { return hp; }
 int Enemy::getAtk() { return atk; }

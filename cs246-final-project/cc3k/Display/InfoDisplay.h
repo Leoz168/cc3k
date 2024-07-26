@@ -9,8 +9,9 @@
 class InfoDisplay: public Observer {
         GameModel *gm;
     public:
+        InfoDisplay(GameModel* gameSubject);
         void notify() override;
-
+        ~InfoDisplay();
 };
 
 #endif

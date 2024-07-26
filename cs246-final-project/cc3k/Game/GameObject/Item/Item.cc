@@ -6,7 +6,7 @@ using namespace std;
 
 Item::Item(string description, int x, int y, int id, int tile_type): 
     description{description}, 
-    GameObject{x, y, id, tile_type} {}
+    GameObject{x, y, id, NOASSOCIATEDROOM, tile_type} {}
 
 string Item::getDescription() { return description; }
 

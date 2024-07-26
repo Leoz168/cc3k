@@ -2,6 +2,7 @@
 #include "mapfileTileMap.h"
 #include <regex>
 #include <algorithm>
+#include <iostream>
 using namespace std;
 
 GameModel::GameModel(bool isMapProvided, string mapFile) : 
@@ -28,6 +29,10 @@ bool GameModel::isAvailableTileForSpawn(int x, int y) {
 
 int GameModel::getCols() {
     return numCols;
+}
+
+int GameModel::getRows() {
+    return numRows;
 }
 
 int GameModel::getPlayerRace() {
@@ -103,26 +108,27 @@ void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
 }
 
 
-bool isFloodfillValid(char type, map<int, char> reverseCellMap) {
-    return type == reverseCellMap[FLOORTILE] || type == reverseCellMap[STAIR] || type == playerChar || itemMap.count(type) || enemyMap.count(type);
+bool isFloodfillValid(char type) {
+    return (type == '.' || type == '\\' || type == playerChar || itemMap.count(type) || enemyMap.count(type));
 }
 
 
-void floodfillInit(GameModel* model, int x, int y, vector<string>& floor_lines, vector<vector<bool>>& tiles_processed, int room_number, map<int, char>& reverseCellMap) {
+void floodfillInit(GameModel* model, int x, int y, vector<string>& floor_lines, vector<vector<bool>>& tiles_processed, int room_number) {
     tiles_processed[y][x] = true;
     
     char type = floor_lines[y][x];
-    model->spawnObject(x, y, type);
+    if (type != '.') model->spawnObject(x, y, '.', room_number);
+    model->spawnObject(x, y, type, room_number);
 
     for (auto it : DIRECTIONS_POSN_CHANGE) {
         int newx = x + it.second.first;
         int newy = y + it.second.second;
         if (newx >= 0 && newy >= 0 
             && newy < floor_lines.size() 
-            && newx < floor_lines[y].length()
-            && tiles_processed[y][x] == false
-            && isFloodfillValid(type, reverseCellMap)) {
-                floodfillInit(model, newx, newy, floor_lines, tiles_processed, room_number, reverseCellMap);
+            && newx < floor_lines[newy].length()
+            && tiles_processed[newy][newx] == false
+            && isFloodfillValid(floor_lines[newy][newx])) {
+                floodfillInit(model, newx, newy, floor_lines, tiles_processed, room_number);
             }
     }
 }
@@ -133,12 +139,7 @@ void floodfillInit(GameModel* model, int x, int y, vector<string>& floor_lines, 
 void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
     string line;
     int y = 0; // Line number
-    map<int, char> reverseCellMap;
     int max_col_size = 0;
-
-    for (auto it : cellMap) {
-        reverseCellMap[it.second] = reverseCellMap[it.first];
-    }
 
     const regex horizontal_border{"\\|-*\\|\\n*"};
 
@@ -179,8 +180,8 @@ void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
             if (tiles_processed[y][x] == false) {
                 char type = floor_line[x];
                 tiles_processed[y][x] = true;
-                if (isFloodfillValid(type, reverseCellMap)) {
-                    floodfillInit(this, x, y, floor_lines, tiles_processed, room_number, reverseCellMap);
+                if (isFloodfillValid(type)) {
+                    floodfillInit(this, x, y, floor_lines, tiles_processed, room_number);
                     room_number++;
                 } else {
                     spawnObject(x, y, type);

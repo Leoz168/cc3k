@@ -8,6 +8,8 @@
 #include "Game/GameModel.h"
 #include "Display/GameSubject.h"
 #include "Game/Directions.h"
+#include "Display/TextDisplay.h"
+#include "Display/InfoDisplay.h"
 
 using namespace std;
 
@@ -86,9 +88,11 @@ int main(int argc, char* argv[]) {
     } else {
         filename = emptyFloorFile;
     }
-    GameModel gm{filename == emptyFloorFile ? false : true, filename};
 
     while (true) {
+        GameModel gm{filename == emptyFloorFile ? false : true, filename};
+        TextDisplay textDisplay{&gm};
+        InfoDisplay infoDisplay{&gm};
         string command;
         ifstream ifs_map {filename};
         // handle race

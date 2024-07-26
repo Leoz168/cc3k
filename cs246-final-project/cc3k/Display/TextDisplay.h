@@ -8,7 +8,9 @@
 class TextDisplay: public Observer {
         GameModel *gm;
     public:
+        TextDisplay(GameModel* gameSubject);
         void notify() override;
+        ~TextDisplay();
 };
 
 #endif

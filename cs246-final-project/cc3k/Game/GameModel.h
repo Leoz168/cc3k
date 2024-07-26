@@ -92,6 +92,7 @@ class GameModel: public GameSubject {
         int tileIDAt(int x, int y);
         bool isAvailableTileForSpawn(int x, int y);
         bool canMoveHere(int x, int y);
+        int getRows();
         int getCols();
 
         std::pair<int,int> findAvailableTileAround(int x, int y);

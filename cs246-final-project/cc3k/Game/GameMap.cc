@@ -1,5 +1,6 @@
 #include "GameMap.h"
 #include "tileIDs.h"
+#include <iostream>
 
 using namespace std;
 
@@ -61,7 +62,6 @@ bool GameMap::addTile(int x, int y, shared_ptr<Tile> new_tile) {
     vector<shared_ptr<Tile>>& tile_vector = game_map[make_pair(x, y)];
     bool return_val = false;
     if (tile_vector.empty()) return_val = true;
-    tile_vector.emplace_back(new_tile);
 
     if (new_tile->getTileID() == FLOORTILE) {
         int floortile_room_number = new_tile->getRoomNumber();
@@ -69,6 +69,8 @@ bool GameMap::addTile(int x, int y, shared_ptr<Tile> new_tile) {
             addFloorTileCoordToRoomMap(floortile_room_number, new_tile->getPosn());
         }
     }
+
+    tile_vector.emplace_back(new_tile);
 
     return return_val;
 }
