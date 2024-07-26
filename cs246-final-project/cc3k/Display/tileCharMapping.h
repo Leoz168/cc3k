@@ -48,6 +48,10 @@ char IDToChar(int id) {
         return 'G';
         break;
 
+    case DRAGONHOARD:
+        return 'G';
+        break;
+
     case RESTOREHEALTH:
         return 'P';
         break;

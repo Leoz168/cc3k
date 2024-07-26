@@ -311,8 +311,6 @@ void GameModel::spawnRandObject(int x, int y, char type) {
 
 // Create the player based on the chosen race
 bool GameModel::createPlayerAtRandPosn() {
-    if (isPlayerCreated) return false; // Player already exists
-
     pair<int, int> pos = randomSpawnablePosition().second;
     spawnObject(pos.first, pos.second, '@');
     return true;
@@ -454,6 +452,7 @@ bool GameModel::movePlayer(Directions direction) {
             gameMap.removeTile(newPosn.first, newPosn.second);
         } else if (id == STAIR) {
             nextFloor();
+            return false;
         }
 
         // Move the player to the new square:
@@ -528,7 +527,11 @@ GameMap &GameModel::getMap() {
 void GameModel::nextFloor() {
     if (floorLevel < 5) {
         floorLevel += 1;
+        isStairCreated = false;
         resetFloor();
+        status_message = "You've moved up a floor!";
+        notifyobserver();
+        status_message = "";
     } else {
         endGame(true);
     }
@@ -547,12 +550,12 @@ double GameModel::calculateScore() {
 void GameModel::updateGame() {
     player->triggerAbility(TROLL, 0);
 
-    enemyAction();
     if (player->getHP() <= 0) {
         endGame(false);
-    } else if (player->getPosn() == stair->getPosn()) {
-        nextFloor();
+        return;
     }
+
+    enemyAction();
 
     notifyobserver();
     status_message = "";
@@ -568,6 +571,9 @@ bool GameModel::startGame() {
 bool GameModel::resetFloor() {
     GameMap new_map;
     gameMap = new_map;
+    enemies = std::vector<std::shared_ptr<Enemy>>{};
+    items = std::vector<std::shared_ptr<Item>> {};
+    cells = std::vector<std::shared_ptr<Cell>> {};
     ifstream mapFileStream{mapFile};
     initializeMap(mapFileStream, isMapProvided);
 }

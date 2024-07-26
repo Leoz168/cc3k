@@ -8,9 +8,9 @@ TextDisplay::TextDisplay(GameModel* gameSubject) : gm{gameSubject} {
 void TextDisplay::notify() {
     int row = gm->getRows();
     int col = gm->getCols();
-    for(int i = 0; i < col; i++) {
-        for(int j = 0; j < row; j++) {
-            std::cout << IDToChar(gm->tileIDAt(i, j));
+    for(int i = 0; i < row; i++) {
+        for(int j = 0; j < col; j++) {
+            std::cout << IDToChar(gm->tileIDAt(j, i));
         }
         std::cout << std::endl;
     }

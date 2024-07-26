@@ -146,43 +146,35 @@ int main(int argc, char* argv[]) {
 
             switch (processCommand(command)) {
                 case PlayerCommand::NO:
-                    gm.movePlayer(commandToDirection(processCommand(command)));
-                    gm.updateGame();
+                    if (gm.movePlayer(commandToDirection(processCommand(command)))) gm.updateGame();;
                     break;
 
                 case PlayerCommand::SO:
-                    gm.movePlayer(commandToDirection(processCommand(command)));
-                    gm.updateGame();
+                    if (gm.movePlayer(commandToDirection(processCommand(command)))) gm.updateGame();;
                     break;
                 
                 case PlayerCommand::EA:
-                    gm.movePlayer(commandToDirection(processCommand(command)));
-                    gm.updateGame();
+                    if (gm.movePlayer(commandToDirection(processCommand(command)))) gm.updateGame();;
                     break;
                 
                 case PlayerCommand::WE:
-                    gm.movePlayer(commandToDirection(processCommand(command)));
-                    gm.updateGame();
+                    if (gm.movePlayer(commandToDirection(processCommand(command)))) gm.updateGame();;
                     break;
 
                 case PlayerCommand::NE:
-                    gm.movePlayer(commandToDirection(processCommand(command)));
-                    gm.updateGame();
+                    if (gm.movePlayer(commandToDirection(processCommand(command)))) gm.updateGame();;
                     break;
 
                 case PlayerCommand::NW:
-                    gm.movePlayer(commandToDirection(processCommand(command)));
-                    gm.updateGame();
+                    if (gm.movePlayer(commandToDirection(processCommand(command)))) gm.updateGame();;
                     break;
 
                 case PlayerCommand::SE:
-                    gm.movePlayer(commandToDirection(processCommand(command)));
-                    gm.updateGame();
+                    if (gm.movePlayer(commandToDirection(processCommand(command)))) gm.updateGame();;
                     break;
 
                 case PlayerCommand::SW:
-                    gm.movePlayer(commandToDirection(processCommand(command)));
-                    gm.updateGame();
+                    if (gm.movePlayer(commandToDirection(processCommand(command)))) gm.updateGame();;
                     break;
 
                 case PlayerCommand::U: {
