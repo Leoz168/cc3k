@@ -36,6 +36,8 @@ std::pair<int, int> Player::getPosition() { return std::pair<int, int>{x, y}; }
 
 void Player::setPosition(int x, int y) { this->x = x; this->y = y; }
 
+void Player::setRoom(int room_number) { this->room_number = room_number; }
+
 void Player::usePotion(int id) {
     int cur_hp = this->getHP();
     int max_hp = this->getMaxHP();
