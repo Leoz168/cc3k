@@ -508,7 +508,7 @@ bool GameModel::playerAttack(Directions direction) {
 
 bool GameModel::enemyAction() {
     for (auto enemy: enemies) {
-        enemy.takeAction(player, gameMap);
+        (enemy.get())->takeAction(player.get(), gameMap);
     }
     return true;
 }
@@ -553,12 +553,24 @@ double GameModel::calculateScore() {
 
 // Update the game state
 void GameModel::updateGame() {
-
+    enemyAction();
 }
 
 // Reset the floor
 bool GameModel::resetFloor(Tile* tile) {
 
+}
+
+bool GameModel::freezeEnemy() {
+    for (auto it : enemies) {
+        (it.get())->setFrozen(true);
+    }
+}
+
+bool GameModel::unfreezeEnemy() {
+    for (auto it : enemies) {
+        (it.get())->setFrozen(false);
+    }
 }
 
 // Destructor
