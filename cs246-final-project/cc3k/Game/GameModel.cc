@@ -312,13 +312,53 @@ pair<int, pair<int, int>> GameModel::randomSpawnablePosition() {
 }
 
 // Move the player in the specified direction
-bool GameModel::movePlayer(string direction) {
-    PlayerCommand dir = processCommand(direction);
+bool GameModel::movePlayer(Directions direction) {
+    pair posNow = player->getPosn();
+    switch (direction)
+    {
+    case Directions::N:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE) {
+            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::NE:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE) {
+            gameMap.moveTile(posNow.first, posNow.second, 1, -1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::N:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE) {
+            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::N:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE) {
+            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::N:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE) {
+            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
     
-    
+    default:
+        break;
+    }
 }
 
-bool playerAttack(Directions direction) {
+
+// Use a potion
+bool usePotion(Directions direction) {
 
 }
 bool isValidAttack(int x, int y);
@@ -339,13 +379,8 @@ bool GameModel::restartGame() {
 
 }
 
-// Quit the game
-void GameModel::quitGame() {
-
-}
-
 // Set the score
-bool GameModel::setScore() {
+int calculateScore() {
 
 }
 
