@@ -8,5 +8,5 @@ void InfoDisplay::notify() {
         cout << "HP: " << setw(4) << gm->getHP() << endl;
         cout << "Atk: " << setw(3) << gm->getAtk() << endl;
         cout << "Def: " << setw(3) << gm->getdef() << endl;
-        cout << "Action: " << endl;
+        cout << "Action: " << gm->getStatusMessage() << endl;
 }

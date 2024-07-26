@@ -558,11 +558,15 @@ void GameModel::updateGame() {
     } else if (player->getPosn() == stair->getPosn()) {
         nextFloor();
     }
+
+    notifyobserver();
+    status_message = "";
 }
 
 bool GameModel::startGame() {
     status_message = "Game Start! Input your commands: ";
     notifyobserver();
+    status_message = "";
 }
 
 // Reset the floor
@@ -584,6 +588,7 @@ bool GameModel::endGame(bool win) {
     smsg += "Your score is: " + to_string(calculateScore());
 
     notifyobserver();
+    status_message = "";
 }
 
 bool GameModel::freezeEnemy() {
