@@ -1,7 +1,7 @@
 #ifndef TILEIDS
 #define TILEIDS
 
-enum tileID {
+enum TileID {
     NOTHING = -1,
 
     // Cells
