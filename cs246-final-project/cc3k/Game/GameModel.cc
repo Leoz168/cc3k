@@ -74,7 +74,7 @@ void GameModel::spawnObject(int x, int y, char type) {
         enemies.emplace_back(std::move(newObject)); // add to enemies vector
 
     } else {
-        std::cerr << "Reached default. Invalid input " + type + "type in spawnObject class" << endl;
+        std::cerr << "Reached default. Invalid input " + to_string(type) + "type in spawnObject class" << endl;
         return;
     }
 
@@ -106,7 +106,7 @@ void GameModel::spawnRandObject(int x, int y, char type) {
             break;
 
         default:
-            std::cerr << "Reached default. Invalid input " + type + "type in spawnRandObject class" << endl;
+            std::cerr << "Reached default. Invalid input " + to_string(type) + "type in spawnRandObject class" << endl;
             return;
     }
 
@@ -195,16 +195,11 @@ void GameModel::createDragonAndHoardAtRandPosn() {
 
 // Move the player in the specified direction
 bool GameModel::movePlayer(string direction) {
-
+    
 }
 
 // Move the enemy in a random direction
 bool GameModel::moveEnemyInRandomDirection() {
-
-}
-
-// Check if the move is valid
-bool GameModel::isValidMove(shared_ptr<GameObject> gameObject) {
 
 }
 
