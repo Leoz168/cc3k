@@ -561,5 +561,17 @@ bool GameModel::resetFloor(Tile* tile) {
 
 }
 
+bool GameModel::freezeEnemy() {
+    for (auto it : enemies) {
+        (it.get())->setFrozen(true);
+    }
+}
+
+bool GameModel::unfreezeEnemy() {
+    for (auto it : enemies) {
+        (it.get())->setFrozen(false);
+    }
+}
+
 // Destructor
 GameModel::~GameModel() {}
