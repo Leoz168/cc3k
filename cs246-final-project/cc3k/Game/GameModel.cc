@@ -1,5 +1,5 @@
 #include "GameModel.h"
-#include "MapFiles/mapfileTileMap.h"
+#include "mapfileTileMap.h"
 using namespace std;
 
 void GameModel::setPlayerRace(char type){
@@ -55,21 +55,17 @@ std::pair<int, int> GameModel::findAvailableTileAround(int x, int y) {
 // Initialize the map
 void GameModel::initializeMap(ifstream &mapFile, bool isMapProvided) {
     // Initialize the map from a file:
-    ifstream empty_map_file{"MapFiles/emptyfloor.txt"};
     if (!isMapProvided) {
-        readMap(empty_map_file);
+        readMap(mapFile);
+        createPlayerAtRandPosn();
+        createStairAtRandPosn();
+        createPotionAtRandPosn();
+        createGoldAtRandPosn();
+        createEnemyAtRandPosn();
+        createDragonAndHoardAtRandPosn();
     } else {
         readMap(mapFile);
     }
-
-    // Initialize the remaining objects which have not yet been created:
-    createPlayerAtRandPosn();
-    createStairAtRandPosn();
-    createPotionAtRandPosn();
-    createGoldAtRandPosn();
-    createEnemyAtRandPosn();
-    createDragonAndHoardAtRandPosn();
-
 }
 
 // Read the map from the file: either provided one or emptyfloor.txt

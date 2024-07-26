@@ -1,6 +1,6 @@
 #pragma once;
 
-#include "../tileIDs.h"
+#include "tileIDs.h"
 #include <map>
 
 const std::map<char, int> cellMap {

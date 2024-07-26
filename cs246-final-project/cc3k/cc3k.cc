@@ -65,10 +65,9 @@ int main(int argc, char* argv[]) {
         string filename = "";
         int i = 0;
         if (argc == 2) {
-            while (argv[1][i]) {
-                filename += argv[1][i];       // read arg into fileName
-                ++i;
-            }
+            filename = argv[1];
+        } else {
+            filename = "emptyfloor.txt";
         }
         ifstream ifs_map {filename};
         // handle race
