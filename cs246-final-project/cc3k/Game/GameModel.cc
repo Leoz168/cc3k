@@ -302,6 +302,8 @@ pair<int, pair<int, int>> GameModel::randomSpawnablePosition() {
     return make_pair(-1, make_pair(-1, -1));
 }
 
+
+// {N = 0, NE, E, SE, S, SW, W, NW}
 // Move the player in the specified direction
 bool GameModel::movePlayer(Directions direction) {
     pair posNow = player->getPosn();
@@ -309,36 +311,57 @@ bool GameModel::movePlayer(Directions direction) {
     {
     case Directions::N:
         int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE) {
+        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
             gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
         }
         break;
 
     case Directions::NE:
         int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE) {
+        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
             gameMap.moveTile(posNow.first, posNow.second, 1, -1, gameMap.tileAt(posNow.first, posNow.second));
         }
         break;
 
-    case Directions::N:
-        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+    case Directions::E:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second);
         if (id == FLOORTILE || id == PASSAGE) {
-            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+            gameMap.moveTile(posNow.first, posNow.second, 1, 0, gameMap.tileAt(posNow.first, posNow.second));
         }
         break;
 
-    case Directions::N:
-        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE) {
-            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+    case Directions::SE:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second + 1);
+        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
+            gameMap.moveTile(posNow.first, posNow.second, 1, 1, gameMap.tileAt(posNow.first, posNow.second));
         }
         break;
 
-    case Directions::N:
-        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
-        if (id == FLOORTILE || id == PASSAGE) {
-            gameMap.moveTile(posNow.first, posNow.second, 0, -1, gameMap.tileAt(posNow.first, posNow.second));
+    case Directions::S:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second + 1);
+        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
+            gameMap.moveTile(posNow.first, posNow.second, 0, 1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::SW:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
+            gameMap.moveTile(posNow.first, posNow.second, 0, 1, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::W:
+        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second);
+        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
+            gameMap.moveTile(posNow.first, posNow.second, -1, 0, gameMap.tileAt(posNow.first, posNow.second));
+        }
+        break;
+
+    case Directions::NW:
+        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second - 1);
+        if (id == FLOORTILE || id == PASSAGE || id == DOORWAY || id == STAIR) {
+            gameMap.moveTile(posNow.first, posNow.second, -1, -1, gameMap.tileAt(posNow.first, posNow.second));
         }
         break;
     
