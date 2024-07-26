@@ -15,4 +15,15 @@ void Troll::attackedBy(Enemy *e) {
 int Troll::getTileID() { return id; };
 Tile* Troll::getTilePtr() { return this; };
 
-bool triggerAbility(int id, int ab_ver);
+bool Troll::triggerAbility(int id, int ab_ver) {
+    if (id == TROLL) {
+        int cur_hp = getHP();
+        if ((cur_hp + 5) > getMaxHP()) {
+            setHP(getMaxHP());
+        } else {
+            setHP(cur_hp + 5);
+        }
+        return true;
+    }
+    return false;
+}

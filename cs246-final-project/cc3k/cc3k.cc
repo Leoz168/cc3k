@@ -52,6 +52,9 @@ Directions commandToDirection(const PlayerCommand command) {
             return Directions::W;
         case PlayerCommand::NW:
             return Directions::NW;
+        default:
+            cerr << "invalid command for commandToDirection" << endl;
+            return Directions::N;
     }
 }
 
@@ -100,27 +103,27 @@ int main(int argc, char* argv[]) {
             switch (std::tolower(race)) {
                 case 's':
                     gm.setPlayerRace(race);
-                    if (filename == "") gm.initializeMap(ifs_map, false);
+                    if (filename == emptyFloorFile) gm.initializeMap(ifs_map, false);
                     else gm.initializeMap(ifs_map, true);
                     break;
                 case 'd':
                     gm.setPlayerRace(race);
-                    if (filename == "") gm.initializeMap(ifs_map, false);
+                    if (filename == emptyFloorFile) gm.initializeMap(ifs_map, false);
                     else gm.initializeMap(ifs_map, true);
                     break;
                 case 'v':
                     gm.setPlayerRace(race);
-                    if (filename == "") gm.initializeMap(ifs_map, false);
+                    if (filename == emptyFloorFile) gm.initializeMap(ifs_map, false);
                     else gm.initializeMap(ifs_map, true);
                     break;
                 case 'g':
                     gm.setPlayerRace(race);
-                    if (filename == "") gm.initializeMap(ifs_map, false);
+                    if (filename == emptyFloorFile) gm.initializeMap(ifs_map, false);
                     else gm.initializeMap(ifs_map, true);
                     break;
                 case 't':
                     gm.setPlayerRace(race);
-                    if (filename == "") gm.initializeMap(ifs_map, false);
+                    if (filename == emptyFloorFile) gm.initializeMap(ifs_map, false);
                     else gm.initializeMap(ifs_map, true);
                     break;
                 default:

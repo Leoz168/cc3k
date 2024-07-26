@@ -26,14 +26,6 @@ bool GameModel::isAvailableTileForSpawn(int x, int y) {
     return false;
 }
 
-bool GameModel::canMoveHere(int x, int y) {
-    int id = gameMap.tileIDAt(x, y);
-    if (id == FLOORTILE || id == DOORWAY || id == PASSAGE) {
-        return true;
-    }
-    return false;
-}
-
 int GameModel::getCols() {
     return numCols;
 }
@@ -148,7 +140,7 @@ void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
         reverseCellMap[it.second] = reverseCellMap[it.first];
     }
 
-    const regex horizontal_border{"\\" + string{reverseCellMap[VWALL]} + string{reverseCellMap[HWALL]} + "*\\" + string{reverseCellMap[VWALL]}};
+    const regex horizontal_border{"\\|-*\\|\\n*"};
 
     if (isMapProvided) {
         for (int i = 1; i < floorLevel; i++) {
@@ -183,7 +175,7 @@ void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
 
     for (int y = 0; y < floor_lines.size(); ++y) {
         string& floor_line = floor_lines[y];
-        for (int x = 0; floor_line.size(); ++y) {
+        for (int x = 0; x < floor_line.size(); ++x) {
             if (tiles_processed[y][x] == false) {
                 char type = floor_line[x];
                 tiles_processed[y][x] = true;
@@ -237,7 +229,7 @@ void GameModel::spawnObject(int x, int y, char type, int room_number) {
             }
         }
 
-        cells.emplace_back(std::move(newObject)); // add to cell vector
+        cells.emplace_back(move(dynamic_pointer_cast<Cell>(newObject))); // add to cell vector
 
     } else if (itemMap.count(type)) { // Input char is an Item
         id = itemMap.at(type);
@@ -252,7 +244,7 @@ void GameModel::spawnObject(int x, int y, char type, int room_number) {
         }
 
         newObject = makeItem.spawnTile(x, y, id, false);
-        items.emplace_back(std::move(newObject));
+        items.emplace_back(move(dynamic_pointer_cast<Item>(newObject)));
 
     } else if (enemyMap.count(type)) { // Input char is an Enemy
         id = enemyMap.at(type);
@@ -272,7 +264,7 @@ void GameModel::spawnObject(int x, int y, char type, int room_number) {
         }
 
         newObject = makeEnemy.spawnTile(x, y, id, false);
-        enemies.emplace_back(std::move(newObject)); // add to enemies vector
+        enemies.emplace_back(move(dynamic_pointer_cast<Enemy>(newObject))); // add to enemies vector
 
     } else {
         std::cerr << "Reached default. Invalid input " + std::to_string(type) + "type in spawnObject class" << endl;
@@ -294,17 +286,17 @@ void GameModel::spawnRandObject(int x, int y, char type) {
     switch (type) {
         case 'E':
             newObject = makeEnemy.spawnTile(x, y, HUMAN, true); // default value for id
-            enemies.emplace_back(std::move(newObject));
+            enemies.emplace_back(move(dynamic_pointer_cast<Enemy>(newObject)));
             break;
 
         case 'G':
             newObject = makeItem.spawnTile(x, y, NORMALGOLD, true); // default value for id
-            items.emplace_back(std::move(newObject));
+            items.emplace_back(move(dynamic_pointer_cast<Item>(newObject)));
             break;
 
         case 'P':
             newObject = makeItem.spawnTile(x, y, RESTOREHEALTH, true); // default value for id
-            items.emplace_back(std::move(newObject));
+            items.emplace_back(move(dynamic_pointer_cast<Item>(newObject)));
             break;
 
         default:
@@ -552,6 +544,8 @@ double GameModel::calculateScore() {
 
 // Update the game state
 void GameModel::updateGame() {
+    player->triggerAbility(TROLL, 0);
+
     enemyAction();
     if (player->getHP() <= 0) {
         endGame(false);

@@ -15,4 +15,9 @@ void Drow::attackedBy(Enemy *e) {
 int Drow::getTileID() { return id; };
 Tile* Drow::getTilePtr() { return this; };
 
-bool triggerAbility(int id, int ab_ver);
+bool Drow::triggerAbility(int id, int ab_ver) {
+    if (id == DROW) {
+        return true;
+    }
+    return false;
+}

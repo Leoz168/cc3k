@@ -10,7 +10,7 @@ class Shade : public Player {
         void attackedBy(Enemy * e);
         int getTileID() override;
         Tile* getTilePtr() override;
-        bool triggerAbility(int id, int ab_ver);
+        bool triggerAbility(int id, int ab_ver) override;
         ~Shade() = default;
 };
 

@@ -29,7 +29,7 @@ class Creator {
         }
 
     public:
-        virtual ~Creator() = 0;
+        virtual ~Creator() = default;
 };
 
 #endif

@@ -17,4 +17,6 @@ void Shade::attackedBy(Enemy *e) {
 int Shade::getTileID() { return id; };
 Tile* Shade::getTilePtr() { return this; };
 
-bool triggerAbility(int id, int ab_ver);
+bool Shade::triggerAbility(int id, int ab_ver) {
+    return false;
+}

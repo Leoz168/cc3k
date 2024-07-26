@@ -37,44 +37,44 @@ std::pair<int, int> Player::getPosition() { return std::pair<int, int>{x, y}; }
 void Player::setPosition(int x, int y) { this->x = x; this->y = y; }
 
 void Player::usePotion(int id) {
-    switch (id)
-        {
+    int cur_hp = this->getHP();
+    int max_hp = this->getMaxHP();
+    int potion_mult = 1;
+    if (triggerAbility(DROW, 0)) potion_mult = 1.5;
+    switch (id) {
         case RESTOREHEALTH:
-            int hp_now = this->getHP();
-            int hp_max = this->getMaxHP();
             if (this->getTileID() == VAMPIRE) {
-                this->setHP(hp_now + 10);
+                this->setHP(cur_hp + 10 * potion_mult);
             } else {
-                if (hp_now + 10 <= hp_max) {
-                    this->setHP(hp_now + 10);
+                if (cur_hp + 10 * potion_mult <= max_hp) {
+                    this->setHP(cur_hp + 10 * potion_mult);
                 } else {
-                    this->setHP(hp_max);
+                    this->setHP(max_hp);
                 }
             }
             break;
         case BOOSTATK:
-            this->ehr->addAtkEffect(5);
+            this->ehr->addAtkEffect(5 * potion_mult);
             break;
         case BOOSTDEF:
-            this->ehr->addDefEffect(5);
+            this->ehr->addDefEffect(5 * potion_mult);
             break;
         case POISONHEALTH:
-            int hp_now = this->getHP();
-            if (hp_now - 10 >= 0) {
-                this->setHP(hp_now - 10);
+            if (cur_hp - 10 * potion_mult >= 0) {
+                this->setHP(cur_hp - 10 * potion_mult);
             } else {
                 this->setHP(0);
             }
             break;
         case WOUNDATK:
-            this->ehr->addAtkEffect(-5);
+            this->ehr->addAtkEffect(-5 * potion_mult);
             break;
         case WOUNDDEF:
-            this->ehr->addDefEffect(-5);
+            this->ehr->addDefEffect(-5 * potion_mult);
+            break;
         default:
             cout << "Ah? What are you picking?" << endl;
-            break;
-        }
+    }
 }
 
 void Player::move(int x, int y, int dx, int dy) { this->x += dx; this->y += dy; }

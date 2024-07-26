@@ -1,5 +1,5 @@
 #include "Item.h"
-#include "GameObject.h"
+#include "../GameObject.h"
 #include <string>
 
 using namespace std;

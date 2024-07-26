@@ -4,7 +4,7 @@
 using namespace std;
 
 // Default initialize an empty map
-explicit GameMap::GameMap() {}
+GameMap::GameMap() {}
 
 Tile* GameMap::tileAt(int x, int y) {
     vector<shared_ptr<Tile>> tile_vector = game_map[make_pair(x, y)];
@@ -103,7 +103,7 @@ int GameMap::addRoom() {
 }
 
 bool GameMap::addFloorTileCoordToRoomMap(int room_number, pair<int, int> coord) {
-    if (room_number >= num_rooms) return false;
+    if (room_number + 1 >= num_rooms) num_rooms = room_number + 1;
 
     vector<pair<int, int>>& coords_at_room = room_floortile_coord_mapping[room_number];
 

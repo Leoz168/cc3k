@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 
 #include "tileIDs.h"
 #include <map>

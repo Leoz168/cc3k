@@ -22,8 +22,6 @@ int Enemy::getDef() { return def; }
 bool Enemy::isDead() { return getHP() <= 0; }
 void Enemy::takeDamage(int damage) { hp -= damage; }
 
-Enemy::~Enemy() = default;
-
 bool Enemy::attackPlayer(Player* player) {
     if ((rand() % 2) == 0) {
         return false;

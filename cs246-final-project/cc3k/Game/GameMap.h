@@ -14,11 +14,11 @@ using namespace std;
 class GameMap {
         map<pair<int, int>, vector<shared_ptr<Tile>>> game_map;
         map<int, vector<pair<int, int>>> room_floortile_coord_mapping;
-        int num_rooms = 0;
+        int num_rooms = 1;
         int rows = 0;
         int cols = 0;
     public:
-        explicit GameMap();
+        GameMap();
 
         // tileAt returns the frontmost tile pointer at (x, y)
         //     and nullptr if there is no tile there
