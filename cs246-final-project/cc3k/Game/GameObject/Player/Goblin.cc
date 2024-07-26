@@ -11,8 +11,11 @@ bool Goblin::attackEnemy(Enemy *e) {
 }
 
 void Goblin::attackedBy(Enemy *e) {
-    if (e->getTileID() == ORC) hp_now -= static_cast<int>(ceil((100.0 / (100.0 + getDef())) * e->getAtk()) * 1.5);
-    else hp_now -= static_cast<int>(ceil((100.0 / (100.0 + getDef())) * e->getAtk()));
+    int damage_dealt;
+    if (e->getTileID() == ORC) damage_dealt = static_cast<int>(ceil((100.0 / (100.0 + getDef())) * e->getAtk() * 1.5));
+    else damage_dealt = static_cast<int>(ceil((100.0 / (100.0 + getDef())) * e->getAtk()));
+    hp_now -= damage_dealt;
+    enemyAttackHistory.emplace_back(make_pair(e->getTileID(), damage_dealt));
 }
 
 int Goblin::getTileID() { return id; };

@@ -38,7 +38,28 @@ void Player::setPosition(int x, int y) { this->x = x; this->y = y; }
 
 void Player::setRoom(int room_number) { this->room_number = room_number; }
 
+bool Player::potionKnown(int id) {
+    for (auto i : known_potions) {
+        if (i == id) return true;
+    }
+    return false;
+}
+
+void Player::addKnownPotion(int id) {
+    for (auto i : known_potions) {
+        if (i == id) return;
+    }
+    known_potions.emplace_back(id);
+}
+
+vector<pair<int, int>> Player::getEnemyAttackHistory() {
+    auto ret = enemyAttackHistory;
+    enemyAttackHistory = vector<pair<int, int>>{};
+    return ret;
+}
+
 void Player::usePotion(int id) {
+    addKnownPotion(id);
     int cur_hp = this->getHP();
     int max_hp = this->getMaxHP();
     int potion_mult = 1;

@@ -1,6 +1,9 @@
 #ifndef TILEIDS
 #define TILEIDS
 
+#include <string>
+#include <map>
+
 enum TileID {
     NOTHING = -1,
 
@@ -51,6 +54,15 @@ enum TileType {
     POTION,
     ENEMY,
     PLAYER
+};
+
+const std::map<int, std::string> potionIDNames = {
+    {RESTOREHEALTH, "RH"},
+    {POISONHEALTH, "PH"},
+    {WOUNDATK, "WA"},
+    {WOUNDDEF, "WD"},
+    {BOOSTATK, "BA"},
+    {BOOSTDEF, "BD"}
 };
 
 #endif

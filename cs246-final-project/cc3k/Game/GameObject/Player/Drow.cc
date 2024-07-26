@@ -9,7 +9,9 @@ bool Drow::attackEnemy(Enemy *e) {
 }
 
 void Drow::attackedBy(Enemy *e) {
-    hp_now -= static_cast<int>(ceil((100.0 / (100.0 + getDef())) * e->getAtk()));
+    int damage_dealt = static_cast<int>(ceil((100.0 / (100.0 + getDef())) * e->getAtk()));
+    hp_now -= damage_dealt;
+    enemyAttackHistory.emplace_back(make_pair(e->getTileID(), damage_dealt));
 }
 
 int Drow::getTileID() { return id; };

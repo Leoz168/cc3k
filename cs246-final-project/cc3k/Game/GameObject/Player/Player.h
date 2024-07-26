@@ -3,9 +3,11 @@
 
 #include "../GameObject.h"
 #include "../../Handler/Effects/EffectHandler.h"
+#include "../../tileIDs.h"
 #include "Directions.h"
 #include <cmath>
 #include <memory>
+#include <vector>
 
 using namespace std;
 
@@ -20,6 +22,8 @@ class Player: public GameObject {
         int id;
         int gold;
         bool merchant_hostility = false;
+        vector<int> known_potions;
+        vector<pair<int, int>> enemyAttackHistory;
     public:
         unique_ptr<EffectHandler> ehr;
         Player(int x, int y, int id, int hp_now, int hp_max, int atk, int def, int gold);
@@ -42,6 +46,9 @@ class Player: public GameObject {
         void setPosition(int x, int y);
         void setRoom(int room);
         void move(int x, int y, int dx, int dy);
+        bool potionKnown(int);
+        void addKnownPotion(int);
+        vector<pair<int, int>> getEnemyAttackHistory();
         virtual bool attackEnemy(Enemy * e) = 0;
         virtual void attackedBy(Enemy * e) = 0;
         virtual bool triggerAbility(int id, int ab_ver) = 0;

@@ -492,24 +492,40 @@ bool GameModel::movePlayer(Directions direction) {
     pair<int, int> newPosn = make_pair<int, int>(posNow.first + moveDirection.first, posNow.second + moveDirection.second);
     const int id = gameMap.tileIDAt(newPosn.first, newPosn.second);
     Tile * tileAtNewPosn = gameMap.tileAt(newPosn.first, newPosn.second);
-    
+
+    string gold_smsg_append = "";
+    string potion_find_smsg_append = "";
+
     if (canMoveHere(newPosn.first, newPosn.second)) {
         // Add gold pick-up functionality
         if (id == NORMALGOLD || id == SMALLGOLD || id == MERCHANTHOARD || (id == DRAGONHOARD && dynamic_cast<DragonHoard *> (tileAtNewPosn)->canPlayerPickup(player.get()))) {
             player->setGoldCount(player->getGoldCount() + dynamic_cast<Gold *>(tileAtNewPosn)->getValue());
+            gold_smsg_append += "PC found " + to_string(dynamic_cast<Gold *>(tileAtNewPosn)->getValue()) + " gold!\n";
             gameMap.removeTile(newPosn.first, newPosn.second);
         } else if (id == STAIR) {
             nextFloor();
             return false;
         }
 
+        for (auto it : DIRECTIONS_POSN_CHANGE) {
+            int newx = newPosn.first + it.second.first;
+            int newy = newPosn.second + it.second.second;
+            if (canUse(newx, newy)) {
+                if (player->potionKnown(gameMap.tileIDAt(newx, newy))) potion_find_smsg_append += "PA sees " 
+                    + (dynamic_cast<Potion*>(gameMap.tileAt(newx, newy)))->getDescription() 
+                    + " " + DIRECTIONS_NAMES.at(it.first) + ".\n";
+                else potion_find_smsg_append += "PA sees an unknown potion " + DIRECTIONS_NAMES.at(it.first) + ".\n";
+            }
+        }
+
         // Move the player to the new square:
         player->setPosition(newPosn.first, newPosn.second);
         gameMap.moveTile(posNow.first, posNow.second, moveDirection.first, moveDirection.second, gameMap.tileAt(posNow.first, posNow.second));
-        status_message = "You've moved " + DIRECTIONS_NAMES.at(direction) + "\n";
+        status_message = "You've moved " + DIRECTIONS_NAMES.at(direction) + "\n" + gold_smsg_append + potion_find_smsg_append;
         return true;
     } else {
         status_message = "There seems to be something blocking your way in the " + DIRECTIONS_NAMES.at(direction) + " direction...\n";
+        notifyobserver();
         return false;
     }
 }
@@ -527,6 +543,8 @@ bool GameModel::playerAttack(Directions direction) {
     pair<int, int> posNow = player->getPosn();
     pair<int, int> attackDirection = DIRECTIONS_POSN_CHANGE.at(direction);
     pair<int, int> enemyPosn = make_pair<int, int>(posNow.first + attackDirection.first, posNow.second + attackDirection.second);
+    string gold_collect_append_msg = "";
+    int gold_collected = 0;
 
     if (isValidAttack(enemyPosn.first, enemyPosn.second)) {
         Enemy * enemyToAttack = dynamic_cast<Enemy *>(gameMap.tileAt(enemyPosn.first, enemyPosn.second));
@@ -551,18 +569,43 @@ bool GameModel::playerAttack(Directions direction) {
             }
             
             // Add gold to player
-            if (enemyID != HUMAN) {
-                player->setGoldCount(player->getGoldCount() + (rand() % 2) + 1);
-            } else {
+            if (enemyID != HUMAN && enemyID != MERCHANT && enemyID != DRAGON) {
+                gold_collected = (rand() % 2) + 1;
+                player->setGoldCount(player->getGoldCount() + gold_collected);
+                gold_collect_append_msg += "PC found " + to_string(gold_collected) + " gold!\n";
+            } else if (enemyID == HUMAN) {
                 spawnObject(enemyPosn.first, enemyPosn.second, '6'); // 6 - NormalGold
                 std::pair<int, int> spawnSecondGoldPosn = findAvailableTileAround(enemyPosn.first, enemyPosn.second);
                 spawnObject(spawnSecondGoldPosn.first, spawnSecondGoldPosn.second, '6');
+            } else if (enemyID == MERCHANT) {
+                spawnObject(enemyPosn.first, enemyPosn.second, '8'); // 6 - MerchantHoard
+            } else if (enemyID == DRAGON) {
+                bool playerOnDragonHoard = false;
+                DragonHoard* dragonHoard = nullptr;
+                pair<int, int> pposn = player->getPosn();
+                for (auto it : gameMap.allTilesAt(pposn.first, pposn.second)) {
+                    if (it->getTileID() == DRAGONHOARD) {
+                        playerOnDragonHoard = true;
+                        dragonHoard = dynamic_cast<DragonHoard*>(it);
+                        break;
+                    }
+                }
+                if (playerOnDragonHoard) {
+                    player->setGoldCount(player->getGoldCount() + dragonHoard->getValue());
+                    gold_collect_append_msg += "PC found " + to_string(dragonHoard->getValue()) + " gold!\n";
+                    gameMap.moveTile(pposn.first, pposn.second, -(pposn.first + 1), -(pposn.second + 1), player->getTilePtr());
+                    gameMap.removeTile(pposn.first, pposn.second);
+                    gameMap.moveTile(-1, -1, (pposn.first + 1), (pposn.second + 1), player->getTilePtr());
+                }
             }
             
+            if (player->getTileID() == GOBLIN) gold_collect_append_msg += "PC stole 5 gold!\n";
         }
         status_message = "PC deals " + to_string(initialEnemyHP - finalEnemyHP) + " damage to " + IDToChar(enemyID) + ".\n";
         if (killed) status_message += "PC killed " + IDToChar(enemyID) + "!\n";
         else status_message += IDToChar(enemyID) + " now has " + to_string(finalEnemyHP) + " HP.\n";
+
+        status_message += gold_collect_append_msg;
         return true;
     }
     status_message = "There's nothing to attack over " + DIRECTIONS_NAMES.at(direction) + " there!\n";
@@ -593,12 +636,14 @@ bool GameModel::usePotion(Directions direction) {
     int id = gameMap.tileIDAt(potionPosn.first, potionPosn.second);
     if(canUse(potionPosn.first, potionPosn.second)) {
         player->usePotion(id);
+        status_message = "Player used a " + potionIDNames.at(id) + " potion.\n";
         gameMap.removeTile(potionPosn.first, potionPosn.second);
         for (auto it = items.begin(); it != items.end(); ++it) {
             if ((*it).get() == gameMap.tileAt(potionPosn.first, potionPosn.second));
         }
         return true;
     }
+    status_message = "There's nothing to use there...\n";
     return false;
 }
 
@@ -639,6 +684,10 @@ void GameModel::updateGame() {
     if (player->getHP() <= 0) {
         endGame(false);
         return;
+    }
+
+    for ( auto it : player->getEnemyAttackHistory() ) {
+        status_message += IDToChar(it.first) + " deals " + to_string(it.second) + " damage to PC.\n";
     }
 
     notifyobserver();
@@ -682,6 +731,9 @@ bool GameModel::freezeEnemy() {
         (it.get())->setFrozen(true);
     }
     enemyFrozen = true;
+    status_message = "Enemies have been frozen.\n";
+    notifyobserver();
+    status_message = "";
 }
 
 bool GameModel::unfreezeEnemy() {
@@ -689,6 +741,9 @@ bool GameModel::unfreezeEnemy() {
         (it.get())->setFrozen(false);
     }
     enemyFrozen = false;
+    status_message = "Enemies have been unfrozen.\n";
+    notifyobserver();
+    status_message = "";
 }
 
 bool GameModel::isEnemyFrozen() {
