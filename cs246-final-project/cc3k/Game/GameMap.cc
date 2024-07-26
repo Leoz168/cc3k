@@ -56,6 +56,14 @@ bool GameMap::addTile(int x, int y, shared_ptr<Tile> new_tile) {
     bool return_val = false;
     if (tile_vector.empty()) return_val = true;
     tile_vector.emplace_back(new_tile);
+
+    if (new_tile->getTileID() == FLOORTILE) {
+        int floortile_room_number = new_tile->getRoomNumber();
+        if (floortile_room_number != NOASSOCIATEDROOM) {
+            addFloorTileCoordToRoomMap(floortile_room_number, new_tile->getPosn());
+        }
+    }
+
     return return_val;
 }
 
