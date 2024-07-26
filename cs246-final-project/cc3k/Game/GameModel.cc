@@ -461,8 +461,49 @@ bool GameModel::movePlayer(Directions direction) {
 
 
 // Use a potion
-bool usePotion(Directions direction) {
+bool GameModel::usePotion(Directions direction) {
+    pair posNow = player->getPosn();
+    switch (direction)
+    {
+    case Directions::N:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second - 1);
+        player->usePotion(id);
+        break;
 
+    case Directions::NE:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second - 1);
+        player->usePotion(id);
+        break;
+
+    case Directions::E:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second);
+        player->usePotion(id);
+        break;
+
+    case Directions::SE:
+        int id = gameMap.tileIDAt(posNow.first + 1, posNow.second + 1);
+        player->usePotion(id);
+        break;
+
+    case Directions::S:
+        int id = gameMap.tileIDAt(posNow.first, posNow.second + 1);
+        player->usePotion(id);
+        break;
+
+    case Directions::W:
+        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second);
+        player->usePotion(id);
+        break;
+
+    case Directions::NW:
+        int id = gameMap.tileIDAt(posNow.first - 1, posNow.second - 1);
+        player->usePotion(id);
+        break;
+    
+    default:
+        cout << "Tho you tried really hard, you didn't manage to become superman..." << endl;
+        break;
+    }
 }
 bool isValidAttack(int x, int y);
 bool usePotion(Directions direction);
