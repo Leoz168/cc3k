@@ -27,7 +27,7 @@ class GameModel: public GameSubject {
         // Game State variables:
         int numRows = -1;
         int numCols= -1;
-        int floorLevel = 0;
+        int floorLevel = 1;
         int potionSpawnCounter = 0;
         int enemySpawnCounter = 0;
         int goldSpawnCounter = 0;

@@ -106,6 +106,7 @@ void floodfillInit(GameModel* model, int x, int y, vector<string>& floor_lines, 
 
 
 // Read the map from the file: either provided one or emptyfloor.txt
+// NOTE: for floors from a file, floorLevel MUST represent the floor to generate.
 void GameModel::readMap(std::ifstream &mapFile, bool isMapProvided) {
     string line;
     int y = 0; // Line number
