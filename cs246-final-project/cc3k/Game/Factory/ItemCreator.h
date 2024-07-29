@@ -80,6 +80,9 @@ class ItemCreator : public Creator {
                 case SMALLGOLD:
                     newItem = std::make_shared<SmallGold>(x, y);
                     break;
+                case MERCHANTHOARD:
+                    newItem = std::make_shared<MerchantHoard>(x, y);
+                    break;
                 case DRAGONHOARD:
                     newItem = std::make_shared<DragonHoard>(x, y);
                     break;
