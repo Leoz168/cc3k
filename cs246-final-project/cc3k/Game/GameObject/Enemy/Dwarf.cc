@@ -9,8 +9,4 @@ Dwarf::Dwarf(int x, int y) :
 
 Tile* Dwarf::getTilePtr() { return this; }
 
-void Dwarf::postAtkedByPlayerAction(Player* player) {
-    player->triggerAbility(VAMPIRE, 1);
-}
-
 Dwarf::~Dwarf() {}

@@ -62,7 +62,7 @@ void Player::usePotion(int id) {
     addKnownPotion(id);
     int cur_hp = this->getHP();
     int max_hp = this->getMaxHP();
-    int potion_mult = 1;
+    double potion_mult = 1;
     if (triggerAbility(DROW, 0)) potion_mult = 1.5;
     switch (id) {
         case RESTOREHEALTH:
